@@ -4,13 +4,11 @@ import ArticleCard from "@/components/articles/ArticleCard";
 import ArticleSearch from "@/components/articles/ArticleSearch";
 import CategoryTabs from "@/components/articles/CategoryTabs";
 import TopStoriesBand from "@/components/articles/TopStoriesBand";
-import TrendingList from "@/components/articles/TrendingList";
 import Pagination from "@/components/shared/Pagination";
 import {
   getCategoriesWithCounts,
   getLatestArticles,
   getTopStoryArticles,
-  getTrendingArticles,
   searchArticles,
   type ArticleSort,
 } from "@/lib/data";
@@ -18,7 +16,7 @@ import {
 export const metadata: Metadata = {
   title: "Articles — CIO Mogul India",
   description:
-    "Latest news, trending stories, top editorial picks, and the full article archive by category.",
+    "Top stories, the latest news, and the full article archive by category.",
 };
 
 export default async function ArticlesPage({
@@ -29,10 +27,9 @@ export default async function ArticlesPage({
   // Three editor-curated sections above the fold are static-safe — fetched
   // in parallel. The Explore block reads searchParams so it goes inside
   // <Suspense> for the same reason as /magazines.
-  const [topStories, latest, trending, categories] = await Promise.all([
+  const [topStories, latest, categories] = await Promise.all([
     getTopStoryArticles(3),
     getLatestArticles(6),
-    getTrendingArticles(5),
     getCategoriesWithCounts(),
   ]);
 
@@ -70,14 +67,7 @@ export default async function ArticlesPage({
         </div>
       </section>
 
-      {/* 3 — Trending */}
-      <section className="section">
-        <div className="wrap">
-          <TrendingList articles={trending} />
-        </div>
-      </section>
-
-      {/* 4 — Explore by Category */}
+      {/* 3 — Explore by Category */}
       <section className="section explore">
         <div className="wrap">
           <header className="section-head section-head--row">
