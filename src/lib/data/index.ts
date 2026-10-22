@@ -211,6 +211,9 @@ type RawPodcast = {
   date?: string;
   youtubeUrl: string;
   thumbnail?: SanityImage;
+  publishedYear?: number;
+  description?: string;
+  duration?: string;
 };
 export async function getPodcasts(): Promise<Podcast[]> {
   return withFallback<Podcast[]>(async () => {
@@ -221,8 +224,56 @@ export async function getPodcasts(): Promise<Podcast[]> {
       date: r.date ?? "",
       youtubeUrl: r.youtubeUrl,
       thumbnail: mapImage(r.thumbnail, PODCASTS[i % PODCASTS.length].thumbnail),
+      publishedYear: r.publishedYear,
+      description: r.description ?? "",
+      duration: r.duration ?? "",
     }));
   }, PODCASTS);
+}
+
+// Archive search for /podcasts. Mirrors searchMagazineEditions so the page
+// component looks the same; move to GROQ-level filtering if the catalogue
+// ever grows past a few hundred rows.
+export type PodcastSort = "newest" | "oldest";
+
+export type PodcastQuery = {
+  q?: string;
+  year?: number;
+  sort?: PodcastSort;
+  page?: number;
+  perPage?: number;
+};
+
+export async function searchPodcasts(query: PodcastQuery = {}) {
+  const { q, year, sort = "newest", page = 1, perPage = 9 } = query;
+  const podcasts = await getPodcasts();
+
+  const normalised = q?.trim().toLowerCase() ?? "";
+  const matches = (p: Podcast) => {
+    if (year && p.publishedYear !== year) return false;
+    if (!normalised) return true;
+    return (
+      p.title.toLowerCase().includes(normalised) ||
+      (p.description ?? "").toLowerCase().includes(normalised)
+    );
+  };
+
+  const filtered = podcasts.filter(matches);
+  // Insertion order in the array is already newest-first; respect it rather
+  // than parse free-form `date` strings.
+  const sorted = sort === "oldest" ? [...filtered].reverse() : filtered;
+
+  const total = sorted.length;
+  const totalPages = Math.max(1, Math.ceil(total / perPage));
+  const safePage = Math.min(Math.max(1, page), totalPages);
+  const start = (safePage - 1) * perPage;
+  const items = sorted.slice(start, start + perPage);
+
+  const years = Array.from(
+    new Set(podcasts.map((p) => p.publishedYear).filter((y): y is number => typeof y === "number"))
+  ).sort((a, b) => b - a);
+
+  return { items, total, totalPages, page: safePage, perPage, years };
 }
 
 // ─── Testimonials ────────────────────────────────────────────────────────

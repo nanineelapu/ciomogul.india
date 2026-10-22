@@ -74,6 +74,12 @@ export type Podcast = {
   date: string;
   youtubeUrl: string;
   thumbnail: string;
+  // Optional on homepage, used by the /podcasts archive filter.
+  publishedYear?: number;
+  // Short editorial description for the archive card + for Sanity.
+  description?: string;
+  // Minutes:seconds display string (e.g. "42:16"). Optional.
+  duration?: string;
 };
 
 export type Testimonial = {

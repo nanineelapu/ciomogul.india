@@ -111,7 +111,10 @@ export const PODCASTS_QUERY = /* groq */ `
     title,
     "date": coalesce(date, ""),
     youtubeUrl,
-    "thumbnail": thumbnail
+    "thumbnail": thumbnail,
+    publishedYear,
+    "description": coalesce(description, ""),
+    "duration": coalesce(duration, "")
   }
 `;
 

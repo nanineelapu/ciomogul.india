@@ -2629,3 +2629,165 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
   .mag-more { padding: 48px 0 72px; }
   .mag-more__title { font-size: 24px; }
 }
+
+/* ==========================================================================
+   PODCASTS — archive grid (/podcasts)
+   Reuses .page-lead, .mag-filters, .mag-empty, .pagination from magazines.
+   ========================================================================== */
+
+.pod-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 56px 32px;
+  padding: 64px 0;
+}
+
+.pod-card {
+  display: flex;
+  flex-direction: column;
+  color: var(--color-ink);
+  transition: transform .3s cubic-bezier(.19, 1, .22, 1);
+}
+
+.pod-card:hover { transform: translateY(-6px); }
+
+.pod-card__thumb {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 9;
+  margin-bottom: 20px;
+  overflow: hidden;
+  background: var(--color-paper-2);
+}
+
+.pod-card__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .5s cubic-bezier(.19, 1, .22, 1), filter .3s ease;
+}
+
+.pod-card:hover .pod-card__thumb img {
+  transform: scale(1.04);
+  filter: brightness(.78);
+}
+
+/* dark gradient so the play button + duration stay readable on busy stills */
+.pod-card__thumb::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(0,0,0,.45) 100%);
+  pointer-events: none;
+  transition: opacity .3s ease;
+}
+
+.pod-card__ep {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 2;
+  padding: 4px 10px;
+  background: var(--color-navy);
+  color: #fff;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .14em;
+}
+
+.pod-card__play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+  background: var(--color-navy);
+  color: #fff;
+  transition: background-color .25s ease, transform .25s ease;
+  padding-left: 4px;
+}
+
+.pod-card:hover .pod-card__play {
+  background: #fff;
+  color: var(--color-navy);
+  transform: translate(-50%, -50%) scale(1.08);
+}
+
+.pod-card__duration {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  z-index: 2;
+  padding: 4px 10px;
+  background: rgba(11, 31, 58, .9);
+  color: #fff;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  font-variant-numeric: tabular-nums;
+}
+
+.pod-card__kicker {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin-bottom: 8px;
+}
+
+.pod-card__title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 22px;
+  line-height: 1.2;
+  color: var(--color-ink);
+  margin-bottom: 10px;
+}
+
+.pod-card__desc {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--color-ink-2);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.pod-card__cta {
+  margin-top: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--color-navy);
+}
+
+.pod-card__cta::after {
+  content: "→";
+  transition: transform .25s ease;
+}
+
+.pod-card:hover .pod-card__cta::after { transform: translateX(4px); }
+
+@media (max-width: 1080px) {
+  .pod-grid { grid-template-columns: repeat(2, 1fr); gap: 48px 24px; }
+}
+
+@media (max-width: 640px) {
+  .pod-grid { grid-template-columns: 1fr; gap: 40px; padding: 48px 0; }
+  .pod-card__title { font-size: 18px; }
+  .pod-card__play { width: 52px; height: 52px; }
+}

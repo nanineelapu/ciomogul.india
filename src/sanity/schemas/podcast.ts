@@ -14,6 +14,14 @@ export const podcast = defineType({
     }),
     defineField({ name: "date", title: "Date (display)", type: "string" }),
     defineField({
+      name: "publishedYear",
+      title: "Published year (for filtering)",
+      type: "number",
+      validation: (r) => r.integer().min(2000).max(2100),
+    }),
+    defineField({ name: "duration", title: "Duration (e.g. 42:16)", type: "string" }),
+    defineField({ name: "description", title: "Description", type: "text", rows: 3 }),
+    defineField({
       name: "youtubeUrl",
       title: "YouTube URL",
       type: "url",
