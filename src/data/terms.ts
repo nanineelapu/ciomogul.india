@@ -1,6 +1,9 @@
+// A paragraph is plain text, or a numbered point like { ref: "1.1", text }.
+export type LegalPoint = string | { ref: string; text: string };
+
 export type LegalSection = {
   title: string;
-  paragraphs: string[];
+  paragraphs: LegalPoint[];
   email?: string;
 };
 

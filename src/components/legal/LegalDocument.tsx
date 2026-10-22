@@ -24,9 +24,16 @@ export default function LegalDocument({ content }: { content: LegalContent }) {
                   {s.title}
                 </h2>
                 <div className="legal__text">
-                  {s.paragraphs.map((p, j) => (
-                    <p key={j}>{p}</p>
-                  ))}
+                  {s.paragraphs.map((p, j) =>
+                    typeof p === "string" ? (
+                      <p key={j}>{p}</p>
+                    ) : (
+                      <p key={j} className="legal__point">
+                        <span className="legal__ref" aria-hidden>{p.ref}</span>
+                        {p.text}
+                      </p>
+                    )
+                  )}
                   {s.email && (
                     <p>
                       <a href={`mailto:${s.email}`} className="legal__link">

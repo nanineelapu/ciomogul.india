@@ -4362,3 +4362,23 @@ a.contact-details__value:hover { color: var(--color-navy-2); }
   .legal__title { font-size: 20px; gap: 12px; }
   .legal__text { padding-left: 0; }
 }
+
+/* Numbered points (1.1, 2.3 …) sit in the left gutter beside the text */
+.legal__point { position: relative; }
+
+.legal__ref {
+  position: absolute;
+  left: -38px;
+  top: 2px;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 560px) {
+  .legal__point { padding-left: 34px; }
+  .legal__ref { left: 0; }
+}
