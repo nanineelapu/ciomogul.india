@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Poppins } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
 
-// Load the two fonts the client approved. next/font keeps font files local
-// at build time, so no FOUT and no external request on page load.
+// Root layout — nothing but the html/body shell + global fonts. Site chrome
+// (Header, Footer) lives in (site)/layout so the /studio route can render
+// Sanity Studio full-bleed without any marketing nav around it.
 const playfair = Playfair_Display({
   subsets: ["latin"],
   weight: ["800"],
@@ -31,11 +30,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${playfair.variable} ${poppins.variable}`}>
-      <body>
-        <Header />
-        {children}
-        <Footer />
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
