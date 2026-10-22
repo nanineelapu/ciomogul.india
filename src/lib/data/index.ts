@@ -13,6 +13,7 @@ import { HALL_OF_FAME } from "@/data/hallOfFame";
 import { COVER_STORIES } from "@/data/coverStories";
 import { NEWS_CARDS, VITAL_UPDATES, FEATURED_ARTICLES } from "@/data/news";
 import { ARTICLES, CATEGORY_ORDER } from "@/data/articles";
+import { ABOUT, type AboutContent } from "@/data/about";
 import { WOMEN_LEADERS } from "@/data/womenLeaders";
 import { PODCASTS } from "@/data/podcasts";
 import { TESTIMONIALS } from "@/data/testimonials";
@@ -636,4 +637,9 @@ export async function searchMagazineEditions(query: MagazineQuery = {}) {
   );
 
   return { items, total, totalPages, page: safePage, perPage, years };
+}
+
+// ─── About ───────────────────────────────────────────────────────────────
+export async function getAboutContent(): Promise<AboutContent> {
+  return ABOUT;
 }
