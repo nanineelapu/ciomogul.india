@@ -30,7 +30,6 @@ export default async function MagazinesPage({
     <main>
       <section className="page-lead">
         <div className="wrap">
-          <span className="page-lead__eyebrow">The archive</span>
           <h1 className="page-lead__title">Every edition, in one place.</h1>
           <p className="page-lead__sub">
             Each issue of CIO Mogul India features the people shaping how
@@ -41,14 +40,6 @@ export default async function MagazinesPage({
             <div>
               Editions
               <b>{total} published</b>
-            </div>
-            <div>
-              Format
-              <b>Digital · print-ready PDF</b>
-            </div>
-            <div>
-              Cadence
-              <b>Monthly</b>
             </div>
           </dl>
         </div>
