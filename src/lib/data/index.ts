@@ -390,30 +390,35 @@ export async function getTopStoryArticles(limit = 3): Promise<Article[]> {
   return ARTICLES.filter((a) => a.isTopStory).slice(0, limit);
 }
 
-export async function getLatestArticles(limit = 6): Promise<Article[]> {
-  // ARTICLES is already ordered newest-first by convention.
-  return ARTICLES.slice(0, limit);
+// Each article should appear once on /articles: Top Stories first, then the
+// newest remaining ones as Latest, then everything left as the archive that
+// the category tabs explore. ARTICLES is sorted newest first.
+const LATEST_COUNT = 6;
+
+function nonTop(): Article[] {
+  return ARTICLES.filter((a) => !a.isTopStory);
 }
 
-export async function getTrendingArticles(limit = 5): Promise<Article[]> {
-  return ARTICLES
-    .filter((a) => a.isTrending)
-    .sort((a, b) => (a.trendingRank ?? 99) - (b.trendingRank ?? 99))
-    .slice(0, limit);
+function archivePool(): Article[] {
+  return nonTop().slice(LATEST_COUNT);
+}
+
+export async function getLatestArticles(limit = LATEST_COUNT): Promise<Article[]> {
+  return nonTop().slice(0, limit);
 }
 
 // Category list with live counts — the editor doesn't maintain the counts;
 // they're derived from the published articles. The "All" entry's count is
 // the total.
 export async function getCategoriesWithCounts(): Promise<Category[]> {
-  const total = ARTICLES.length;
+  const pool = archivePool();
   return CATEGORY_ORDER.map((c) => ({
     slug: c.slug,
     name: c.name,
     count:
       c.slug === ""
-        ? total
-        : ARTICLES.filter((a) => a.categorySlug === c.slug).length,
+        ? pool.length
+        : pool.filter((a) => a.categorySlug === c.slug).length,
   }));
 }
 
@@ -441,7 +446,7 @@ export async function searchArticles(query: ArticleQuery = {}) {
     );
   };
 
-  const filtered = ARTICLES.filter(matches);
+  const filtered = archivePool().filter(matches);
   const sorted = sort === "oldest" ? [...filtered].reverse() : filtered;
 
   const total = sorted.length;
