@@ -1786,14 +1786,14 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
 
 /* ---------- Shared page lead block ---------- */
 .page-lead {
-  padding: 72px 0 48px;
+  padding: 36px 0 28px;
   border-bottom: 1px solid var(--color-rule-soft);
 }
 
 .page-lead__eyebrow {
   display: inline-block;
-  margin-bottom: 20px;
-  padding-bottom: 10px;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
   border-bottom: 2px solid var(--color-navy);
   font-family: var(--font-ui);
   font-size: 12px;
@@ -1806,17 +1806,17 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
 .page-lead__title {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 72px;
-  line-height: 1;
+  font-size: clamp(32px, 3.6vw, 46px);
+  line-height: 1.08;
   letter-spacing: -.01em;
   color: var(--color-ink);
-  max-width: 18ch;
+  max-width: 28ch;
 }
 
 .page-lead__sub {
-  margin-top: 24px;
-  max-width: 60ch;
-  font-size: 18px;
+  margin-top: 12px;
+  max-width: 62ch;
+  font-size: 16px;
   line-height: 1.55;
   color: var(--color-ink-2);
 }
@@ -1824,12 +1824,12 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
 .page-lead__meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 24px;
-  margin-top: 32px;
-  padding-top: 24px;
+  gap: 32px;
+  margin-top: 18px;
+  padding-top: 14px;
   border-top: 1px solid var(--color-rule-soft);
   font-family: var(--font-ui);
-  font-size: 13px;
+  font-size: 11px;
   letter-spacing: .08em;
   text-transform: uppercase;
   color: var(--color-muted);
@@ -1843,21 +1843,21 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
 }
 
 @media (max-width: 900px) {
-  .page-lead { padding: 48px 0 32px; }
-  .page-lead__title { font-size: 48px; }
-  .page-lead__sub { font-size: 16px; }
+  .page-lead { padding: 28px 0 20px; }
+  .page-lead__title { font-size: 32px; }
+  .page-lead__sub { font-size: 15px; }
 }
 
 @media (max-width: 560px) {
-  .page-lead__title { font-size: 38px; }
+  .page-lead__title { font-size: 28px; }
 }
 
 /* ---------- Magazine grid (listing + "more editions") ---------- */
 .mag-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 48px 32px;
-  padding: 64px 0;
+  gap: 40px 32px;
+  padding: 32px 0 56px;
 }
 
 .mag-card {
@@ -1976,8 +1976,8 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
 
 /* ---------- /magazines index: filter bar + empty state ---------- */
 .mag-filters {
-  margin-top: 48px;
-  padding-bottom: 24px;
+  margin-top: 8px;
+  padding-bottom: 16px;
   border-bottom: 1px solid var(--color-rule-soft);
   transition: opacity .15s ease;
 }
@@ -2640,8 +2640,8 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
 .pod-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 56px 32px;
-  padding: 64px 0;
+  gap: 44px 32px;
+  padding: 32px 0 56px;
 }
 
 .pod-card {
@@ -3004,7 +3004,7 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
 .hall-roll {
   list-style: none;
   margin: 0;
-  padding: 72px 0 32px;
+  padding: 40px 0 24px;
 }
 
 .hall-roll > li {
@@ -3555,14 +3555,14 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
 /* Lead block — slightly tighter spacing because the archive subheadings are
    intentionally minimal here. The .page-lead--light variant drops the meta
    strip's top border + eyebrow heaviness. */
-.page-lead--light { padding-bottom: 32px; }
+.page-lead--light { padding-bottom: 20px; }
 
 /* ---------- Portrait grid ---------- */
 .ws-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 56px 32px;
-  padding: 56px 0;
+  gap: 44px 32px;
+  padding: 32px 0 56px;
 }
 
 .ws-card {
@@ -4072,8 +4072,8 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
   justify-content: space-between;
   gap: 24px;
   align-items: center;
-  padding-bottom: 24px;
-  margin-bottom: 48px;
+  padding-bottom: 16px;
+  margin-bottom: 32px;
   border-bottom: 1px solid var(--color-rule-soft);
   flex-wrap: wrap;
 }
@@ -4544,3 +4544,6 @@ a.contact-details__value:hover { color: var(--color-navy-2); }
   border-bottom: 1px solid currentColor;
   padding-bottom: 2px;
 }
+
+/* Section directly after a page lead sits closer so results show above the fold */
+.page-lead + .section { padding-top: 20px; }
