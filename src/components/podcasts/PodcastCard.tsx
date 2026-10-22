@@ -1,6 +1,12 @@
+"use client";
 import Image from "next/image";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useTransition } from "react";
 import type { Podcast } from "@/types/content";
 
+// Click sets ?watch=<slug> in the URL. The PodcastPlayerModal, mounted higher
+// in the tree, reads that param and opens itself. Doing it this way makes the
+// modal state shareable, back-button-closable, and server-renderable.
 export default function PodcastCard({
   podcast,
   index,
@@ -9,13 +15,24 @@ export default function PodcastCard({
   // Shown as a small "EP ##" chip; purely a visual device.
   index?: number;
 }) {
+  const router = useRouter();
+  const params = useSearchParams();
+  const [pending, startTransition] = useTransition();
+
+  function openPlayer() {
+    const next = new URLSearchParams(params.toString());
+    next.set("watch", podcast.slug);
+    startTransition(() => {
+      router.replace(`/podcasts?${next.toString()}`, { scroll: false });
+    });
+  }
+
   return (
-    <a
-      href={podcast.youtubeUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="pod-card"
-      aria-label={`${podcast.title} — opens on YouTube`}
+    <button
+      type="button"
+      className={`pod-card${pending ? " is-pending" : ""}`}
+      onClick={openPlayer}
+      aria-label={`Play: ${podcast.title}`}
     >
       <span className="pod-card__thumb">
         {typeof index === "number" && (
@@ -47,6 +64,6 @@ export default function PodcastCard({
         <span className="pod-card__desc">{podcast.description}</span>
       )}
       <span className="pod-card__cta">Watch episode</span>
-    </a>
+    </button>
   );
 }

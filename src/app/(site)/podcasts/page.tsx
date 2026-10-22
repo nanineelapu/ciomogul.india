@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import PodcastCard from "@/components/podcasts/PodcastCard";
 import PodcastFilters from "@/components/podcasts/PodcastFilters";
+import PodcastPlayerModal from "@/components/podcasts/PodcastPlayerModal";
 import Pagination from "@/components/shared/Pagination";
 import {
   getPodcasts,
@@ -22,7 +23,8 @@ export default async function PodcastsPage({
 }) {
   // The lead block above the fold is static-safe. The archive section reads
   // searchParams, so it goes inside <Suspense> — same pattern as /magazines.
-  const totalEpisodes = (await getPodcasts()).length;
+  const allPodcasts = await getPodcasts();
+  const totalEpisodes = allPodcasts.length;
 
   return (
     <main>
@@ -59,6 +61,12 @@ export default async function PodcastsPage({
           </Suspense>
         </div>
       </section>
+
+      {/* Mounted at page level so any card on this page can open it. The modal
+          itself reads ?watch=<slug> from the URL and renders when set. */}
+      <Suspense fallback={null}>
+        <PodcastPlayerModal podcasts={allPodcasts} />
+      </Suspense>
     </main>
   );
 }
