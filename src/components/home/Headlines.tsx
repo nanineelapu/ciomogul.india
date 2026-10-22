@@ -18,7 +18,7 @@ export default function Headlines({ headlines }: { headlines: Headline[] }) {
           <div className="headlines__viewport">
             <div className="headlines__track">
               {items.map((h, i) => (
-                <a key={`${h.slug}-${i}`} href="/news" aria-hidden={i >= headlines.length} tabIndex={i >= headlines.length ? -1 : 0}>{h.text}</a>
+                <a key={`${h.slug}-${i}`} href="/articles" aria-hidden={i >= headlines.length} tabIndex={i >= headlines.length ? -1 : 0}>{h.text}</a>
               ))}
             </div>
           </div>

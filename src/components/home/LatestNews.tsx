@@ -17,15 +17,15 @@ export default async function LatestNews() {
             {cards.map((c) => (
               <article key={c.slug} className="news-card">
                 {c.image ? (
-                  <Link href="/news" className="news-card__img">
+                  <Link href="/articles" className="news-card__img">
                     <Image src={c.image} alt={c.alt ?? ""} width={800} height={400} sizes="(max-width: 1080px) 100vw, 40vw" />
                   </Link>
                 ) : (
                   <span className="news-card__img news-card__img--tile" aria-hidden>Aadhaar</span>
                 )}
-                <h3 className="news-card__title"><Link href="/news">{c.title}</Link></h3>
+                <h3 className="news-card__title"><Link href="/articles">{c.title}</Link></h3>
                 <p className="news-card__date">{c.date}</p>
-                <Link href="/news" className="read-more">Read more</Link>
+                <Link href="/articles" className="read-more">Read more</Link>
               </article>
             ))}
           </div>
@@ -39,9 +39,9 @@ export default async function LatestNews() {
           <ul className="updates__list">
             {updates.map((u) => (
               <li key={u.slug}>
-                <h3><Link href="/news">{u.title}</Link></h3>
+                <h3><Link href="/articles">{u.title}</Link></h3>
                 {u.description && <p>{u.description}</p>}
-                <Link href="/news" className="read-more">Read more</Link>
+                <Link href="/articles" className="read-more">Read more</Link>
               </li>
             ))}
           </ul>

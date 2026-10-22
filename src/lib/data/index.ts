@@ -12,6 +12,7 @@ import { MAGAZINE_EDITIONS } from "@/data/magazineEditions";
 import { HALL_OF_FAME } from "@/data/hallOfFame";
 import { COVER_STORIES } from "@/data/coverStories";
 import { NEWS_CARDS, VITAL_UPDATES, FEATURED_ARTICLES } from "@/data/news";
+import { ARTICLES, CATEGORY_ORDER } from "@/data/articles";
 import { WOMEN_LEADERS } from "@/data/womenLeaders";
 import { PODCASTS } from "@/data/podcasts";
 import { TESTIMONIALS } from "@/data/testimonials";
@@ -33,6 +34,8 @@ import {
   WOMEN_LEADERS_QUERY,
 } from "@/sanity/lib/queries";
 import type {
+  Article,
+  Category,
   CoverStory,
   FeaturedArticle,
   HallOfFameEntry,
@@ -371,6 +374,82 @@ export async function getAdjacentHallEntries(slug: string): Promise<{
     prev: i > 0 ? roll[i - 1] : null,
     next: i < roll.length - 1 ? roll[i + 1] : null,
   };
+}
+
+// ─── Articles ────────────────────────────────────────────────────────────
+// No Sanity schema yet — the Sanity `article` doc will come when the client
+// is ready to edit full-length articles in the CMS. The frontend already
+// speaks the Article type so wiring it up later is one file.
+
+export async function getArticles(): Promise<Article[]> {
+  return ARTICLES;
+}
+
+export async function getTopStoryArticles(limit = 3): Promise<Article[]> {
+  return ARTICLES.filter((a) => a.isTopStory).slice(0, limit);
+}
+
+export async function getLatestArticles(limit = 6): Promise<Article[]> {
+  // ARTICLES is already ordered newest-first by convention.
+  return ARTICLES.slice(0, limit);
+}
+
+export async function getTrendingArticles(limit = 5): Promise<Article[]> {
+  return ARTICLES
+    .filter((a) => a.isTrending)
+    .sort((a, b) => (a.trendingRank ?? 99) - (b.trendingRank ?? 99))
+    .slice(0, limit);
+}
+
+// Category list with live counts — the editor doesn't maintain the counts;
+// they're derived from the published articles. The "All" entry's count is
+// the total.
+export async function getCategoriesWithCounts(): Promise<Category[]> {
+  const total = ARTICLES.length;
+  return CATEGORY_ORDER.map((c) => ({
+    slug: c.slug,
+    name: c.name,
+    count:
+      c.slug === ""
+        ? total
+        : ARTICLES.filter((a) => a.categorySlug === c.slug).length,
+  }));
+}
+
+export type ArticleSort = "newest" | "oldest";
+
+export type ArticleQuery = {
+  q?: string;
+  category?: string;   // category slug; "" or undefined = all
+  sort?: ArticleSort;
+  page?: number;
+  perPage?: number;
+};
+
+export async function searchArticles(query: ArticleQuery = {}) {
+  const { q, category, sort = "newest", page = 1, perPage = 9 } = query;
+  const normalised = q?.trim().toLowerCase() ?? "";
+
+  const matches = (a: Article) => {
+    if (category && a.categorySlug !== category) return false;
+    if (!normalised) return true;
+    return (
+      a.title.toLowerCase().includes(normalised) ||
+      a.excerpt.toLowerCase().includes(normalised) ||
+      a.author.toLowerCase().includes(normalised)
+    );
+  };
+
+  const filtered = ARTICLES.filter(matches);
+  const sorted = sort === "oldest" ? [...filtered].reverse() : filtered;
+
+  const total = sorted.length;
+  const totalPages = Math.max(1, Math.ceil(total / perPage));
+  const safePage = Math.min(Math.max(1, page), totalPages);
+  const start = (safePage - 1) * perPage;
+  const items = sorted.slice(start, start + perPage);
+
+  return { items, total, totalPages, page: safePage, perPage };
 }
 
 export type HallSort = "newest" | "oldest";

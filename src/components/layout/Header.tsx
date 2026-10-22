@@ -10,7 +10,7 @@ const NAV = [
   { label: "Hall of Fame", href: "/hall-of-fame" },
   { label: "Women Spotlight", href: "/women-spotlight" },
   { label: "Podcasts", href: "/podcasts" },
-  { label: "News", href: "/news" },
+  { label: "Articles", href: "/articles" },
   { label: "About Us", href: "/about" },
   { label: "Contact Us", href: "/contact" },
 ];

@@ -15,11 +15,11 @@ export default async function FeaturedArticles() {
         <div className="articles">
           {rows.map((r) => (
             <article key={r.slug} className="row-card">
-              <Link href="/news" className="row-card__img">
+              <Link href="/articles" className="row-card__img">
                 <Image src={r.image} alt={r.alt} width={600} height={500} sizes="(max-width: 1080px) 50vw, 25vw" />
               </Link>
               <div className="row-card__text">
-                <h3><Link href="/news">{r.title}</Link></h3>
+                <h3><Link href="/articles">{r.title}</Link></h3>
                 <p>{r.description}</p>
               </div>
             </article>

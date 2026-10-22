@@ -99,6 +99,33 @@ export type Headline = {
   text: string;
 };
 
+// The /articles page is powered by a richer document than the homepage
+// NewsCard — it tracks category, author, read time and flags for the
+// editor-curated sections (Top Stories, Trending). The homepage types stay
+// as they are so the homepage layout isn't disturbed.
+export type Article = {
+  slug: string;
+  title: string;
+  excerpt: string;
+  category: string;        // display name — "Business", "Technology", etc.
+  categorySlug: string;    // url-safe form — "business", "technology"
+  author: string;
+  date: string;            // free-form display
+  publishedYear: number;
+  image: string;
+  alt?: string;
+  readTime?: string;       // e.g. "6 min read"
+  isTopStory?: boolean;    // picked up by the Top Stories hero band
+  isTrending?: boolean;    // picked up by the Trending list
+  trendingRank?: number;   // 1 = most trending; smaller = higher
+};
+
+export type Category = {
+  slug: string;    // "" means "All"
+  name: string;
+  count: number;   // populated by the data layer, not hand-maintained
+};
+
 // A Hall of Fame entry is a curated nomination; it references an existing
 // magazine edition (so title / pullQuote / cover don't drift) and layers on
 // its own serial number, induction year, and an optional override portrait.

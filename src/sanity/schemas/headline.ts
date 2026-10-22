@@ -17,7 +17,7 @@ export const headline = defineType({
       name: "href",
       title: "Link URL",
       type: "string",
-      description: 'Where this headline links to. Defaults to "/news" if blank.',
+      description: 'Where this headline links to. Defaults to "/articles" if blank.',
     }),
     defineField({
       name: "order",
