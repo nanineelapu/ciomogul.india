@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -29,7 +30,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function LeaderProfilePage({
+async function LeaderProfilePageContent({
   params,
 }: {
   params: Promise<Params>;
@@ -112,5 +113,15 @@ export default async function LeaderProfilePage({
         </div>
       </nav>
     </main>
+  );
+}
+
+// Awaiting params suspends, so it runs inside a Suspense boundary. The page
+// shell renders immediately and the profile streams in.
+export default function LeaderProfilePage({ params }: { params: Promise<Params> }) {
+  return (
+    <Suspense fallback={null}>
+      <LeaderProfilePageContent params={params} />
+    </Suspense>
   );
 }

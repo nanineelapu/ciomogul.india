@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -30,7 +31,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function HallHonoreePage({
+async function HallHonoreePageContent({
   params,
 }: {
   params: Promise<Params>;
@@ -167,5 +168,15 @@ export default async function HallHonoreePage({
         </div>
       </nav>
     </main>
+  );
+}
+
+// Awaiting params suspends, so it runs inside a Suspense boundary. The page
+// shell renders immediately and the profile streams in.
+export default function HallHonoreePage({ params }: { params: Promise<Params> }) {
+  return (
+    <Suspense fallback={null}>
+      <HallHonoreePageContent params={params} />
+    </Suspense>
   );
 }
