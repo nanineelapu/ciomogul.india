@@ -30,8 +30,7 @@ export default async function PodcastsPage({
     <main>
       <section className="page-lead">
         <div className="wrap">
-          <span className="page-lead__eyebrow">Podcasts</span>
-          <h1 className="page-lead__title">Conversations with people shaping India.</h1>
+          <h1 className="page-lead__title">Podcasts</h1>
           <p className="page-lead__sub">
             Long-form interviews with CIOs, founders, operators and the
             thinkers whose work ends up in the magazine. Every episode is
@@ -41,14 +40,6 @@ export default async function PodcastsPage({
             <div>
               Episodes
               <b>{totalEpisodes} published</b>
-            </div>
-            <div>
-              Format
-              <b>Video · YouTube</b>
-            </div>
-            <div>
-              Cadence
-              <b>Monthly</b>
             </div>
           </dl>
         </div>

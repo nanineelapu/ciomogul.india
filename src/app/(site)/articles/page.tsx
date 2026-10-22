@@ -40,8 +40,7 @@ export default async function ArticlesPage({
     <main>
       <section className="page-lead page-lead--light">
         <div className="wrap">
-          <span className="page-lead__eyebrow">Articles</span>
-          <h1 className="page-lead__title">News, reporting, and sharper picks.</h1>
+          <h1 className="page-lead__title">Articles</h1>
           <p className="page-lead__sub">
             What&apos;s new, what&apos;s read, and what we think is worth your
             time — plus the full archive filtered the way you want it.

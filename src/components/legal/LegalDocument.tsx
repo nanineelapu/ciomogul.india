@@ -13,7 +13,6 @@ export default function LegalDocument({
     <main>
       <section className="page-lead page-lead--light">
         <div className="wrap">
-          <span className="page-lead__eyebrow">Legal</span>
           <h1 className="page-lead__title">{content.title}</h1>
           <p className="page-lead__sub">{content.intro}</p>
         </div>

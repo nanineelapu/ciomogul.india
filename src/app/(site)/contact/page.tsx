@@ -38,7 +38,6 @@ export default function ContactPage() {
     <main>
       <section className="page-lead page-lead--light">
         <div className="wrap">
-          <span className="page-lead__eyebrow">Contact</span>
           <h1 className="page-lead__title">Let&apos;s start a conversation.</h1>
           <p className="page-lead__sub">
             Whether you have an enquiry, a story to pitch, or simply want to

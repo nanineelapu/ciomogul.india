@@ -26,11 +26,9 @@ export default async function WomenSpotlightPage({
     <main>
       <section className="page-lead page-lead--light">
         <div className="wrap">
-          <span className="page-lead__eyebrow">Women Spotlight</span>
-          <h1 className="page-lead__title">The leaders shaping the next decade.</h1>
+          <h1 className="page-lead__title">Women Spotlight</h1>
           <p className="page-lead__sub">
-            A continuing editorial record of the women we&apos;ve featured on
-            the cover of CIO Mogul India.
+            The women leaders we have featured in CIO Mogul India.
           </p>
         </div>
       </section>
@@ -76,11 +74,13 @@ async function LeadersGrid({
 
   return (
     <>
-      <LeaderFilters
-        years={result.years}
-        resultCount={result.total}
-        totalCount={totalCount}
-      />
+      {totalCount > 8 && (
+        <LeaderFilters
+          years={result.years}
+          resultCount={result.total}
+          totalCount={totalCount}
+        />
+      )}
 
       {result.items.length === 0 ? (
         <div className="mag-empty">

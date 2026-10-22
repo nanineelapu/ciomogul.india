@@ -16,7 +16,6 @@ export default async function AboutPage() {
     <main>
       <section className="page-lead page-lead--light">
         <div className="wrap">
-          <span className="page-lead__eyebrow">About us</span>
           <h1 className="page-lead__title">{about.headline}</h1>
           <p className="page-lead__sub">{about.intro}</p>
         </div>

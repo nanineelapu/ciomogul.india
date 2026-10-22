@@ -30,7 +30,7 @@ export default async function MagazinesPage({
     <main>
       <section className="page-lead">
         <div className="wrap">
-          <h1 className="page-lead__title">Every edition, in one place.</h1>
+          <h1 className="page-lead__title">Magazines</h1>
           <p className="page-lead__sub">
             Each issue of CIO Mogul India features the people shaping how
             India&apos;s technology, business and industry work. Browse the
