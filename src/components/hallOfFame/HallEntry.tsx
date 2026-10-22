@@ -21,9 +21,9 @@ export default function HallEntry({
       </aside>
 
       <Link
-        href={`/magazines/${entry.editionSlug}`}
+        href={`/hall-of-fame/${entry.slug}`}
         className="hall-entry__portrait"
-        aria-label={`Open ${entry.name}'s edition`}
+        aria-label={`Open ${entry.name}'s profile`}
       >
         <Image
           src={entry.portrait}
@@ -36,7 +36,9 @@ export default function HallEntry({
 
       <div className="hall-entry__body">
         <p className="hall-entry__kicker">Inducted · {entry.inductedOn}</p>
-        <h3 className="hall-entry__name">{entry.name}</h3>
+        <h3 className="hall-entry__name">
+          <Link href={`/hall-of-fame/${entry.slug}`}>{entry.name}</Link>
+        </h3>
         <p className="hall-entry__role">
           {entry.role}
           {entry.organization && <> · <span>{entry.organization}</span></>}
@@ -44,8 +46,8 @@ export default function HallEntry({
 
         <blockquote className="hall-entry__quote">{entry.pullQuote}</blockquote>
 
-        <Link href={`/magazines/${entry.editionSlug}`} className="hall-entry__cta">
-          Read the edition
+        <Link href={`/hall-of-fame/${entry.slug}`} className="hall-entry__cta">
+          Open profile
         </Link>
       </div>
     </article>

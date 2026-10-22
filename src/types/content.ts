@@ -108,4 +108,5 @@ export type HallOfFameEntry = {
   organization: string;
   portrait: string;         // image path — may be the cover for now
   pullQuote: string;        // one-line quote from their edition
+  profileBody: string[];    // paragraphs on the honoree profile page
 };

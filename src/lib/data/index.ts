@@ -287,6 +287,25 @@ export async function getHallOfFame(): Promise<HallOfFameEntry[]> {
   return HALL_OF_FAME;
 }
 
+export async function getHallEntryBySlug(slug: string): Promise<HallOfFameEntry | null> {
+  return HALL_OF_FAME.find((e) => e.slug === slug) ?? null;
+}
+
+// Returns the entries immediately before/after `slug` in the natural roll
+// order (newest-first — matches /hall-of-fame default). Null when at an end.
+export async function getAdjacentHallEntries(slug: string): Promise<{
+  prev: HallOfFameEntry | null;
+  next: HallOfFameEntry | null;
+}> {
+  const roll = HALL_OF_FAME;
+  const i = roll.findIndex((e) => e.slug === slug);
+  if (i === -1) return { prev: null, next: null };
+  return {
+    prev: i > 0 ? roll[i - 1] : null,
+    next: i < roll.length - 1 ? roll[i + 1] : null,
+  };
+}
+
 export type HallSort = "newest" | "oldest";
 
 export type HallQuery = {
