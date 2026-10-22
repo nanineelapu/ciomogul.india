@@ -4127,10 +4127,10 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
 .contact-details__value {
   display: block;
   margin: 0;
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 22px;
-  line-height: 1.25;
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.4;
   color: var(--color-ink);
   overflow-wrap: anywhere;
 }
