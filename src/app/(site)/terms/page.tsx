@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function TermsPage() {
-  return <LegalDocument content={TERMS} />;
+  return <LegalDocument content={TERMS} related={{ label: "Privacy Policy", href: "/privacy" }} />;
 }

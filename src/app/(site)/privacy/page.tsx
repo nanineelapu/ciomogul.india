@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function PrivacyPage() {
-  return <LegalDocument content={PRIVACY} />;
+  return <LegalDocument content={PRIVACY} related={{ label: "Terms of Service", href: "/terms" }} />;
 }

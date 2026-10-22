@@ -1,7 +1,14 @@
+import Link from "next/link";
 import type { LegalContent } from "@/data/terms";
 
 // Shared layout for legal pages (Terms, Privacy). Plain, readable, numbered.
-export default function LegalDocument({ content }: { content: LegalContent }) {
+export default function LegalDocument({
+  content,
+  related,
+}: {
+  content: LegalContent;
+  related?: { label: string; href: string };
+}) {
   return (
     <main>
       <section className="page-lead page-lead--light">
@@ -45,6 +52,12 @@ export default function LegalDocument({ content }: { content: LegalContent }) {
               </section>
             ))}
           </div>
+
+          <nav className="legal-also" aria-label="Related pages">
+            <span className="legal-also__label">Also read</span>
+            {related && <Link href={related.href}>{related.label}</Link>}
+            <Link href="/contact">Contact us</Link>
+          </nav>
         </div>
       </section>
     </main>

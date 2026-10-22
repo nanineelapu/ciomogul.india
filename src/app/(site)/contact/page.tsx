@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import ContactForm from "@/components/contact/ContactForm";
+import { CONTACT_FAQ, CONTACT_TOPICS } from "@/data/contact";
 
 export const metadata: Metadata = {
   title: "Contact — CIO Mogul India",
@@ -45,6 +46,19 @@ export default function ContactPage() {
         </div>
       </section>
 
+      <section className="section contact-topics-section">
+        <div className="wrap">
+          <ul className="contact-topics">
+            {CONTACT_TOPICS.map((t) => (
+              <li key={t.title} className="contact-topics__item">
+                <h2 className="contact-topics__title">{t.title}</h2>
+                <p>{t.text}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
       <section className="section">
         <div className="wrap contact-grid">
           <aside className="contact-details" aria-label="Contact details">
@@ -71,6 +85,23 @@ export default function ContactPage() {
             <h2 className="section-head__title">Send a message</h2>
             <span className="section-head__rule" aria-hidden />
             <ContactForm />
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="wrap">
+          <header className="section-head">
+            <h2 className="section-head__title">Common questions</h2>
+            <span className="section-head__rule" aria-hidden />
+          </header>
+          <div className="faq">
+            {CONTACT_FAQ.map((f) => (
+              <details key={f.q} className="faq__item">
+                <summary>{f.q}</summary>
+                <p>{f.a}</p>
+              </details>
+            ))}
           </div>
         </div>
       </section>

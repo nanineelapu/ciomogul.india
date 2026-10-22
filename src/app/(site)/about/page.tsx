@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import ExploreLinks from "@/components/shared/ExploreLinks";
 import { getAboutContent } from "@/lib/data";
 
 export const metadata: Metadata = {
@@ -56,6 +57,8 @@ export default async function AboutPage() {
           </ol>
         </div>
       </section>
+
+      <ExploreLinks heading="Explore the magazine" />
 
       <section className="hall-apply" aria-labelledby="join-title">
         <div className="wrap hall-apply__inner">
