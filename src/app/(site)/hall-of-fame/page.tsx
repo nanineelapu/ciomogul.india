@@ -20,14 +20,12 @@ export default async function HallOfFamePage({
   // Lead block is static; the roll depends on searchParams and streams in.
   const all = await getHallOfFame();
   const totalInductees = all.length;
-  const sinceYear = Math.min(...all.map((e) => e.inductionYear));
 
   return (
     <main>
       <section className="page-lead">
         <div className="wrap">
-          <span className="page-lead__eyebrow">Hall of Fame</span>
-          <h1 className="page-lead__title">The permanent record.</h1>
+          <h1 className="page-lead__title">Hall of Fame</h1>
           <p className="page-lead__sub">
             Every leader we&apos;ve featured on the cover of CIO Mogul India
             — the people whose work has shaped how India&apos;s technology,
@@ -37,14 +35,6 @@ export default async function HallOfFamePage({
             <div>
               Inductees
               <b>{totalInductees} on the roll</b>
-            </div>
-            <div>
-              Since
-              <b>{sinceYear}</b>
-            </div>
-            <div>
-              Updated
-              <b>With each new edition</b>
             </div>
           </dl>
         </div>
