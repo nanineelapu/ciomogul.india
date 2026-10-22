@@ -27,7 +27,7 @@ export default function Footer() {
       </div>
       <div className="wrap footer__bottom">
         <span>© 2026 CIO Mogul India. All rights reserved.</span>
-        <span><Link href="/terms">Terms</Link> · <Link href="/privacy">Privacy</Link></span>
+        <span><Link href="/terms">Terms of Service</Link> · <Link href="/privacy">Privacy</Link></span>
       </div>
     </footer>
   );
