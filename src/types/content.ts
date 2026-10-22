@@ -9,6 +9,24 @@ export type Magazine = {
   alt: string;
 };
 
+// Full edition record for /magazines and /magazines/[slug].
+// Every text field is dummy for now; each one maps 1:1 to a Sanity field later.
+export type MagazineEdition = {
+  slug: string;
+  editionLabel: string;         // e.g. "Edition 014 · October 2026"
+  featuredPersonName: string;   // e.g. "Kannan Subbiah"
+  title: string;                // long editorial headline
+  subtitle: string;             // one-line summary under the title
+  coverImage: string;
+  coverAlt: string;
+  pullQuote: string;            // short quote shown next to the cover
+  pullQuoteAttribution: string; // name + role beneath the quote
+  roleTags: string[];           // e.g. ["Fractional CISO", "Board Advisor"]
+  pdfUrl: string | null;        // null until a PDF is uploaded
+  publishedOn: string;          // display string; no Date parsing needed
+  body: string[];               // paragraphs for the "Inside this edition" block
+};
+
 export type CoverStory = {
   slug: string;
   name: string;

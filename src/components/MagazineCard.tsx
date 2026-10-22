@@ -1,0 +1,35 @@
+import Image from "next/image";
+import Link from "next/link";
+import type { MagazineEdition } from "@/types/content";
+
+export default function MagazineCard({
+  edition,
+  index,
+}: {
+  edition: MagazineEdition;
+  // Index used only to render the "N°" chip in the corner — not stored data.
+  index?: number;
+}) {
+  return (
+    <Link href={`/magazines/${edition.slug}`} className="mag-card">
+      <span className="mag-card__cover">
+        {typeof index === "number" && (
+          <span className="mag-card__num" aria-hidden>
+            N° {String(index + 1).padStart(2, "0")}
+          </span>
+        )}
+        <Image
+          src={edition.coverImage}
+          alt={edition.coverAlt}
+          width={713}
+          height={1009}
+          sizes="(max-width: 420px) 100vw, (max-width: 820px) 50vw, (max-width: 1080px) 33vw, 25vw"
+        />
+      </span>
+      <span className="mag-card__kicker">{edition.editionLabel}</span>
+      <span className="mag-card__name">{edition.featuredPersonName}</span>
+      <span className="mag-card__role">{edition.subtitle}</span>
+      <span className="mag-card__cta">Read edition</span>
+    </Link>
+  );
+}

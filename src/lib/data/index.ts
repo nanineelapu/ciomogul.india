@@ -9,6 +9,7 @@
 
 import { HEADLINES } from "@/data/headlines";
 import { RELEASE_COVERS, GET_FEATURED_COVERS } from "@/data/magazines";
+import { MAGAZINE_EDITIONS } from "@/data/magazineEditions";
 import { COVER_STORIES } from "@/data/coverStories";
 import { NEWS_CARDS, VITAL_UPDATES, FEATURED_ARTICLES } from "@/data/news";
 import { WOMEN_LEADERS } from "@/data/womenLeaders";
@@ -25,6 +26,18 @@ export async function getReleaseCovers() {
 
 export async function getGetFeaturedCovers() {
   return GET_FEATURED_COVERS;
+}
+
+export async function getMagazineEditions() {
+  return MAGAZINE_EDITIONS;
+}
+
+export async function getMagazineEditionBySlug(slug: string) {
+  return MAGAZINE_EDITIONS.find((m) => m.slug === slug) ?? null;
+}
+
+export async function getOtherMagazineEditions(currentSlug: string, limit = 4) {
+  return MAGAZINE_EDITIONS.filter((m) => m.slug !== currentSlug).slice(0, limit);
 }
 
 export async function getCoverStories() {
