@@ -86,11 +86,13 @@ async function ArchiveResults({
 
   return (
     <>
-      <MagazineFilters
-        years={result.years}
-        resultCount={result.total}
-        totalCount={totalCount}
-      />
+      {totalCount > 8 && (
+        <MagazineFilters
+          years={result.years}
+          resultCount={result.total}
+          totalCount={totalCount}
+        />
+      )}
 
       {result.items.length === 0 ? (
         <div className="mag-empty">

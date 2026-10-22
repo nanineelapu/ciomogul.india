@@ -106,11 +106,13 @@ async function HallRoll({
 
   return (
     <>
-      <HallFilters
-        years={result.years}
-        resultCount={result.total}
-        totalCount={totalCount}
-      />
+      {totalCount > 8 && (
+        <HallFilters
+          years={result.years}
+          resultCount={result.total}
+          totalCount={totalCount}
+        />
+      )}
 
       {result.items.length === 0 ? (
         <div className="mag-empty">

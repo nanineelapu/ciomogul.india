@@ -92,11 +92,13 @@ async function PodcastResults({
 
   return (
     <>
-      <PodcastFilters
-        years={result.years}
-        resultCount={result.total}
-        totalCount={totalCount}
-      />
+      {totalCount > 8 && (
+        <PodcastFilters
+          years={result.years}
+          resultCount={result.total}
+          totalCount={totalCount}
+        />
+      )}
 
       {result.items.length === 0 ? (
         <div className="mag-empty">
