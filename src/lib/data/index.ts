@@ -777,3 +777,12 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     };
   }, SETTINGS_FALLBACK);
 }
+
+// ─── Suggestions for the bottom of detail pages ──────────────────────────
+export async function getOtherHallEntries(currentSlug: string, limit = 4): Promise<HallOfFameEntry[]> {
+  return (await getHallOfFame()).filter((e) => e.slug !== currentSlug).slice(0, limit);
+}
+
+export async function getOtherWomenLeaders(currentSlug: string, limit = 4): Promise<WomanLeader[]> {
+  return (await getWomenLeaders()).filter((w) => w.slug !== currentSlug).slice(0, limit);
+}

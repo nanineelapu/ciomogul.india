@@ -3,8 +3,10 @@ import { Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import LeaderCard from "@/components/womenSpotlight/LeaderCard";
+import MoreBlock from "@/components/shared/MoreBlock";
 import {
-  getAdjacentWomenLeaders,
+  getOtherWomenLeaders,
   getWomanLeaderBySlug,
   getWomenLeaders,
 } from "@/lib/data";
@@ -23,23 +25,19 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const leader = await getWomanLeaderBySlug(slug);
-  if (!leader) return { title: "Leader not found — CIO Mogul India" };
+  if (!leader) return { title: "Not found — CIO Mogul India" };
   return {
     title: `${leader.name} — Women Spotlight · CIO Mogul India`,
     description: `${leader.role}${leader.organization ? ` · ${leader.organization}` : ""}`,
   };
 }
 
-async function LeaderProfilePageContent({
-  params,
-}: {
-  params: Promise<Params>;
-}) {
+async function LeaderProfileContent({ params }: { params: Promise<Params> }) {
   const { slug } = await params;
   const leader = await getWomanLeaderBySlug(slug);
   if (!leader) notFound();
 
-  const adjacent = await getAdjacentWomenLeaders(slug);
+  const others = await getOtherWomenLeaders(slug, 4);
 
   return (
     <main>
@@ -70,7 +68,7 @@ async function LeaderProfilePageContent({
                 width={600}
                 height={720}
                 priority
-                sizes="(max-width: 820px) 100vw, 420px"
+                sizes="(max-width: 900px) 100vw, 420px"
               />
             </div>
 
@@ -85,43 +83,22 @@ async function LeaderProfilePageContent({
         </div>
       </article>
 
-      <nav className="honoree-nav" aria-label="Spotlight navigation">
-        <div className="wrap honoree-nav__inner">
-          {adjacent.prev ? (
-            <Link
-              href={`/women-spotlight/${adjacent.prev.slug}`}
-              className="honoree-nav__link honoree-nav__link--prev"
-            >
-              <span className="honoree-nav__dir">← Previous leader</span>
-              <span className="honoree-nav__title">{adjacent.prev.name}</span>
-            </Link>
-          ) : (
-            <span />
-          )}
-
-          {adjacent.next ? (
-            <Link
-              href={`/women-spotlight/${adjacent.next.slug}`}
-              className="honoree-nav__link honoree-nav__link--next"
-            >
-              <span className="honoree-nav__dir">Next leader →</span>
-              <span className="honoree-nav__title">{adjacent.next.name}</span>
-            </Link>
-          ) : (
-            <span />
-          )}
-        </div>
-      </nav>
+      {others.length > 0 && (
+        <MoreBlock title="More leaders" viewAll={{ label: "View all", href: "/women-spotlight" }}>
+          {others.map((o) => (
+            <LeaderCard key={o.slug} leader={o} />
+          ))}
+        </MoreBlock>
+      )}
     </main>
   );
 }
 
-// Awaiting params suspends, so it runs inside a Suspense boundary. The page
-// shell renders immediately and the profile streams in.
+// Awaiting params suspends, so the page body runs inside a Suspense boundary.
 export default function LeaderProfilePage({ params }: { params: Promise<Params> }) {
   return (
     <Suspense fallback={null}>
-      <LeaderProfilePageContent params={params} />
+      <LeaderProfileContent params={params} />
     </Suspense>
   );
 }

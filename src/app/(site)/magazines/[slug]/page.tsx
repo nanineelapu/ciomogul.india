@@ -79,11 +79,6 @@ async function MagazineDetailPageContent({
               </blockquote>
               <p className="mag-hero__attrib">{edition.pullQuoteAttribution}</p>
 
-              <ul className="mag-hero__roles" aria-label="Roles">
-                {edition.roleTags.map((role) => (
-                  <li key={role} className="mag-hero__role">{role}</li>
-                ))}
-              </ul>
 
               <div className="mag-hero__actions">
                 <a
