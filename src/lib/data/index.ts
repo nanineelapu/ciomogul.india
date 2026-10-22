@@ -191,6 +191,9 @@ type RawWomanLeader = {
   role?: string;
   organization?: string;
   image?: SanityImage;
+  featuredYear?: number;
+  featuredOn?: string;
+  bio?: string[];
 };
 export async function getWomenLeaders(): Promise<WomanLeader[]> {
   return withFallback<WomanLeader[]>(async () => {
@@ -201,8 +204,72 @@ export async function getWomenLeaders(): Promise<WomanLeader[]> {
       role: r.role ?? "",
       organization: r.organization ?? "",
       image: mapImage(r.image, WOMEN_LEADERS[i % WOMEN_LEADERS.length].image),
+      featuredYear: r.featuredYear,
+      featuredOn: r.featuredOn ?? "",
+      bio: r.bio ?? [],
     }));
   }, WOMEN_LEADERS);
+}
+
+export async function getWomanLeaderBySlug(slug: string): Promise<WomanLeader | null> {
+  const all = await getWomenLeaders();
+  return all.find((w) => w.slug === slug) ?? null;
+}
+
+export async function getAdjacentWomenLeaders(slug: string): Promise<{
+  prev: WomanLeader | null;
+  next: WomanLeader | null;
+}> {
+  const all = await getWomenLeaders();
+  const i = all.findIndex((w) => w.slug === slug);
+  if (i === -1) return { prev: null, next: null };
+  return {
+    prev: i > 0 ? all[i - 1] : null,
+    next: i < all.length - 1 ? all[i + 1] : null,
+  };
+}
+
+export type WomenSort = "newest" | "oldest";
+
+export type WomenQuery = {
+  q?: string;
+  year?: number;
+  sort?: WomenSort;
+  page?: number;
+  perPage?: number;
+};
+
+export async function searchWomenLeaders(query: WomenQuery = {}) {
+  const { q, year, sort = "newest", page = 1, perPage = 12 } = query;
+  const leaders = await getWomenLeaders();
+
+  const normalised = q?.trim().toLowerCase() ?? "";
+  const matches = (w: WomanLeader) => {
+    if (year && w.featuredYear !== year) return false;
+    if (!normalised) return true;
+    return (
+      w.name.toLowerCase().includes(normalised) ||
+      w.role.toLowerCase().includes(normalised) ||
+      w.organization.toLowerCase().includes(normalised)
+    );
+  };
+
+  const filtered = leaders.filter(matches);
+  // Insertion order is newest-first; respect it rather than parse free-form
+  // display strings.
+  const sorted = sort === "oldest" ? [...filtered].reverse() : filtered;
+
+  const total = sorted.length;
+  const totalPages = Math.max(1, Math.ceil(total / perPage));
+  const safePage = Math.min(Math.max(1, page), totalPages);
+  const start = (safePage - 1) * perPage;
+  const items = sorted.slice(start, start + perPage);
+
+  const years = Array.from(
+    new Set(leaders.map((w) => w.featuredYear).filter((y): y is number => typeof y === "number"))
+  ).sort((a, b) => b - a);
+
+  return { items, total, totalPages, page: safePage, perPage, years };
 }
 
 // ─── Podcasts ────────────────────────────────────────────────────────────

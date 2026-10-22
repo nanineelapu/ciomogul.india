@@ -101,7 +101,10 @@ export const WOMEN_LEADERS_QUERY = /* groq */ `
     name,
     "role": coalesce(role, ""),
     "organization": coalesce(organization, ""),
-    "image": image
+    "image": image,
+    featuredYear,
+    "featuredOn": coalesce(featuredOn, ""),
+    "bio": coalesce(bio, [])
   }
 `;
 

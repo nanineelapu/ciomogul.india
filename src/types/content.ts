@@ -66,6 +66,11 @@ export type WomanLeader = {
   role: string;
   organization: string;
   image: string;
+  // Optional on the homepage (where the strip is just 4 portraits); used by
+  // the /women-spotlight archive filter + per-person detail page.
+  featuredYear?: number;
+  featuredOn?: string;      // free-form display, e.g. "October 2026"
+  bio?: string[];           // paragraphs for the profile page
 };
 
 export type Podcast = {

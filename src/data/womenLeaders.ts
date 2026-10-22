@@ -1,5 +1,15 @@
 import type { WomanLeader } from "@/types/content";
 
+// Four real women leaders already shown on the homepage strip, extended with
+// the fields the /women-spotlight archive + detail pages need. Eight more
+// placeholder entries follow so the filter + pagination have material.
+// Replaced per-entry from Sanity later.
+const BIO_LOREM = [
+  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. The feature's opening paragraph would introduce the leader's current remit and the shift her work is driving — written in editorial voice rather than as a résumé bullet.",
+  "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. The second paragraph adds specific decisions, specific outcomes, specific numbers where they help the reader understand the scale.",
+  "Curabitur pretium tincidunt lacus. The closing paragraph places the leader's work inside the broader shift the magazine tracks, giving the feature its editorial frame.",
+];
+
 export const WOMEN_LEADERS: WomanLeader[] = [
   {
     slug: "sangita-reddy",
@@ -7,6 +17,9 @@ export const WOMEN_LEADERS: WomanLeader[] = [
     role: "Joint Managing Director",
     organization: "Apollo Hospitals",
     image: "/assets/leader-sangita.jpg",
+    featuredYear: 2026,
+    featuredOn: "October 2026",
+    bio: BIO_LOREM,
   },
   {
     slug: "arundhati-bhattacharya",
@@ -14,6 +27,9 @@ export const WOMEN_LEADERS: WomanLeader[] = [
     role: "Chairperson & CEO",
     organization: "Salesforce India",
     image: "/assets/leader-arundhati.jpg",
+    featuredYear: 2026,
+    featuredOn: "September 2026",
+    bio: BIO_LOREM,
   },
   {
     slug: "shobha-nv",
@@ -21,6 +37,9 @@ export const WOMEN_LEADERS: WomanLeader[] = [
     role: "Founder & Managing Director",
     organization: "Infrastructure",
     image: "/assets/leader-shobha.jpg",
+    featuredYear: 2026,
+    featuredOn: "August 2026",
+    bio: BIO_LOREM,
   },
   {
     slug: "nila-malik",
@@ -28,5 +47,91 @@ export const WOMEN_LEADERS: WomanLeader[] = [
     role: "Enterprise Transformation Leader",
     organization: "Aviation",
     image: "/assets/leader-nila.jpg",
+    featuredYear: 2026,
+    featuredOn: "July 2026",
+    bio: BIO_LOREM,
+  },
+  // ─── Dummy entries so the archive view is populated. Portraits reuse the
+  // four we already have so no image is missing until the client uploads real
+  // photos through Sanity.
+  {
+    slug: "dummy-leader-05",
+    name: "Leader Name Placeholder",
+    role: "Role / Title Placeholder",
+    organization: "Organization Placeholder",
+    image: "/assets/leader-sangita.jpg",
+    featuredYear: 2026,
+    featuredOn: "June 2026",
+    bio: BIO_LOREM,
+  },
+  {
+    slug: "dummy-leader-06",
+    name: "Leader Name Placeholder",
+    role: "Role / Title Placeholder",
+    organization: "Organization Placeholder",
+    image: "/assets/leader-arundhati.jpg",
+    featuredYear: 2026,
+    featuredOn: "May 2026",
+    bio: BIO_LOREM,
+  },
+  {
+    slug: "dummy-leader-07",
+    name: "Leader Name Placeholder",
+    role: "Role / Title Placeholder",
+    organization: "Organization Placeholder",
+    image: "/assets/leader-shobha.jpg",
+    featuredYear: 2026,
+    featuredOn: "April 2026",
+    bio: BIO_LOREM,
+  },
+  {
+    slug: "dummy-leader-08",
+    name: "Leader Name Placeholder",
+    role: "Role / Title Placeholder",
+    organization: "Organization Placeholder",
+    image: "/assets/leader-nila.jpg",
+    featuredYear: 2026,
+    featuredOn: "March 2026",
+    bio: BIO_LOREM,
+  },
+  {
+    slug: "dummy-leader-09",
+    name: "Leader Name Placeholder",
+    role: "Role / Title Placeholder",
+    organization: "Organization Placeholder",
+    image: "/assets/leader-sangita.jpg",
+    featuredYear: 2025,
+    featuredOn: "December 2025",
+    bio: BIO_LOREM,
+  },
+  {
+    slug: "dummy-leader-10",
+    name: "Leader Name Placeholder",
+    role: "Role / Title Placeholder",
+    organization: "Organization Placeholder",
+    image: "/assets/leader-arundhati.jpg",
+    featuredYear: 2025,
+    featuredOn: "October 2025",
+    bio: BIO_LOREM,
+  },
+  {
+    slug: "dummy-leader-11",
+    name: "Leader Name Placeholder",
+    role: "Role / Title Placeholder",
+    organization: "Organization Placeholder",
+    image: "/assets/leader-shobha.jpg",
+    featuredYear: 2025,
+    featuredOn: "August 2025",
+    bio: BIO_LOREM,
+  },
+  {
+    slug: "dummy-leader-12",
+    name: "Leader Name Placeholder",
+    role: "Role / Title Placeholder",
+    organization: "Organization Placeholder",
+    image: "/assets/leader-nila.jpg",
+    featuredYear: 2025,
+    featuredOn: "June 2025",
+    bio: BIO_LOREM,
   },
 ];
