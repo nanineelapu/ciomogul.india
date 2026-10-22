@@ -63,7 +63,7 @@ export default function Header() {
           <div className="site-head__actions">
             <span className="site-head__date">{date}</span>
             <div className="site-head__social" aria-label="Follow CIO Mogul India">
-              <a href="https://instagram.com" className="social-btn" aria-label="Instagram"><Icon name="instagram" /></a>
+              <a href="https://www.instagram.com/cio_mogul_india" target="_blank" rel="noopener noreferrer" className="social-btn" aria-label="Instagram"><Icon name="instagram" /></a>
               <a href="https://facebook.com" className="social-btn" aria-label="Facebook"><Icon name="facebook" /></a>
               <a href="https://linkedin.com" className="social-btn" aria-label="LinkedIn"><Icon name="linkedin" /></a>
             </div>

@@ -5,7 +5,7 @@ const COLS = [
   { head: "Platform", links: [["Home", "/"], ["Magazines", "/magazines"], ["Podcasts", "/podcasts"], ["About Us", "/about"]] },
   { head: "Explore", links: [["Hall of Fame", "/hall-of-fame"], ["Women Spotlight", "/women-spotlight"], ["Articles", "/articles"], ["Contact Us", "/contact"]] },
   { head: "Legal", links: [["Terms of Service", "/terms"], ["Privacy Policy", "/privacy"]] },
-  { head: "Follow", links: [["LinkedIn", "https://linkedin.com"], ["Instagram", "https://instagram.com"], ["Facebook", "https://facebook.com"], ["X", "https://twitter.com"]] },
+  { head: "Follow", links: [["LinkedIn", "https://linkedin.com"], ["Instagram", "https://www.instagram.com/cio_mogul_india"], ["Facebook", "https://facebook.com"], ["X", "https://twitter.com"]] },
 ] as const;
 
 export default function Footer() {
