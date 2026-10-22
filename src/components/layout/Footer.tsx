@@ -1,12 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
+import { SOCIAL } from "@/data/social";
 
 const COLS = [
   { head: "Platform", links: [["Home", "/"], ["Magazines", "/magazines"], ["Podcasts", "/podcasts"], ["About Us", "/about"]] },
   { head: "Explore", links: [["Hall of Fame", "/hall-of-fame"], ["Women Spotlight", "/women-spotlight"], ["Articles", "/articles"], ["Contact Us", "/contact"]] },
   { head: "Legal", links: [["Terms of Service", "/terms"], ["Privacy Policy", "/privacy"]] },
-  { head: "Follow", links: [["LinkedIn", "https://linkedin.com"], ["Instagram", "https://www.instagram.com/cio_mogul_india"], ["Facebook", "https://facebook.com"], ["X", "https://twitter.com"]] },
-] as const;
+  { head: "Follow", links: SOCIAL.filter((s) => s.key !== "whatsapp").map((s) => [s.label, s.href] as const) },
+];
 
 export default function Footer() {
   return (

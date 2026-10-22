@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import ContactForm from "@/components/contact/ContactForm";
+import { WHATSAPP_URL } from "@/data/social";
 import { CONTACT_FAQ, CONTACT_TOPICS } from "@/data/contact";
 
 export const metadata: Metadata = {
@@ -23,7 +24,7 @@ const DETAILS = [
   {
     label: "WhatsApp",
     value: "Start a chat",
-    href: "https://wa.me/919529203836",
+    href: WHATSAPP_URL,
     note: "Message us directly.",
   },
   {
