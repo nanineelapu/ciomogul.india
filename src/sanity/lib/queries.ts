@@ -129,3 +129,63 @@ export const TESTIMONIALS_QUERY = /* groq */ `
     "avatar": avatar
   }
 `;
+
+export const HALL_OF_FAME_QUERY = /* groq */ `
+  *[_type == "hallOfFame"] | order(serial desc) {
+    "slug": slug.current,
+    serial,
+    inductionYear,
+    "inductedOn": coalesce(inductedOn, ""),
+    "editionSlug": coalesce(edition->slug.current, ""),
+    name,
+    "role": coalesce(role, ""),
+    "organization": coalesce(organization, ""),
+    "portrait": portrait,
+    "pullQuote": coalesce(pullQuote, ""),
+    "profileBody": coalesce(profileBody, [])
+  }
+`;
+
+export const ARTICLES_QUERY = /* groq */ `
+  *[_type == "article"] | order(publishDate desc) {
+    "slug": slug.current,
+    title,
+    "excerpt": coalesce(excerpt, ""),
+    category,
+    "author": coalesce(author, ""),
+    publishDate,
+    "readTime": coalesce(readTime, ""),
+    "image": image,
+    "alt": coalesce(image.alt, ""),
+    "isTopStory": coalesce(isTopStory, false)
+  }
+`;
+
+export const ABOUT_QUERY = /* groq */ `
+  *[_type == "aboutPage" && _id == "aboutPage"][0] {
+    headline,
+    intro,
+    "whoWeAre": coalesce(whoWeAre, []),
+    "whatWeCover": coalesce(whatWeCover[]{ title, text }, []),
+    joinTitle,
+    joinText
+  }
+`;
+
+export const LEGAL_QUERY = /* groq */ `
+  *[_type == "legalPage" && kind == $kind][0] {
+    title,
+    "intro": coalesce(intro, ""),
+    "sections": coalesce(sections[]{
+      title,
+      "paragraphs": coalesce(paragraphs[]{ ref, text }, []),
+      email
+    }, [])
+  }
+`;
+
+export const SITE_SETTINGS_QUERY = /* groq */ `
+  *[_type == "siteSettings" && _id == "siteSettings"][0] {
+    email, phone, office, instagram, facebook, linkedin, x, whatsapp
+  }
+`;

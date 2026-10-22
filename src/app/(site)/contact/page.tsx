@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import ContactForm from "@/components/contact/ContactForm";
-import { WHATSAPP_URL } from "@/data/social";
+import { getSiteSettings } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Contact — CIO Mogul India",
@@ -8,14 +8,15 @@ export const metadata: Metadata = {
     "Get in touch with the CIO Mogul India editorial team for enquiries, story pitches and partnerships.",
 };
 
-const DETAILS = [
-  { label: "Email", value: "info@ciomogulindia.com", href: "mailto:info@ciomogulindia.com" },
-  { label: "Phone", value: "+91 95292 03836", href: "tel:+919529203836" },
-  { label: "WhatsApp", value: "Start a chat", href: WHATSAPP_URL },
-  { label: "Office", value: "Mumbai, Maharashtra, India" },
-];
+export default async function ContactPage() {
+  const settings = await getSiteSettings();
+  const DETAILS: { label: string; value: string; href?: string }[] = [
+    { label: "Email", value: settings.email, href: `mailto:${settings.email}` },
+    { label: "Phone", value: settings.phone, href: settings.phoneHref },
+    { label: "WhatsApp", value: "Start a chat", href: settings.whatsappUrl },
+    { label: "Office", value: settings.office },
+  ];
 
-export default function ContactPage() {
   return (
     <main>
       <section className="page-lead page-lead--light">

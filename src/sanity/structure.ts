@@ -1,28 +1,33 @@
 import type { StructureResolver } from "sanity/structure";
 
-// Studio sidebar. The homepage config is modelled as a singleton — one and
-// only one document — so we expose it as a direct editor rather than a list.
+type Builder = Parameters<StructureResolver>[0];
+
+const single = (S: Builder, id: string, title: string) =>
+  S.listItem()
+    .title(title)
+    .id(id)
+    .child(S.editor().id(id).schemaType(id).documentId(id));
+
+// Studio sidebar. Singletons open straight into their editor.
 export const structure: StructureResolver = (S) =>
   S.list()
     .title("Content")
     .items([
-      S.listItem()
-        .title("Homepage")
-        .id("homepage-config")
-        .child(
-          S.editor()
-            .id("homepageConfig")
-            .schemaType("homepageConfig")
-            .documentId("homepageConfig")
-        ),
+      single(S, "homepageConfig", "Homepage"),
+      single(S, "aboutPage", "About page"),
+      single(S, "siteSettings", "Site settings"),
       S.divider(),
       S.documentTypeListItem("magazineEdition").title("Magazine Editions"),
+      S.documentTypeListItem("hallOfFame").title("Hall of Fame"),
+      S.documentTypeListItem("womanLeader").title("Women Spotlight"),
+      S.documentTypeListItem("podcast").title("Podcasts"),
+      S.documentTypeListItem("article").title("Articles"),
+      S.divider(),
+      S.documentTypeListItem("legalPage").title("Terms & Privacy"),
       S.divider(),
       S.documentTypeListItem("headline").title("Headlines (ticker)"),
-      S.documentTypeListItem("newsCard").title("News Cards"),
-      S.documentTypeListItem("vitalUpdate").title("Vital Updates"),
-      S.documentTypeListItem("featuredArticle").title("Featured Articles"),
-      S.documentTypeListItem("podcast").title("Podcasts"),
-      S.documentTypeListItem("womanLeader").title("Women — Wall of Fame"),
+      S.documentTypeListItem("newsCard").title("Homepage news cards"),
+      S.documentTypeListItem("vitalUpdate").title("Vital updates"),
+      S.documentTypeListItem("featuredArticle").title("Homepage featured articles"),
       S.documentTypeListItem("testimonial").title("Testimonials"),
     ]);

@@ -8,15 +8,28 @@ import { featuredArticle } from "./featuredArticle";
 import { womanLeader } from "./womanLeader";
 import { podcast } from "./podcast";
 import { testimonial } from "./testimonial";
+import { hallOfFame } from "./hallOfFame";
+import { article } from "./article";
+import { aboutPage } from "./aboutPage";
+import { legalPage } from "./legalPage";
+import { siteSettings } from "./siteSettings";
 
 export const schemaTypes: SchemaTypeDefinition[] = [
   magazineEdition,
+  hallOfFame,
+  womanLeader,
+  podcast,
+  article,
   homepageConfig,
   headline,
   newsCard,
   vitalUpdate,
   featuredArticle,
-  womanLeader,
-  podcast,
   testimonial,
+  aboutPage,
+  legalPage,
+  siteSettings,
 ];
+
+// Documents that must exist exactly once.
+export const SINGLETON_TYPES = ["homepageConfig", "aboutPage", "siteSettings"];

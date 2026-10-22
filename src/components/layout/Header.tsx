@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { SOCIAL, type SocialKey } from "@/data/social";
+import type { SocialKey } from "@/data/social";
 
 const NAV = [
   { label: "Home", href: "/" },
@@ -24,7 +24,11 @@ function isActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-export default function Header() {
+export default function Header({
+  social,
+}: {
+  social: { key: SocialKey; label: string; href: string }[];
+}) {
   const pathname = usePathname();
   const [date, setDate] = useState("");
   const [compact, setCompact] = useState(false);
@@ -64,7 +68,7 @@ export default function Header() {
           <div className="site-head__actions">
             <span className="site-head__date">{date}</span>
             <div className="site-head__social" aria-label="Follow CIO Mogul India">
-              {SOCIAL.map((s) => (
+              {social.map((s) => (
                 <a key={s.key} href={s.href} target="_blank" rel="noopener noreferrer" className="social-btn" aria-label={s.label}><Icon name={s.key} /></a>
               ))}
             </div>

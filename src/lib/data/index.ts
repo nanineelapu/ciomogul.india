@@ -14,6 +14,9 @@ import { COVER_STORIES } from "@/data/coverStories";
 import { NEWS_CARDS, VITAL_UPDATES, FEATURED_ARTICLES } from "@/data/news";
 import { ARTICLES, CATEGORY_ORDER } from "@/data/articles";
 import { ABOUT, type AboutContent } from "@/data/about";
+import { TERMS, type LegalContent } from "@/data/terms";
+import { PRIVACY } from "@/data/privacy";
+import { SOCIAL, WHATSAPP_URL, type SocialKey } from "@/data/social";
 import { WOMEN_LEADERS } from "@/data/womenLeaders";
 import { PODCASTS } from "@/data/podcasts";
 import { TESTIMONIALS } from "@/data/testimonials";
@@ -21,6 +24,11 @@ import { sanityConfigured } from "@/sanity/env";
 import { sanityFetch } from "@/sanity/lib/client";
 import { urlForOrDefault } from "@/sanity/lib/image";
 import {
+  ABOUT_QUERY,
+  ARTICLES_QUERY,
+  HALL_OF_FAME_QUERY,
+  LEGAL_QUERY,
+  SITE_SETTINGS_QUERY,
   COVER_STORIES_QUERY,
   FEATURED_ARTICLES_QUERY,
   GET_FEATURED_COVERS_QUERY,
@@ -354,21 +362,28 @@ export async function searchPodcasts(query: PodcastQuery = {}) {
 // For now the fetcher just returns the hard-coded array; the search layer
 // below keeps the component shape identical to magazines and podcasts.
 
+type RawHall = Omit<HallOfFameEntry, "portrait"> & { portrait?: SanityImage };
+
 export async function getHallOfFame(): Promise<HallOfFameEntry[]> {
-  return HALL_OF_FAME;
+  return withFallback<HallOfFameEntry[]>(async () => {
+    const rows = await sanityFetch<RawHall[]>({ query: HALL_OF_FAME_QUERY });
+    return rows.map((r, i) => ({
+      ...r,
+      portrait: mapImage(r.portrait, HALL_OF_FAME[i % HALL_OF_FAME.length].portrait),
+    }));
+  }, HALL_OF_FAME);
 }
 
 export async function getHallEntryBySlug(slug: string): Promise<HallOfFameEntry | null> {
-  return HALL_OF_FAME.find((e) => e.slug === slug) ?? null;
+  return (await getHallOfFame()).find((e) => e.slug === slug) ?? null;
 }
 
-// Returns the entries immediately before/after `slug` in the natural roll
-// order (newest-first — matches /hall-of-fame default). Null when at an end.
+// Entries immediately before and after the given slug in roll order (newest first).
 export async function getAdjacentHallEntries(slug: string): Promise<{
   prev: HallOfFameEntry | null;
   next: HallOfFameEntry | null;
 }> {
-  const roll = HALL_OF_FAME;
+  const roll = await getHallOfFame();
   const i = roll.findIndex((e) => e.slug === slug);
   if (i === -1) return { prev: null, next: null };
   return {
@@ -378,40 +393,71 @@ export async function getAdjacentHallEntries(slug: string): Promise<{
 }
 
 // ─── Articles ────────────────────────────────────────────────────────────
-// No Sanity schema yet — the Sanity `article` doc will come when the client
-// is ready to edit full-length articles in the CMS. The frontend already
-// speaks the Article type so wiring it up later is one file.
+type RawArticle = {
+  slug: string;
+  title: string;
+  excerpt: string;
+  category: string;
+  author: string;
+  publishDate: string;
+  readTime: string;
+  image?: SanityImage;
+  alt: string;
+  isTopStory: boolean;
+};
+
+const formatDate = (iso: string) =>
+  new Date(iso + "T00:00:00Z").toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC",
+  });
 
 export async function getArticles(): Promise<Article[]> {
-  return ARTICLES;
+  return withFallback<Article[]>(async () => {
+    const rows = await sanityFetch<RawArticle[]>({ query: ARTICLES_QUERY });
+    return rows.map((r, i) => ({
+      slug: r.slug,
+      title: r.title,
+      excerpt: r.excerpt,
+      category: r.category,
+      categorySlug: r.category.toLowerCase(),
+      author: r.author,
+      date: formatDate(r.publishDate),
+      publishedYear: Number(r.publishDate.slice(0, 4)),
+      image: mapImage(r.image, ARTICLES[i % ARTICLES.length].image),
+      alt: r.alt,
+      readTime: r.readTime || undefined,
+      isTopStory: r.isTopStory,
+    }));
+  }, ARTICLES);
 }
 
 export async function getTopStoryArticles(limit = 3): Promise<Article[]> {
-  return ARTICLES.filter((a) => a.isTopStory).slice(0, limit);
+  return (await getArticles()).filter((a) => a.isTopStory).slice(0, limit);
 }
 
 // Each article should appear once on /articles: Top Stories first, then the
 // newest remaining ones as Latest, then everything left as the archive that
-// the category tabs explore. ARTICLES is sorted newest first.
+// the category tabs explore. Articles are sorted newest first.
 const LATEST_COUNT = 6;
 
-function nonTop(): Article[] {
-  return ARTICLES.filter((a) => !a.isTopStory);
+async function nonTop(): Promise<Article[]> {
+  return (await getArticles()).filter((a) => !a.isTopStory);
 }
 
-function archivePool(): Article[] {
-  return nonTop().slice(LATEST_COUNT);
+async function archivePool(): Promise<Article[]> {
+  return (await nonTop()).slice(LATEST_COUNT);
 }
 
 export async function getLatestArticles(limit = LATEST_COUNT): Promise<Article[]> {
-  return nonTop().slice(0, limit);
+  return (await nonTop()).slice(0, limit);
 }
 
-// Category list with live counts — the editor doesn't maintain the counts;
-// they're derived from the published articles. The "All" entry's count is
-// the total.
+// Category list with live counts derived from the archive.
 export async function getCategoriesWithCounts(): Promise<Category[]> {
-  const pool = archivePool();
+  const pool = await archivePool();
   return CATEGORY_ORDER.map((c) => ({
     slug: c.slug,
     name: c.name,
@@ -426,7 +472,7 @@ export type ArticleSort = "newest" | "oldest";
 
 export type ArticleQuery = {
   q?: string;
-  category?: string;   // category slug; "" or undefined = all
+  category?: string;
   sort?: ArticleSort;
   page?: number;
   perPage?: number;
@@ -446,7 +492,7 @@ export async function searchArticles(query: ArticleQuery = {}) {
     );
   };
 
-  const filtered = archivePool().filter(matches);
+  const filtered = (await archivePool()).filter(matches);
   const sorted = sort === "oldest" ? [...filtered].reverse() : filtered;
 
   const total = sorted.length;
@@ -645,6 +691,89 @@ export async function searchMagazineEditions(query: MagazineQuery = {}) {
 }
 
 // ─── About ───────────────────────────────────────────────────────────────
+type RawAbout = {
+  headline?: string;
+  intro?: string;
+  whoWeAre?: string[];
+  whatWeCover?: { title: string; text: string }[];
+  joinTitle?: string;
+  joinText?: string;
+};
+
 export async function getAboutContent(): Promise<AboutContent> {
-  return ABOUT;
+  return withFallback<AboutContent>(async () => {
+    const r = await sanityFetch<RawAbout | null>({ query: ABOUT_QUERY });
+    if (!r) return ABOUT;
+    return {
+      headline: r.headline || ABOUT.headline,
+      intro: r.intro || ABOUT.intro,
+      whoWeAre: r.whoWeAre?.length ? r.whoWeAre : ABOUT.whoWeAre,
+      whatWeCover: r.whatWeCover?.length ? r.whatWeCover : ABOUT.whatWeCover,
+      join: {
+        title: r.joinTitle || ABOUT.join.title,
+        text: r.joinText || ABOUT.join.text,
+      },
+    };
+  }, ABOUT);
+}
+
+// ─── Terms and Privacy ───────────────────────────────────────────────────
+type RawLegal = {
+  title: string;
+  intro: string;
+  sections: { title: string; paragraphs: { ref?: string; text: string }[]; email?: string }[];
+};
+
+export async function getLegalContent(kind: "terms" | "privacy"): Promise<LegalContent> {
+  const fallback = kind === "terms" ? TERMS : PRIVACY;
+  return withFallback<LegalContent>(async () => {
+    const r = await sanityFetch<RawLegal | null>({ query: LEGAL_QUERY, params: { kind } });
+    if (!r) return fallback;
+    return {
+      title: r.title,
+      intro: r.intro,
+      sections: r.sections.map((sec) => ({
+        title: sec.title,
+        paragraphs: sec.paragraphs.map((p) => (p.ref ? { ref: p.ref, text: p.text } : p.text)),
+        email: sec.email || undefined,
+      })),
+    };
+  }, fallback);
+}
+
+// ─── Site settings (contact details + social links) ──────────────────────
+export type SiteSettings = {
+  email: string;
+  phone: string;
+  phoneHref: string;
+  office: string;
+  whatsappUrl: string;
+  social: { key: SocialKey; label: string; href: string }[];
+};
+
+const SETTINGS_FALLBACK: SiteSettings = {
+  email: "info@ciomogulindia.com",
+  phone: "+91 95292 03836",
+  phoneHref: "tel:+919529203836",
+  office: "Mumbai, Maharashtra, India",
+  whatsappUrl: WHATSAPP_URL,
+  social: SOCIAL.map((x) => ({ key: x.key, label: x.label, href: x.href })),
+};
+
+type RawSettings = Partial<Record<"email" | "phone" | "office" | SocialKey, string>>;
+
+export async function getSiteSettings(): Promise<SiteSettings> {
+  return withFallback<SiteSettings>(async () => {
+    const r = await sanityFetch<RawSettings | null>({ query: SITE_SETTINGS_QUERY });
+    if (!r) return SETTINGS_FALLBACK;
+    const phone = r.phone || SETTINGS_FALLBACK.phone;
+    return {
+      email: r.email || SETTINGS_FALLBACK.email,
+      phone,
+      phoneHref: "tel:" + phone.replace(/[^+\d]/g, ""),
+      office: r.office || SETTINGS_FALLBACK.office,
+      whatsappUrl: r.whatsapp || SETTINGS_FALLBACK.whatsappUrl,
+      social: SOCIAL.map((x) => ({ key: x.key, label: x.label, href: r[x.key] || x.href })),
+    };
+  }, SETTINGS_FALLBACK);
 }

@@ -2,7 +2,7 @@ import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
 import { visionTool } from "@sanity/vision";
 import { apiVersion, dataset, projectId } from "./src/sanity/env";
-import { schemaTypes } from "./src/sanity/schemas";
+import { schemaTypes, SINGLETON_TYPES } from "./src/sanity/schemas";
 import { structure } from "./src/sanity/structure";
 
 // Config used by both the embedded /studio route and the sanity CLI
@@ -24,11 +24,11 @@ export default defineConfig({
     // homepageConfig is a singleton — hide "Create new" everywhere it would
     // normally appear so editors can't accidentally make a second copy.
     templates: (templates) =>
-      templates.filter(({ schemaType }) => schemaType !== "homepageConfig"),
+      templates.filter(({ schemaType }) => !SINGLETON_TYPES.includes(schemaType)),
   },
   document: {
     actions: (prev, { schemaType }) =>
-      schemaType === "homepageConfig"
+      SINGLETON_TYPES.includes(schemaType)
         ? prev.filter(({ action }) => action !== "duplicate" && action !== "delete")
         : prev,
   },
