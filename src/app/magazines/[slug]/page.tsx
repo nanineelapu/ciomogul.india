@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import MagazineCard from "@/components/MagazineCard";
-import PdfViewer from "@/components/PdfViewerLoader";
+import MagazineCard from "@/components/magazines/MagazineCard";
+import PdfViewer from "@/components/magazines/PdfViewerLoader";
 import {
   getMagazineEditionBySlug,
   getMagazineEditions,

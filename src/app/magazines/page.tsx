@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import MagazineCard from "@/components/MagazineCard";
-import MagazineFilters from "@/components/MagazineFilters";
-import Pagination from "@/components/Pagination";
+import MagazineCard from "@/components/magazines/MagazineCard";
+import MagazineFilters from "@/components/magazines/MagazineFilters";
+import Pagination from "@/components/shared/Pagination";
 import {
   getMagazineEditions,
   searchMagazineEditions,
