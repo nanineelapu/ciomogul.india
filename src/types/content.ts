@@ -93,3 +93,19 @@ export type Headline = {
   slug: string;
   text: string;
 };
+
+// A Hall of Fame entry is a curated nomination; it references an existing
+// magazine edition (so title / pullQuote / cover don't drift) and layers on
+// its own serial number, induction year, and an optional override portrait.
+export type HallOfFameEntry = {
+  slug: string;             // url-safe id (usually the edition slug)
+  serial: number;           // permanent registry number — "001", "002", …
+  inductionYear: number;    // used by the year filter + sort
+  inductedOn: string;       // free-form display, e.g. "October 2026"
+  editionSlug: string;      // link into /magazines/<slug>
+  name: string;             // honoree name (snapshot of the edition's)
+  role: string;             // honoree role (short, Playfair card)
+  organization: string;
+  portrait: string;         // image path — may be the cover for now
+  pullQuote: string;        // one-line quote from their edition
+};

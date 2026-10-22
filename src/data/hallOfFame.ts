@@ -1,0 +1,163 @@
+import type { HallOfFameEntry } from "@/types/content";
+
+// Dummy roll of inductees. Each row points back at an existing magazine
+// edition (so title, cover and pull-quote stay in sync later from Sanity).
+// Serial numbers are permanent — they don't shift when sort changes.
+export const HALL_OF_FAME: HallOfFameEntry[] = [
+  {
+    slug: "edition-014-cyber-governance",
+    serial: 14,
+    inductionYear: 2026,
+    inductedOn: "October 2026",
+    editionSlug: "edition-014-cyber-governance",
+    name: "Honoree Name Placeholder",
+    role: "Role / Title Placeholder",
+    organization: "Organization Name",
+    portrait: "/assets/cover-abhirup-guha.jpg",
+    pullQuote:
+      "A short pull-quote from this honoree's cover edition — around twenty words so the layout holds its rhythm.",
+  },
+  {
+    slug: "edition-013-industrial-leadership",
+    serial: 13,
+    inductionYear: 2026,
+    inductedOn: "September 2026",
+    editionSlug: "edition-013-industrial-leadership",
+    name: "Honoree Name Placeholder",
+    role: "Role / Title Placeholder",
+    organization: "Organization Name",
+    portrait: "/assets/mag-cover-abhirup.jpg",
+    pullQuote:
+      "Dummy pull-quote content. The client replaces this from the CMS once a Sanity honoree document is published.",
+  },
+  {
+    slug: "edition-012-finance-leader",
+    serial: 12,
+    inductionYear: 2026,
+    inductedOn: "August 2026",
+    editionSlug: "edition-012-finance-leader",
+    name: "Honoree Name Placeholder",
+    role: "Role / Title Placeholder",
+    organization: "Organization Name",
+    portrait: "/assets/mag-cover-finance.jpg",
+    pullQuote:
+      "A placeholder quote that will be swapped for the real line the honoree stood by on their cover.",
+  },
+  {
+    slug: "edition-011-leader-to-watch",
+    serial: 11,
+    inductionYear: 2026,
+    inductedOn: "July 2026",
+    editionSlug: "edition-011-leader-to-watch",
+    name: "Honoree Name Placeholder",
+    role: "Role / Title Placeholder",
+    organization: "Organization Name",
+    portrait: "/assets/mag-cover-parin.jpg",
+    pullQuote:
+      "Another placeholder for the roll. Pull-quotes between fifteen and twenty-five words sit best in this layout.",
+  },
+  {
+    slug: "edition-010-chaos-to-clarity",
+    serial: 10,
+    inductionYear: 2026,
+    inductedOn: "June 2026",
+    editionSlug: "edition-010-chaos-to-clarity",
+    name: "Honoree Name Placeholder",
+    role: "Role / Title Placeholder",
+    organization: "Organization Name",
+    portrait: "/assets/cover-chaos-clarity.jpg",
+    pullQuote:
+      "Each roll entry gets its own quote; the editor can lift it from the magazine edition or write a fresh one.",
+  },
+  {
+    slug: "edition-009-finance-leader-2026",
+    serial: 9,
+    inductionYear: 2026,
+    inductedOn: "May 2026",
+    editionSlug: "edition-009-finance-leader-2026",
+    name: "Honoree Name Placeholder",
+    role: "Role / Title Placeholder",
+    organization: "Organization Name",
+    portrait: "/assets/cover-finance-leader.jpg",
+    pullQuote:
+      "A placeholder quote while real editorial copy is being drafted. The layout stays the same.",
+  },
+  {
+    slug: "edition-008-ceo-coach",
+    serial: 8,
+    inductionYear: 2026,
+    inductedOn: "April 2026",
+    editionSlug: "edition-008-ceo-coach",
+    name: "Honoree Name Placeholder",
+    role: "Role / Title Placeholder",
+    organization: "Organization Name",
+    portrait: "/assets/cover-ceo-coach.jpg",
+    pullQuote:
+      "A short, specific line reads stronger than a general one — hold the honoree's quote to one idea.",
+  },
+  {
+    slug: "edition-007-abhirup-guha",
+    serial: 7,
+    inductionYear: 2026,
+    inductedOn: "March 2026",
+    editionSlug: "edition-007-abhirup-guha",
+    name: "Honoree Name Placeholder",
+    role: "Role / Title Placeholder",
+    organization: "Organization Name",
+    portrait: "/assets/cover-abhirup-guha.jpg",
+    pullQuote:
+      "Dummy pull-quote content. The client replaces this from the CMS once real honoree data lands.",
+  },
+  {
+    slug: "edition-006-dummy-2025-four",
+    serial: 6,
+    inductionYear: 2025,
+    inductedOn: "December 2025",
+    editionSlug: "edition-006-dummy-2025-four",
+    name: "Honoree Name Placeholder",
+    role: "Role / Title Placeholder",
+    organization: "Organization Name",
+    portrait: "/assets/mag-cover-abhirup.jpg",
+    pullQuote:
+      "A quote retrieved from the honoree's edition — surfaces here so visitors see why they were featured.",
+  },
+  {
+    slug: "edition-005-dummy-2025-three",
+    serial: 5,
+    inductionYear: 2025,
+    inductedOn: "October 2025",
+    editionSlug: "edition-005-dummy-2025-three",
+    name: "Honoree Name Placeholder",
+    role: "Role / Title Placeholder",
+    organization: "Organization Name",
+    portrait: "/assets/cover-chaos-clarity.jpg",
+    pullQuote:
+      "Placeholder dummy content. Replaced via the Sanity Studio once the Hall of Fame schema is wired in.",
+  },
+  {
+    slug: "edition-004-dummy-2025-two",
+    serial: 4,
+    inductionYear: 2025,
+    inductedOn: "August 2025",
+    editionSlug: "edition-004-dummy-2025-two",
+    name: "Honoree Name Placeholder",
+    role: "Role / Title Placeholder",
+    organization: "Organization Name",
+    portrait: "/assets/cover-finance-leader.jpg",
+    pullQuote:
+      "The early entries anchor the roll's history — these are the ones that give the Hall its weight over time.",
+  },
+  {
+    slug: "edition-003-dummy-2025-one",
+    serial: 3,
+    inductionYear: 2025,
+    inductedOn: "June 2025",
+    editionSlug: "edition-003-dummy-2025-one",
+    name: "Honoree Name Placeholder",
+    role: "Role / Title Placeholder",
+    organization: "Organization Name",
+    portrait: "/assets/cover-ceo-coach.jpg",
+    pullQuote:
+      "The first few editions on the roll. Replaced from the CMS once published records are entered.",
+  },
+];

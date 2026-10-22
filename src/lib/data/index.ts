@@ -9,6 +9,7 @@ import type { Image as SanityImage } from "sanity";
 import { HEADLINES } from "@/data/headlines";
 import { RELEASE_COVERS, GET_FEATURED_COVERS } from "@/data/magazines";
 import { MAGAZINE_EDITIONS } from "@/data/magazineEditions";
+import { HALL_OF_FAME } from "@/data/hallOfFame";
 import { COVER_STORIES } from "@/data/coverStories";
 import { NEWS_CARDS, VITAL_UPDATES, FEATURED_ARTICLES } from "@/data/news";
 import { WOMEN_LEADERS } from "@/data/womenLeaders";
@@ -34,6 +35,7 @@ import {
 import type {
   CoverStory,
   FeaturedArticle,
+  HallOfFameEntry,
   Headline,
   Magazine,
   MagazineEdition,
@@ -272,6 +274,61 @@ export async function searchPodcasts(query: PodcastQuery = {}) {
   const years = Array.from(
     new Set(podcasts.map((p) => p.publishedYear).filter((y): y is number => typeof y === "number"))
   ).sort((a, b) => b - a);
+
+  return { items, total, totalPages, page: safePage, perPage, years };
+}
+
+// ─── Hall of Fame ────────────────────────────────────────────────────────
+// Sanity schema will come when the client wants to edit the roll in the CMS.
+// For now the fetcher just returns the hard-coded array; the search layer
+// below keeps the component shape identical to magazines and podcasts.
+
+export async function getHallOfFame(): Promise<HallOfFameEntry[]> {
+  return HALL_OF_FAME;
+}
+
+export type HallSort = "newest" | "oldest";
+
+export type HallQuery = {
+  q?: string;
+  year?: number;
+  sort?: HallSort;
+  page?: number;
+  perPage?: number;
+};
+
+export async function searchHallOfFame(query: HallQuery = {}) {
+  const { q, year, sort = "newest", page = 1, perPage = 10 } = query;
+  const entries = await getHallOfFame();
+
+  const normalised = q?.trim().toLowerCase() ?? "";
+  const matches = (e: HallOfFameEntry) => {
+    if (year && e.inductionYear !== year) return false;
+    if (!normalised) return true;
+    return (
+      e.name.toLowerCase().includes(normalised) ||
+      e.role.toLowerCase().includes(normalised) ||
+      e.organization.toLowerCase().includes(normalised) ||
+      e.pullQuote.toLowerCase().includes(normalised)
+    );
+  };
+
+  const filtered = entries.filter(matches);
+  // Newest (highest serial) first by default.
+  const sorted =
+    sort === "oldest"
+      ? [...filtered].sort((a, b) => a.serial - b.serial)
+      : [...filtered].sort((a, b) => b.serial - a.serial);
+
+  const total = sorted.length;
+  const totalPages = Math.max(1, Math.ceil(total / perPage));
+  const safePage = Math.min(Math.max(1, page), totalPages);
+  const start = (safePage - 1) * perPage;
+  const items = sorted.slice(start, start + perPage);
+
+  const years = Array.from(new Set(entries.map((e) => e.inductionYear))).sort(
+    (a, b) => b - a
+  );
 
   return { items, total, totalPages, page: safePage, perPage, years };
 }
