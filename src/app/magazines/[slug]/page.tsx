@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import MagazineCard from "@/components/MagazineCard";
+import PdfViewer from "@/components/PdfViewerLoader";
 import {
   getMagazineEditionBySlug,
   getMagazineEditions,
@@ -128,17 +129,16 @@ export default async function MagazineDetailPage({
             <header className="mag-pdf__head">
               <h2 className="mag-pdf__title">Read the magazine</h2>
               <span className="mag-pdf__hint">
-                {edition.pdfUrl ? "Scroll or use arrow keys" : "Preview coming soon"}
+                {edition.pdfUrl ? "← → to turn pages · + − to zoom" : "Preview coming soon"}
               </span>
             </header>
-            <div className="mag-pdf__frame">
-              {edition.pdfUrl ? (
-                <iframe
-                  src={edition.pdfUrl}
-                  title={`${edition.featuredPersonName} — ${edition.editionLabel}`}
-                  loading="lazy"
-                />
-              ) : (
+            {edition.pdfUrl ? (
+              <PdfViewer
+                file={edition.pdfUrl}
+                title={`${edition.featuredPersonName} — ${edition.editionLabel}`}
+              />
+            ) : (
+              <div className="mag-pdf__frame">
                 <div className="mag-pdf__placeholder" role="status">
                   <div className="mag-pdf__placeholder-inner">
                     <b>PDF viewer</b>
@@ -148,8 +148,8 @@ export default async function MagazineDetailPage({
                     </p>
                   </div>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </div>
       </section>

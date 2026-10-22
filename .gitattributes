@@ -1,0 +1,10 @@
+* text=auto eol=lf
+
+# Binary assets that must not be line-ending-normalized on checkout
+*.pdf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.ico binary
+# pdfjs worker ships as an ESM file but must be served byte-for-byte
+public/pdf.worker.min.mjs binary

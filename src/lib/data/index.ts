@@ -40,6 +40,52 @@ export async function getOtherMagazineEditions(currentSlug: string, limit = 4) {
   return MAGAZINE_EDITIONS.filter((m) => m.slug !== currentSlug).slice(0, limit);
 }
 
+export type MagazineSort = "newest" | "oldest";
+
+export type MagazineQuery = {
+  q?: string;        // free-text search across name, title, subtitle
+  year?: number;     // exact year match on publishedYear
+  sort?: MagazineSort;
+  page?: number;     // 1-indexed
+  perPage?: number;
+};
+
+// All sort/filter/paginate logic lives in one place so the page component
+// just reads `searchParams` and asks for data; the swap to Sanity GROQ is
+// a one-file change.
+export async function searchMagazineEditions(query: MagazineQuery = {}) {
+  const { q, year, sort = "newest", page = 1, perPage = 12 } = query;
+
+  const normalised = q?.trim().toLowerCase() ?? "";
+  const matches = (m: (typeof MAGAZINE_EDITIONS)[number]) => {
+    if (year && m.publishedYear !== year) return false;
+    if (!normalised) return true;
+    return (
+      m.featuredPersonName.toLowerCase().includes(normalised) ||
+      m.title.toLowerCase().includes(normalised) ||
+      m.subtitle.toLowerCase().includes(normalised) ||
+      m.editionLabel.toLowerCase().includes(normalised)
+    );
+  };
+
+  const filtered = MAGAZINE_EDITIONS.filter(matches);
+
+  // The source list is already ordered newest-first by convention; a sort
+  // keeps that intent explicit rather than depending on insertion order.
+  const sorted = sort === "oldest" ? [...filtered].reverse() : filtered;
+
+  const total = sorted.length;
+  const totalPages = Math.max(1, Math.ceil(total / perPage));
+  const safePage = Math.min(Math.max(1, page), totalPages);
+  const start = (safePage - 1) * perPage;
+  const items = sorted.slice(start, start + perPage);
+
+  const years = Array.from(new Set(MAGAZINE_EDITIONS.map((m) => m.publishedYear)))
+    .sort((a, b) => b - a);
+
+  return { items, total, totalPages, page: safePage, perPage, years };
+}
+
 export async function getCoverStories() {
   return COVER_STORIES;
 }

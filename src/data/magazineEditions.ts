@@ -23,8 +23,9 @@ export const MAGAZINE_EDITIONS: MagazineEdition[] = [
       "A pull-quote taken from the cover artwork or the feature interview — around twenty to thirty words — sits here as a design anchor.",
     pullQuoteAttribution: "Featured Leader Name — Role, Organization",
     roleTags: ["Role Tag One", "Role Tag Two", "Role Tag Three"],
-    pdfUrl: null,
+    pdfUrl: "/assets/pdfs/sample.pdf",
     publishedOn: "October 2026",
+    publishedYear: 2026,
     body: [LOREM_PARAGRAPH, LOREM_PARAGRAPH_2, LOREM_PARAGRAPH_3],
   },
   {
@@ -42,6 +43,7 @@ export const MAGAZINE_EDITIONS: MagazineEdition[] = [
     roleTags: ["Role Tag One", "Role Tag Two"],
     pdfUrl: null,
     publishedOn: "September 2026",
+    publishedYear: 2026,
     body: [LOREM_PARAGRAPH_2, LOREM_PARAGRAPH, LOREM_PARAGRAPH_3],
   },
   {
@@ -59,6 +61,7 @@ export const MAGAZINE_EDITIONS: MagazineEdition[] = [
     roleTags: ["Role Tag One", "Role Tag Two", "Role Tag Three"],
     pdfUrl: null,
     publishedOn: "August 2026",
+    publishedYear: 2026,
     body: [LOREM_PARAGRAPH, LOREM_PARAGRAPH_3, LOREM_PARAGRAPH_2],
   },
   {
@@ -76,6 +79,7 @@ export const MAGAZINE_EDITIONS: MagazineEdition[] = [
     roleTags: ["Role Tag One", "Role Tag Two"],
     pdfUrl: null,
     publishedOn: "July 2026",
+    publishedYear: 2026,
     body: [LOREM_PARAGRAPH_3, LOREM_PARAGRAPH, LOREM_PARAGRAPH_2],
   },
   {
@@ -93,6 +97,7 @@ export const MAGAZINE_EDITIONS: MagazineEdition[] = [
     roleTags: ["Role Tag One", "Role Tag Two", "Role Tag Three"],
     pdfUrl: null,
     publishedOn: "June 2026",
+    publishedYear: 2026,
     body: [LOREM_PARAGRAPH, LOREM_PARAGRAPH_2, LOREM_PARAGRAPH_3],
   },
   {
@@ -110,6 +115,7 @@ export const MAGAZINE_EDITIONS: MagazineEdition[] = [
     roleTags: ["Role Tag One", "Role Tag Two"],
     pdfUrl: null,
     publishedOn: "May 2026",
+    publishedYear: 2026,
     body: [LOREM_PARAGRAPH_2, LOREM_PARAGRAPH, LOREM_PARAGRAPH_3],
   },
   {
@@ -127,6 +133,7 @@ export const MAGAZINE_EDITIONS: MagazineEdition[] = [
     roleTags: ["Role Tag One", "Role Tag Two", "Role Tag Three"],
     pdfUrl: null,
     publishedOn: "April 2026",
+    publishedYear: 2026,
     body: [LOREM_PARAGRAPH_3, LOREM_PARAGRAPH_2, LOREM_PARAGRAPH],
   },
   {
@@ -144,6 +151,79 @@ export const MAGAZINE_EDITIONS: MagazineEdition[] = [
     roleTags: ["Role Tag One", "Role Tag Two"],
     pdfUrl: null,
     publishedOn: "March 2026",
+    publishedYear: 2026,
+    body: [LOREM_PARAGRAPH, LOREM_PARAGRAPH_3, LOREM_PARAGRAPH_2],
+  },
+  {
+    slug: "edition-006-dummy-2025-four",
+    editionLabel: "Edition 006 · December 2025",
+    featuredPersonName: "Featured Leader Name",
+    title: "A Dummy 2025 Edition Headline — Fourth From End",
+    subtitle:
+      "A short editorial subtitle that explains the edition in one line. Replaced from Sanity later.",
+    coverImage: "/assets/mag-cover-abhirup.jpg",
+    coverAlt: "Magazine cover placeholder",
+    pullQuote:
+      "A fallback pull-quote while the real one is drafted. Keep the shape, lose the words — the CMS will replace it later.",
+    pullQuoteAttribution: "Featured Leader Name — Role, Organization",
+    roleTags: ["Role Tag One", "Role Tag Two"],
+    pdfUrl: null,
+    publishedOn: "December 2025",
+    publishedYear: 2025,
+    body: [LOREM_PARAGRAPH_2, LOREM_PARAGRAPH, LOREM_PARAGRAPH_3],
+  },
+  {
+    slug: "edition-005-dummy-2025-three",
+    editionLabel: "Edition 005 · October 2025",
+    featuredPersonName: "Featured Leader Name",
+    title: "A Dummy 2025 Edition Headline — Third From End",
+    subtitle:
+      "A short editorial subtitle that explains the edition in one line. Replaced from Sanity later.",
+    coverImage: "/assets/cover-chaos-clarity.jpg",
+    coverAlt: "Magazine cover placeholder",
+    pullQuote:
+      "Dummy copy lets us test the layout at various string lengths before the real content lands in the CMS.",
+    pullQuoteAttribution: "Featured Leader Name — Role, Organization",
+    roleTags: ["Role Tag One", "Role Tag Two", "Role Tag Three"],
+    pdfUrl: null,
+    publishedOn: "October 2025",
+    publishedYear: 2025,
+    body: [LOREM_PARAGRAPH, LOREM_PARAGRAPH_2, LOREM_PARAGRAPH_3],
+  },
+  {
+    slug: "edition-004-dummy-2025-two",
+    editionLabel: "Edition 004 · August 2025",
+    featuredPersonName: "Featured Leader Name",
+    title: "A Dummy 2025 Edition Headline — Second From End",
+    subtitle:
+      "A short editorial subtitle that explains the edition in one line. Replaced from Sanity later.",
+    coverImage: "/assets/cover-finance-leader.jpg",
+    coverAlt: "Magazine cover placeholder",
+    pullQuote:
+      "Early editions get retrieved from the archive view; keep enough variety for the filter and sort controls to be exercised.",
+    pullQuoteAttribution: "Featured Leader Name — Role, Organization",
+    roleTags: ["Role Tag One", "Role Tag Two"],
+    pdfUrl: null,
+    publishedOn: "August 2025",
+    publishedYear: 2025,
+    body: [LOREM_PARAGRAPH_3, LOREM_PARAGRAPH, LOREM_PARAGRAPH_2],
+  },
+  {
+    slug: "edition-003-dummy-2025-one",
+    editionLabel: "Edition 003 · June 2025",
+    featuredPersonName: "Featured Leader Name",
+    title: "A Dummy 2025 Edition Headline — First From End",
+    subtitle:
+      "A short editorial subtitle that explains the edition in one line. Replaced from Sanity later.",
+    coverImage: "/assets/cover-ceo-coach.jpg",
+    coverAlt: "Magazine cover placeholder",
+    pullQuote:
+      "The oldest edition shown in the archive. Replaced by the real archive catalogue once content is in the CMS.",
+    pullQuoteAttribution: "Featured Leader Name — Role, Organization",
+    roleTags: ["Role Tag One", "Role Tag Two", "Role Tag Three"],
+    pdfUrl: null,
+    publishedOn: "June 2025",
+    publishedYear: 2025,
     body: [LOREM_PARAGRAPH, LOREM_PARAGRAPH_3, LOREM_PARAGRAPH_2],
   },
 ];

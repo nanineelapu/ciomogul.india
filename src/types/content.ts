@@ -24,6 +24,8 @@ export type MagazineEdition = {
   roleTags: string[];           // e.g. ["Fractional CISO", "Board Advisor"]
   pdfUrl: string | null;        // null until a PDF is uploaded
   publishedOn: string;          // display string; no Date parsing needed
+  publishedYear: number;        // used by the archive filter — kept separate so
+                                // the display string stays free-form
   body: string[];               // paragraphs for the "Inside this edition" block
 };
 
