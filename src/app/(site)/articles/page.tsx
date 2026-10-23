@@ -3,7 +3,6 @@ import { Suspense } from "react";
 import ArticleCard from "@/components/articles/ArticleCard";
 import ArticleSearch from "@/components/articles/ArticleSearch";
 import CategoryTabs from "@/components/articles/CategoryTabs";
-import TopStoriesBand from "@/components/articles/TopStoriesBand";
 import Pagination from "@/components/shared/Pagination";
 import {
   getCategoriesWithCounts,
@@ -48,14 +47,22 @@ export default async function ArticlesPage({
       {/* 1 — Top Stories */}
       <section className="section">
         <div className="wrap">
-          <TopStoriesBand articles={topStories} />
+          <header className="section-head">
+            <h2 className="section-head__title">Top stories</h2>
+            <span className="section-head__rule" aria-hidden />
+          </header>
+          <div className="article-grid">
+            {topStories.map((a) => (
+              <ArticleCard key={a.slug} article={a} />
+            ))}
+          </div>
         </div>
       </section>
 
       {/* 2 — Latest News */}
-      <section className="section latest-news">
+      <section className="section">
         <div className="wrap">
-          <header className="section-head section-head--row">
+          <header className="section-head">
             <h2 className="section-head__title">Latest news</h2>
             <span className="section-head__rule" aria-hidden />
           </header>
@@ -70,7 +77,7 @@ export default async function ArticlesPage({
       {/* 3 — Explore by Category */}
       <section className="section explore">
         <div className="wrap">
-          <header className="section-head section-head--row">
+          <header className="section-head">
             <h2 className="section-head__title">Explore by category</h2>
             <span className="section-head__rule" aria-hidden />
           </header>
