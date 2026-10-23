@@ -20,6 +20,7 @@ export const article = defineType({
     defineField({ name: "title", title: "Title", type: "string", validation: (r) => r.required() }),
     defineField({ name: "slug", type: "slug", options: { source: "title", maxLength: 96 }, validation: (r) => r.required() }),
     defineField({ name: "excerpt", title: "Excerpt", type: "text", rows: 3 }),
+    defineField({ name: "body", title: "Body paragraphs", type: "array", of: [{ type: "text", rows: 5 }] }),
     defineField({ name: "category", title: "Category", type: "string", options: { list: ARTICLE_CATEGORIES }, validation: (r) => r.required() }),
     defineField({ name: "author", title: "Author", type: "string" }),
     defineField({ name: "publishDate", title: "Publish date", type: "date", validation: (r) => r.required() }),

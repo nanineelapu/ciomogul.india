@@ -159,6 +159,14 @@ const ROWS: Row[] = [
     image: IMG.india, author: "Culture Desk", read: 4 },
 ];
 
+// Placeholder body text for every article until real copy is entered in Sanity.
+const BODY = [
+  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. The opening paragraph sets out the story in plain terms: what happened, who is involved and why it matters to India's technology and business leaders.",
+  "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. The second paragraph adds the detail: the numbers, the decisions and the people behind them.",
+  "Curabitur pretium tincidunt lacus. Further paragraphs bring in context, expert views and what readers should watch for next.",
+  "Excepteur sint occaecat cupidatat non proident. The closing paragraph ties the story back to the wider shift the magazine is following.",
+];
+
 const fmt = (iso: string) =>
   new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-US", {
     month: "long",
@@ -182,6 +190,7 @@ export const ARTICLES: Article[] = [...ROWS]
     alt: "",
     readTime: `${r.read} min read`,
     isTopStory: r.top ?? false,
+    body: BODY,
   }));
 
 // Order the category tabs render in. Counts are derived by the data layer.

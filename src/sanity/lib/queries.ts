@@ -157,7 +157,8 @@ export const ARTICLES_QUERY = /* groq */ `
     "readTime": coalesce(readTime, ""),
     "image": image,
     "alt": coalesce(image.alt, ""),
-    "isTopStory": coalesce(isTopStory, false)
+    "isTopStory": coalesce(isTopStory, false),
+    "body": coalesce(body, [])
   }
 `;
 

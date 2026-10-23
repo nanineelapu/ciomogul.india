@@ -115,7 +115,8 @@ export type Article = {
   image: string;
   alt?: string;
   readTime?: string;       // e.g. "6 min read"
-  isTopStory?: boolean;    // picked up by the Top Stories hero band
+  isTopStory?: boolean;    // picked up by the Top Stories section
+  body?: string[];         // paragraphs for the article page
   isTrending?: boolean;    // picked up by the Trending list
   trendingRank?: number;   // 1 = most trending; smaller = higher
 };

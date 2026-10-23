@@ -404,6 +404,7 @@ type RawArticle = {
   image?: SanityImage;
   alt: string;
   isTopStory: boolean;
+  body: string[];
 };
 
 const formatDate = (iso: string) =>
@@ -430,6 +431,7 @@ export async function getArticles(): Promise<Article[]> {
       alt: r.alt,
       readTime: r.readTime || undefined,
       isTopStory: r.isTopStory,
+      body: r.body,
     }));
   }, ARTICLES);
 }
@@ -785,4 +787,19 @@ export async function getOtherHallEntries(currentSlug: string, limit = 4): Promi
 
 export async function getOtherWomenLeaders(currentSlug: string, limit = 4): Promise<WomanLeader[]> {
   return (await getWomenLeaders()).filter((w) => w.slug !== currentSlug).slice(0, limit);
+}
+
+export async function getArticleBySlug(slug: string): Promise<Article | null> {
+  return (await getArticles()).find((a) => a.slug === slug) ?? null;
+}
+
+// Other articles to suggest at the bottom of an article: same category first,
+// then the newest of the rest.
+export async function getRelatedArticles(slug: string, limit = 4): Promise<Article[]> {
+  const all = await getArticles();
+  const current = all.find((a) => a.slug === slug);
+  const others = all.filter((a) => a.slug !== slug);
+  const same = others.filter((a) => current && a.categorySlug === current.categorySlug);
+  const rest = others.filter((a) => !same.includes(a));
+  return [...same, ...rest].slice(0, limit);
 }
