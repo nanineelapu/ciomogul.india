@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import JsonLd from "@/components/seo/JsonLd";
+import { buildMetadata, breadcrumbLd, pageLd } from "@/lib/seo";
 import { getPageContent } from "@/lib/data";
 import PodcastCard from "@/components/podcasts/PodcastCard";
 import PodcastFilters from "@/components/podcasts/PodcastFilters";
@@ -11,11 +13,15 @@ import {
   type PodcastSort,
 } from "@/lib/data";
 
-export const metadata: Metadata = {
-  title: "Podcasts — CIO Mogul India",
-  description:
-    "Conversations with India's technology and business leaders — long-form interviews, every month.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const page = (await getPageContent()).podcasts;
+  return buildMetadata({
+    title: page.title,
+    description: page.intro,
+    path: "/podcasts",
+    keywords: ["technology podcast India","leadership podcast","CIO interviews podcast","business podcast India","founder interviews","watch podcast episodes"],
+  });
+}
 
 export default async function PodcastsPage({
   searchParams,
@@ -31,6 +37,7 @@ export default async function PodcastsPage({
 
   return (
     <main>
+      <JsonLd data={[pageLd("CollectionPage", { name: page.title, description: page.intro, path: "/podcasts" }), breadcrumbLd([{ name: page.title, path: "/podcasts" }])]} />
       <section className="page-lead">
         <div className="wrap">
           <h1 className="page-lead__title">{page.title}</h1>

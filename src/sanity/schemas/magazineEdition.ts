@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { seoField } from "./seoFields";
 
 export const magazineEdition = defineType({
   name: "magazineEdition",
@@ -101,6 +102,7 @@ export const magazineEdition = defineType({
       description: "Lower number = appears first in the archive.",
       initialValue: 100,
     }),
+    seoField,
   ],
   orderings: [
     {

@@ -191,6 +191,7 @@ export const ARTICLES: Article[] = [...ROWS]
     readTime: `${r.read} min read`,
     isTopStory: r.top ?? false,
     body: BODY,
+    isoDate: r.iso,
   }));
 
 // Order the category tabs render in. Counts are derived by the data layer.

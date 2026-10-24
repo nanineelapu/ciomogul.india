@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Poppins } from "next/font/google";
+import { BASE_KEYWORDS, DEFAULT_DESCRIPTION, DEFAULT_TITLE, LOGO_PATH, SITE_NAME } from "@/lib/seo";
 import "./globals.css";
 import { SITE_URL } from "@/lib/site";
 
@@ -20,24 +21,34 @@ const poppins = Poppins({
   display: "swap",
 });
 
+// Default head tags for every page. Each page sets its own title, description
+// and address (see src/lib/seo.ts). These are fixed values, because the Studio
+// route has no list of addresses and its head tags can't wait for data.
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
+  title: { default: DEFAULT_TITLE, template: `%s | ${SITE_NAME}` },
+  description: DEFAULT_DESCRIPTION,
+  keywords: BASE_KEYWORDS,
+  applicationName: SITE_NAME,
+  publisher: SITE_NAME,
+  creator: SITE_NAME,
+  formatDetection: { telephone: false, email: false, address: false },
   openGraph: {
-    siteName: "CIO Mogul India",
+    siteName: SITE_NAME,
     type: "website",
     locale: "en_IN",
-    images: ["/assets/logo-cio-mogul.png"],
+    images: [LOGO_PATH],
   },
-  title: "CIO Mogul India — The Magazine for India's Technology Leaders",
-  description:
-    "Cover stories, news and podcasts for India's technology and business leaders.",
+  twitter: { card: "summary_large_image" },
+  verification: { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined },
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${playfair.variable} ${poppins.variable}`}>
+    <html lang="en-IN" className={`${playfair.variable} ${poppins.variable}`}>
       <body suppressHydrationWarning>{children}</body>
     </html>
   );

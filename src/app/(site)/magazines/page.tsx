@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import JsonLd from "@/components/seo/JsonLd";
+import { buildMetadata, breadcrumbLd, pageLd } from "@/lib/seo";
 import { getPageContent } from "@/lib/data";
 import MagazineCard from "@/components/magazines/MagazineCard";
 import MagazineFilters from "@/components/magazines/MagazineFilters";
@@ -10,11 +12,15 @@ import {
   type MagazineSort,
 } from "@/lib/data";
 
-export const metadata: Metadata = {
-  title: "Magazines — CIO Mogul India",
-  description:
-    "Every edition of CIO Mogul India — cover stories and interviews with India's technology and business leaders.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const page = (await getPageContent()).magazines;
+  return buildMetadata({
+    title: page.title,
+    description: page.intro,
+    path: "/magazines",
+    keywords: ["CIO Mogul India magazine editions","magazine archive","cover stories","digital magazine editions","read magazine online","monthly business magazine India"],
+  });
+}
 
 export default async function MagazinesPage({
   searchParams,
@@ -31,6 +37,7 @@ export default async function MagazinesPage({
 
   return (
     <main>
+      <JsonLd data={[pageLd("CollectionPage", { name: page.title, description: page.intro, path: "/magazines" }), breadcrumbLd([{ name: page.title, path: "/magazines" }])]} />
       <section className="page-lead">
         <div className="wrap">
           <h1 className="page-lead__title">{page.title}</h1>

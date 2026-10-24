@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import JsonLd from "@/components/seo/JsonLd";
+import { breadcrumbLd, buildMetadata, mergeKeywords, profileLd } from "@/lib/seo";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -25,11 +27,23 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const entry = await getHallEntryBySlug(slug);
-  if (!entry) return { title: "Not found — CIO Mogul India" };
-  return {
-    title: `${entry.name} — Hall of Fame · CIO Mogul India`,
-    description: entry.pullQuote,
-  };
+  if (!entry) return { title: "Not found | CIO Mogul India", robots: { index: false } };
+  const about = [entry.role, entry.organization].filter(Boolean).join(", ");
+  return buildMetadata({
+    title: entry.seo?.title || `${entry.name}, Hall of Fame`,
+    description: entry.seo?.description || entry.pullQuote || `${entry.name}${about ? `, ${about}` : ""}, inducted into the CIO Mogul India Hall of Fame.`,
+    path: `/hall-of-fame/${entry.slug}`,
+    image: entry.portrait,
+    imageAlt: entry.name,
+    keywords: mergeKeywords(entry.seo?.keywords, [
+      entry.name,
+      `${entry.name} profile`,
+      entry.organization,
+      entry.role,
+      "Hall of Fame",
+    ]),
+    type: "profile",
+  });
 }
 
 async function HallProfileContent({ params }: { params: Promise<Params> }) {
@@ -41,6 +55,22 @@ async function HallProfileContent({ params }: { params: Promise<Params> }) {
 
   return (
     <main>
+      <JsonLd
+        data={[
+          profileLd({
+            name: entry.name,
+            role: entry.role,
+            organization: entry.organization,
+            description: entry.seo?.description || entry.pullQuote || entry.name,
+            path: `/hall-of-fame/${entry.slug}`,
+            image: entry.portrait,
+          }),
+          breadcrumbLd([
+            { name: "Hall of Fame", path: "/hall-of-fame" },
+            { name: entry.name, path: `/hall-of-fame/${entry.slug}` },
+          ]),
+        ]}
+      />
       <div className="wrap">
         <Link href="/hall-of-fame" className="back-link">
           Back to Hall of Fame

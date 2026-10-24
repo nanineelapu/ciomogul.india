@@ -10,7 +10,7 @@ export default async function GetFeatured() {
       <div className="wrap">
         <div className="feature-cta">
           <div className="feature-cta__covers" aria-hidden>
-            {covers.map((c) => <Image key={c.slug} src={c.coverImage} alt={c.alt} width={300} height={425} />)}
+            {covers.map((c) => <Image key={c.slug} src={c.coverImage} alt={c.alt} width={300} height={425} sizes="200px" />)}
           </div>
           <div className="feature-cta__text">
             <p className="feature-cta__kicker">For leaders &amp; companies</p>

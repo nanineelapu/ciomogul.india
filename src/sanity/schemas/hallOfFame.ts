@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { seoField } from "./seoFields";
 
 export const hallOfFame = defineType({
   name: "hallOfFame",
@@ -23,6 +24,7 @@ export const hallOfFame = defineType({
     }),
     defineField({ name: "pullQuote", title: "Pull quote", type: "text", rows: 3 }),
     defineField({ name: "profileBody", title: "Profile paragraphs", type: "array", of: [{ type: "text", rows: 4 }] }),
+    seoField,
   ],
   orderings: [{ title: "Serial, newest first", name: "serialDesc", by: [{ field: "serial", direction: "desc" }] }],
   preview: { select: { title: "name", subtitle: "inductedOn", media: "portrait" } },

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import JsonLd from "@/components/seo/JsonLd";
+import { buildMetadata, breadcrumbLd, pageLd } from "@/lib/seo";
 import { getPageContent } from "@/lib/data";
 import ArticleCard from "@/components/articles/ArticleCard";
 import ArticleSearch from "@/components/articles/ArticleSearch";
@@ -13,11 +15,15 @@ import {
   type ArticleSort,
 } from "@/lib/data";
 
-export const metadata: Metadata = {
-  title: "Articles — CIO Mogul India",
-  description:
-    "Top stories, the latest news, and the full article archive by category.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const page = (await getPageContent()).articles;
+  return buildMetadata({
+    title: page.title,
+    description: page.intro,
+    path: "/articles",
+    keywords: ["technology news India","business news India","startup news India","cybersecurity news India","AI news India","policy news India","healthcare technology news","leadership articles"],
+  });
+}
 
 export default async function ArticlesPage({
   searchParams,
@@ -37,6 +43,7 @@ export default async function ArticlesPage({
 
   return (
     <main>
+      <JsonLd data={[pageLd("CollectionPage", { name: page.title, description: page.intro, path: "/articles" }), breadcrumbLd([{ name: page.title, path: "/articles" }])]} />
       <section className="page-lead page-lead--light">
         <div className="wrap">
           <h1 className="page-lead__title">{page.title}</h1>

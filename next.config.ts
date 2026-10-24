@@ -7,6 +7,8 @@ const nextConfig: NextConfig = {
   // Images uploaded in Sanity are served from its CDN.
   images: {
     remotePatterns: [{ protocol: "https", hostname: "cdn.sanity.io" }],
+    // Resized images are kept for 30 days, so repeat visits are instant.
+    minimumCacheTTL: 60 * 60 * 24 * 30,
   },
   turbopack: {
     rules: {

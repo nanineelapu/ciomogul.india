@@ -1,13 +1,19 @@
 import type { Metadata } from "next";
 import ContactForm from "@/components/contact/ContactForm";
+import JsonLd from "@/components/seo/JsonLd";
+import { buildMetadata, breadcrumbLd, pageLd } from "@/lib/seo";
 import { getPageContent } from "@/lib/data";
 import { getSiteSettings } from "@/lib/data";
 
-export const metadata: Metadata = {
-  title: "Contact — CIO Mogul India",
-  description:
-    "Get in touch with the CIO Mogul India editorial team for enquiries, story pitches and partnerships.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const page = (await getPageContent()).contact;
+  return buildMetadata({
+    title: page.title,
+    description: page.intro,
+    path: "/contact",
+    keywords: ["contact CIO Mogul India","get featured in magazine","pitch a story","magazine advertising India","media partnership India"],
+  });
+}
 
 export default async function ContactPage() {
   const settings = await getSiteSettings();
@@ -22,6 +28,7 @@ export default async function ContactPage() {
 
   return (
     <main>
+      <JsonLd data={[pageLd("ContactPage", { name: page.title, description: page.intro, path: "/contact" }), breadcrumbLd([{ name: page.title, path: "/contact" }])]} />
       <section className="page-lead page-lead--light">
         <div className="wrap">
           <h1 className="page-lead__title">{page.title}</h1>

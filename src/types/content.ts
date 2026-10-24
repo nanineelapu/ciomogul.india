@@ -27,6 +27,7 @@ export type MagazineEdition = {
   publishedYear: number;        // used by the archive filter — kept separate so
                                 // the display string stays free-form
   body: string[];               // paragraphs for the "Inside this edition" block
+  seo?: Seo | null;
 };
 
 export type CoverStory = {
@@ -94,6 +95,9 @@ export type Testimonial = {
   avatar: string;
 };
 
+// Optional search-engine overrides entered in Sanity.
+export type Seo = { title?: string; description?: string; keywords?: string[] };
+
 export type Headline = {
   slug: string;
   text: string;
@@ -117,6 +121,8 @@ export type Article = {
   readTime?: string;       // e.g. "6 min read"
   isTopStory?: boolean;    // picked up by the Top Stories section
   body?: string[];         // paragraphs for the article page
+  isoDate?: string;        // yyyy-mm-dd, used by search engines
+  seo?: Seo | null;
   isTrending?: boolean;    // picked up by the Trending list
   trendingRank?: number;   // 1 = most trending; smaller = higher
 };
@@ -142,4 +148,5 @@ export type HallOfFameEntry = {
   portrait: string;         // image path — may be the cover for now
   pullQuote: string;        // one-line quote from their edition
   profileBody: string[];    // paragraphs on the honoree profile page
+  seo?: Seo | null;
 };

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import JsonLd from "@/components/seo/JsonLd";
+import { buildMetadata, breadcrumbLd, pageLd } from "@/lib/seo";
 import { getPageContent } from "@/lib/data";
 import { Suspense } from "react";
 import HallEntry from "@/components/hallOfFame/HallEntry";
@@ -7,11 +9,15 @@ import HallFilters from "@/components/hallOfFame/HallFilters";
 import Pagination from "@/components/shared/Pagination";
 import { getHallOfFame, searchHallOfFame, type HallSort } from "@/lib/data";
 
-export const metadata: Metadata = {
-  title: "Hall of Fame — CIO Mogul India",
-  description:
-    "Every leader we've featured on the cover of CIO Mogul India — the permanent record.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const page = (await getPageContent()).hallOfFame;
+  return buildMetadata({
+    title: page.title,
+    description: page.intro,
+    path: "/hall-of-fame",
+    keywords: ["Hall of Fame","top technology leaders in India","India's best CIOs","cover story honorees","industry leaders hall of fame","leadership recognition India"],
+  });
+}
 
 export default async function HallOfFamePage({
   searchParams,
@@ -26,6 +32,7 @@ export default async function HallOfFamePage({
 
   return (
     <main>
+      <JsonLd data={[pageLd("CollectionPage", { name: page.title, description: page.intro, path: "/hall-of-fame" }), breadcrumbLd([{ name: page.title, path: "/hall-of-fame" }])]} />
       <section className="page-lead">
         <div className="wrap">
           <h1 className="page-lead__title">{page.title}</h1>

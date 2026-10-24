@@ -18,6 +18,7 @@ import { PAGE_CONTENT, type PageContent, type PageText } from "@/data/pageConten
 import { TERMS, type LegalContent } from "@/data/terms";
 import { PRIVACY } from "@/data/privacy";
 import { SOCIAL, WHATSAPP_URL, type SocialKey } from "@/data/social";
+import { DEFAULT_DESCRIPTION } from "@/lib/seo";
 import { WOMEN_LEADERS } from "@/data/womenLeaders";
 import { PODCASTS } from "@/data/podcasts";
 import { TESTIMONIALS } from "@/data/testimonials";
@@ -47,6 +48,7 @@ import {
 import type {
   Article,
   Category,
+  Seo,
   CoverStory,
   FeaturedArticle,
   HallOfFameEntry,
@@ -407,6 +409,7 @@ type RawArticle = {
   alt: string;
   isTopStory: boolean;
   body: string[];
+  seo?: Seo | null;
 };
 
 const formatDate = (iso: string) =>
@@ -434,6 +437,8 @@ export async function getArticles(): Promise<Article[]> {
       readTime: r.readTime || undefined,
       isTopStory: r.isTopStory,
       body: r.body,
+      isoDate: r.publishDate,
+      seo: r.seo,
     }));
   }, ARTICLES);
 }
@@ -586,6 +591,7 @@ type RawEdition = {
   publishedOn: string;
   publishedYear: number;
   body: string[];
+  seo?: Seo | null;
 };
 function mapEdition(r: RawEdition, fallbackCover: string): MagazineEdition {
   return {
@@ -603,6 +609,7 @@ function mapEdition(r: RawEdition, fallbackCover: string): MagazineEdition {
     publishedOn: r.publishedOn,
     publishedYear: r.publishedYear,
     body: r.body ?? [],
+    seo: r.seo,
   };
 }
 
@@ -747,6 +754,8 @@ export async function getLegalContent(kind: "terms" | "privacy"): Promise<LegalC
 
 // ─── Site settings (contact details + social links) ──────────────────────
 export type SiteSettings = {
+  description: string;
+  keywords: string[];
   email: string;
   phone: string;
   phoneHref: string;
@@ -756,6 +765,8 @@ export type SiteSettings = {
 };
 
 const SETTINGS_FALLBACK: SiteSettings = {
+  description: DEFAULT_DESCRIPTION,
+  keywords: [],
   email: "info@ciomogulindia.com",
   phone: "+91 95292 03836",
   phoneHref: "tel:+919529203836",
@@ -764,7 +775,10 @@ const SETTINGS_FALLBACK: SiteSettings = {
   social: SOCIAL.map((x) => ({ key: x.key, label: x.label, href: x.href })),
 };
 
-type RawSettings = Partial<Record<"email" | "phone" | "office" | SocialKey, string>>;
+type RawSettings = Partial<Record<"email" | "phone" | "office" | SocialKey, string>> & {
+  siteDescription?: string;
+  keywords?: string[];
+};
 
 export async function getSiteSettings(): Promise<SiteSettings> {
   return withFallback<SiteSettings>(async () => {
@@ -772,6 +786,8 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     if (!r) return SETTINGS_FALLBACK;
     const phone = r.phone || SETTINGS_FALLBACK.phone;
     return {
+      description: r.siteDescription || SETTINGS_FALLBACK.description,
+      keywords: r.keywords ?? [],
       email: r.email || SETTINGS_FALLBACK.email,
       phone,
       phoneHref: "tel:" + phone.replace(/[^+\d]/g, ""),

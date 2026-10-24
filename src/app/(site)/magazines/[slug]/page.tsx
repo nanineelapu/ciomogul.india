@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import JsonLd from "@/components/seo/JsonLd";
+import { breadcrumbLd, buildMetadata, magazineIssueLd, mergeKeywords } from "@/lib/seo";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -25,11 +27,21 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const edition = await getMagazineEditionBySlug(slug);
-  if (!edition) return { title: "Edition not found — CIO Mogul India" };
-  return {
-    title: `${edition.featuredPersonName} — ${edition.editionLabel} · CIO Mogul India`,
-    description: edition.subtitle,
-  };
+  if (!edition) return { title: "Edition not found | CIO Mogul India", robots: { index: false } };
+  return buildMetadata({
+    title: edition.seo?.title || `${edition.featuredPersonName} | ${edition.editionLabel}`,
+    description: edition.seo?.description || edition.subtitle || edition.title,
+    path: `/magazines/${edition.slug}`,
+    image: edition.coverImage,
+    imageAlt: edition.coverAlt || edition.title,
+    keywords: mergeKeywords(edition.seo?.keywords, [
+      edition.featuredPersonName,
+      `${edition.featuredPersonName} interview`,
+      `${edition.featuredPersonName} cover story`,
+      edition.editionLabel,
+      `magazine edition ${edition.publishedYear}`,
+    ]),
+  });
 }
 
 async function MagazineDetailPageContent({
@@ -45,6 +57,22 @@ async function MagazineDetailPageContent({
 
   return (
     <main>
+      <JsonLd
+        data={[
+          magazineIssueLd({
+            name: `${edition.featuredPersonName}: ${edition.editionLabel}`,
+            description: edition.seo?.description || edition.subtitle || edition.title,
+            path: `/magazines/${edition.slug}`,
+            image: edition.coverImage,
+            year: edition.publishedYear,
+            person: edition.featuredPersonName,
+          }),
+          breadcrumbLd([
+            { name: "Magazines", path: "/magazines" },
+            { name: edition.featuredPersonName, path: `/magazines/${edition.slug}` },
+          ]),
+        ]}
+      />
       <div className="wrap">
         <Link href="/magazines" className="back-link">
           Back to magazines

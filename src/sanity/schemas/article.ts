@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { seoField } from "./seoFields";
 
 export const ARTICLE_CATEGORIES = [
   "Technology",
@@ -40,6 +41,7 @@ export const article = defineType({
       description: "Show in the Top Stories band (the first three are used).",
       initialValue: false,
     }),
+    seoField,
   ],
   orderings: [{ title: "Newest first", name: "dateDesc", by: [{ field: "publishDate", direction: "desc" }] }],
   preview: { select: { title: "title", subtitle: "category", media: "image" } },

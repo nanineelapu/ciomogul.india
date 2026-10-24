@@ -5,6 +5,8 @@ export const siteSettings = defineType({
   title: "Site settings",
   type: "document",
   fields: [
+    defineField({ name: "siteDescription", title: "Site description (for search engines)", type: "text", rows: 3, description: "Around 150 characters. Shown in Google for the home page." }),
+    defineField({ name: "keywords", title: "Site keywords", type: "array", of: [{ type: "string" }], options: { layout: "tags" }, description: "Phrases that describe the whole site. Used on the home page." }),
     defineField({ name: "email", title: "Email", type: "string" }),
     defineField({ name: "phone", title: "Phone", type: "string", description: "For example: +91 95292 03836" }),
     defineField({ name: "office", title: "Office", type: "string" }),

@@ -16,7 +16,8 @@ export const MAGAZINE_FIELDS_PROJ = /* groq */ `
   "pdfUrl": pdfFile.asset->url,
   "publishedOn": coalesce(publishedOn, ""),
   publishedYear,
-  "body": coalesce(body, [])
+  "body": coalesce(body, []),
+  "seo": seo{ "title": metaTitle, "description": metaDescription, keywords }
 `;
 
 export const MAGAZINE_EDITIONS_QUERY = /* groq */ `
@@ -142,7 +143,8 @@ export const HALL_OF_FAME_QUERY = /* groq */ `
     "organization": coalesce(organization, ""),
     "portrait": portrait,
     "pullQuote": coalesce(pullQuote, ""),
-    "profileBody": coalesce(profileBody, [])
+    "profileBody": coalesce(profileBody, []),
+    "seo": seo{ "title": metaTitle, "description": metaDescription, keywords }
   }
 `;
 
@@ -158,7 +160,8 @@ export const ARTICLES_QUERY = /* groq */ `
     "image": image,
     "alt": coalesce(image.alt, ""),
     "isTopStory": coalesce(isTopStory, false),
-    "body": coalesce(body, [])
+    "body": coalesce(body, []),
+    "seo": seo{ "title": metaTitle, "description": metaDescription, keywords }
   }
 `;
 
@@ -187,7 +190,7 @@ export const LEGAL_QUERY = /* groq */ `
 
 export const SITE_SETTINGS_QUERY = /* groq */ `
   *[_type == "siteSettings" && _id == "siteSettings"][0] {
-    email, phone, office, instagram, facebook, linkedin, x, whatsapp
+    email, phone, office, instagram, facebook, linkedin, x, whatsapp, siteDescription, keywords
   }
 `;
 
