@@ -22,8 +22,10 @@ export default function Newsletter() {
         </div>
         <form className="nl-form" noValidate onSubmit={onSubmit}>
           <label htmlFor="nl-email" className="sr-only">Email</label>
-          <input id="nl-email" type="email" placeholder="Your email address" required value={email} onChange={(e) => setEmail(e.target.value)} />
-          <button className="btn btn-ink" type="submit">Subscribe</button>
+          <div className="nl-form__row">
+            <input id="nl-email" type="email" placeholder="Your email address" required value={email} onChange={(e) => setEmail(e.target.value)} />
+            <button className="btn btn-paper" type="submit">Subscribe</button>
+          </div>
           {msg && <p className={`nl-form__msg ${msg.ok ? "is-ok" : "is-error"}`} role="status">{msg.text}</p>}
         </form>
       </div>
