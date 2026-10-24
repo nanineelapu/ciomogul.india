@@ -3602,10 +3602,10 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
 .ws-card:hover .ws-card__portrait img { transform: scale(1.04); }
 
 .ws-card__name {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 22px;
-  line-height: 1.2;
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.35;
   color: var(--color-ink);
   margin-bottom: 6px;
 }
@@ -3800,11 +3800,10 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
 
 .article-card__title {
   margin: 0;
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 20px;
-  line-height: 1.2;
-  letter-spacing: -.005em;
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.4;
 }
 
 .article-card__title a { color: var(--color-ink); }
