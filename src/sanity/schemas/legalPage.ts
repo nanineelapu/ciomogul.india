@@ -15,6 +15,8 @@ export const legalPage = defineType({
           { title: "Privacy Policy", value: "privacy" },
         ],
       },
+      readOnly: ({ document }) =>
+        ["legalPage-terms", "legalPage-privacy"].includes(String(document?._id ?? "").replace(/^drafts\./, "")),
       validation: (r) => r.required(),
     }),
     defineField({ name: "title", title: "Title", type: "string", validation: (r) => r.required() }),

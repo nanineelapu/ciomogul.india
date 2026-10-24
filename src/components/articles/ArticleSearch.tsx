@@ -1,10 +1,11 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
+import type { SiteText } from "@/data/siteText";
 import { useEffect, useState, useTransition } from "react";
 
 // Debounced search for the Explore block. Separate from CategoryTabs so each
 // filter stays small and single-purpose; both push to the same URL.
-export default function ArticleSearch() {
+export default function ArticleSearch({ text }: { text: SiteText["articles"] }) {
   const router = useRouter();
   const params = useSearchParams();
   const [pending, startTransition] = useTransition();
@@ -30,10 +31,10 @@ export default function ArticleSearch() {
 
   return (
     <label className={`mag-filters__search article-search${pending ? " is-pending" : ""}`}>
-      <span className="sr-only">Search articles</span>
+      <span className="sr-only">{text.searchLabel}</span>
       <input
         type="search"
-        placeholder="Search articles…"
+        placeholder={text.searchPlaceholder}
         value={q}
         onChange={(e) => setQ(e.target.value)}
       />

@@ -1,16 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
+import { getSiteText } from "@/lib/data";
 import type { HallOfFameEntry } from "@/types/content";
 
 // One row of the roll of honor. The parent decides the alternating side via
 // the `side` prop so the layout holds its rhythm regardless of filter/sort.
-export default function HallEntry({
+export default async function HallEntry({
   entry,
   side = "left",
 }: {
   entry: HallOfFameEntry;
   side?: "left" | "right";
 }) {
+  const t = await getSiteText();
   return (
     <article className={`hall-entry hall-entry--${side}`}>
       <aside className="hall-entry__ordinal" aria-hidden>
@@ -35,7 +37,7 @@ export default function HallEntry({
       </Link>
 
       <div className="hall-entry__body">
-        <p className="hall-entry__kicker">Inducted · {entry.inductedOn}</p>
+        <p className="hall-entry__kicker">{t.hallOfFame.inducted} · {entry.inductedOn}</p>
         <h3 className="hall-entry__name">
           <Link href={`/hall-of-fame/${entry.slug}`}>{entry.name}</Link>
         </h3>
@@ -47,7 +49,7 @@ export default function HallEntry({
         <blockquote className="hall-entry__quote">{entry.pullQuote}</blockquote>
 
         <Link href={`/hall-of-fame/${entry.slug}`} className="hall-entry__cta">
-          Open profile
+          {t.hallOfFame.openProfile}
         </Link>
       </div>
     </article>

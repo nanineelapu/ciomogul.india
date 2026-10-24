@@ -2,7 +2,7 @@ import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
 import { visionTool } from "@sanity/vision";
 import { apiVersion, dataset, projectId } from "./src/sanity/env";
-import { schemaTypes, SINGLETON_TYPES } from "./src/sanity/schemas";
+import { schemaTypes, SINGLETON_TYPES, LEGAL_DOC_IDS } from "./src/sanity/schemas";
 import { structure } from "./src/sanity/structure";
 
 // Config used by both the embedded /studio route and the sanity CLI
@@ -24,12 +24,19 @@ export default defineConfig({
     // homepageConfig is a singleton — hide "Create new" everywhere it would
     // normally appear so editors can't accidentally make a second copy.
     templates: (templates) =>
-      templates.filter(({ schemaType }) => !SINGLETON_TYPES.includes(schemaType)),
+      templates.filter(({ schemaType }) => !SINGLETON_TYPES.includes(schemaType) && schemaType !== "legalPage"),
   },
   document: {
-    actions: (prev, { schemaType }) =>
-      SINGLETON_TYPES.includes(schemaType)
-        ? prev.filter(({ action }) => action !== "duplicate" && action !== "delete")
-        : prev,
+    actions: (prev, { schemaType, documentId }) => {
+      if (SINGLETON_TYPES.includes(schemaType)) {
+        return prev.filter(({ action }) => action !== "duplicate" && action !== "delete");
+      }
+      if (schemaType === "legalPage") {
+        // The two real pages can't be deleted or copied; stray extras can be removed.
+        const fixed = LEGAL_DOC_IDS.includes((documentId ?? "").replace(/^drafts\./, ""));
+        return prev.filter(({ action }) => action !== "duplicate" && !(fixed && action === "delete"));
+      }
+      return prev;
+    },
   },
 });

@@ -1,25 +1,24 @@
 import Image from "next/image";
-import { getTestimonials } from "@/lib/data";
+import { getSiteText, getTestimonials } from "@/lib/data";
 
 export default async function Testimonials() {
-  const testis = await getTestimonials();
-
+  const [testis, t] = await Promise.all([getTestimonials(), getSiteText()]);
   return (
     <section className="section" id="testimonials" aria-labelledby="testi-title">
       <div className="wrap">
         <header className="s-head">
-          <h2 className="s-title" id="testi-title">What leaders say</h2>
+          <h2 className="s-title" id="testi-title">{t.home.testimonialsTitle}</h2>
           <span className="s-rule" aria-hidden />
         </header>
         <div className="testis">
-          {testis.map((t) => (
-            <figure key={t.name} className="testi">
-              <blockquote>&ldquo;{t.quote}&rdquo;</blockquote>
+          {testis.map((item) => (
+            <figure key={item.name} className="testi">
+              <blockquote>&ldquo;{item.quote}&rdquo;</blockquote>
               <figcaption>
-                <Image src={t.avatar} alt="" width={52} height={52} />
+                <Image src={item.avatar} alt="" width={52} height={52} />
                 <span>
-                  <b>{t.name}</b>
-                  <span>{t.role}</span>
+                  <b>{item.name}</b>
+                  <span>{item.role}</span>
                 </span>
               </figcaption>
             </figure>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { getSiteText } from "@/lib/data";
 import JsonLd from "@/components/seo/JsonLd";
 import { buildMetadata, breadcrumbLd, pageLd } from "@/lib/seo";
 import { getPageContent } from "@/lib/data";
@@ -29,6 +30,7 @@ export default async function HallOfFamePage({
   const totalInductees = all.length;
 
   const page = (await getPageContent()).hallOfFame;
+  const t = await getSiteText();
 
   return (
     <main>
@@ -58,22 +60,19 @@ export default async function HallOfFamePage({
         <div className="wrap hall-apply__inner">
           <div className="hall-apply__text">
             <span className="page-lead__eyebrow" style={{ color: "#fff", borderColor: "#fff" }}>
-              Apply
+              {t.hallOfFame.applyLabel}
             </span>
             <h2 className="hall-apply__title" id="apply-title">
-              Think you belong on the roll?
+              {t.hallOfFame.applyTitle}
             </h2>
-            <p>
-              We add new inductees with every edition. If your work meets the
-              editorial bar, our team will be in touch within a week.
-            </p>
+            <p>{t.hallOfFame.applyText}</p>
           </div>
           <div className="hall-apply__actions">
             <Link href="/contact" className="btn btn-paper">
-              Nominate yourself
+              {t.hallOfFame.applyButton}
             </Link>
             <Link href="/about" className="hall-apply__link">
-              Editorial guidelines →
+              {t.hallOfFame.applyLink}
             </Link>
           </div>
         </div>
@@ -109,6 +108,7 @@ async function HallRoll({
 
   const query = parseParams(urlParams);
   const result = await searchHallOfFame(query);
+  const t = await getSiteText();
 
   return (
     <>
@@ -117,13 +117,14 @@ async function HallRoll({
           years={result.years}
           resultCount={result.total}
           totalCount={totalCount}
+          text={t.hallOfFame}
         />
       )}
 
       {result.items.length === 0 ? (
         <div className="mag-empty">
-          <b>No inductees match those filters.</b>
-          <p>Try a different year or clear the search.</p>
+          <b>{t.hallOfFame.noResultsTitle}</b>
+          <p>{t.hallOfFame.noResultsText}</p>
         </div>
       ) : (
         <>

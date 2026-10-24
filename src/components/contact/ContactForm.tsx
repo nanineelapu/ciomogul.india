@@ -1,23 +1,24 @@
 "use client";
 import { useState } from "react";
+import type { SiteText } from "@/data/siteText";
 
 type Fields = { name: string; email: string; subject: string; message: string };
 type Errors = Partial<Record<keyof Fields, string>>;
 
 const EMPTY: Fields = { name: "", email: "", subject: "", message: "" };
 
-function validate(v: Fields): Errors {
+function validate(v: Fields, t: SiteText["contact"]): Errors {
   const e: Errors = {};
-  if (!v.name.trim()) e.name = "Please enter your name.";
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email.trim())) e.email = "Please enter a valid email address.";
-  if (!v.subject.trim()) e.subject = "Please add a subject.";
-  if (v.message.trim().length < 10) e.message = "Please write at least a short message.";
+  if (!v.name.trim()) e.name = t.nameRequired;
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email.trim())) e.email = t.emailInvalid;
+  if (!v.subject.trim()) e.subject = t.subjectRequired;
+  if (v.message.trim().length < 10) e.message = t.messageShort;
   return e;
 }
 
 // Validates in the browser, then posts to /api/contact, which saves the message
 // and emails the team.
-export default function ContactForm() {
+export default function ContactForm({ text }: { text: SiteText["contact"] }) {
   const [values, setValues] = useState<Fields>(EMPTY);
   const [errors, setErrors] = useState<Errors>({});
   const [sent, setSent] = useState(false);
@@ -31,7 +32,7 @@ export default function ContactForm() {
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const found = validate(values);
+    const found = validate(values, text);
     setErrors(found);
     if (Object.keys(found).length > 0) return;
 
@@ -46,13 +47,13 @@ export default function ContactForm() {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok || !data.ok) {
-        setServerError(data.error || "Something went wrong. Please try again.");
+        setServerError(data.error || text.genericError);
         return;
       }
       setSent(true);
       setValues(EMPTY);
     } catch {
-      setServerError("Something went wrong. Please try again.");
+      setServerError(text.genericError);
     } finally {
       setSending(false);
     }
@@ -61,10 +62,10 @@ export default function ContactForm() {
   if (sent) {
     return (
       <div className="cform__done" role="status">
-        <b>Thank you. Your message is on its way.</b>
-        <p>Our editorial team will get back to you shortly.</p>
+        <b>{text.successTitle}</b>
+        <p>{text.successText}</p>
         <button type="button" className="btn btn-line" onClick={() => setSent(false)}>
-          Send another message
+          {text.sendAnother}
         </button>
       </div>
     );
@@ -73,7 +74,7 @@ export default function ContactForm() {
   return (
     <form className="cform" noValidate onSubmit={onSubmit}>
       <div className="cform__row">
-        <Field label="Name" error={errors.name}>
+        <Field label={text.nameLabel} error={errors.name}>
           <input
             type="text"
             autoComplete="name"
@@ -82,7 +83,7 @@ export default function ContactForm() {
             aria-invalid={!!errors.name}
           />
         </Field>
-        <Field label="Email" error={errors.email}>
+        <Field label={text.formEmailLabel} error={errors.email}>
           <input
             type="email"
             autoComplete="email"
@@ -93,7 +94,7 @@ export default function ContactForm() {
         </Field>
       </div>
 
-      <Field label="Subject" error={errors.subject}>
+      <Field label={text.subjectLabel} error={errors.subject}>
         <input
           type="text"
           value={values.subject}
@@ -102,7 +103,7 @@ export default function ContactForm() {
         />
       </Field>
 
-      <Field label="Message" error={errors.message}>
+      <Field label={text.messageLabel} error={errors.message}>
         <textarea
           rows={6}
           value={values.message}
@@ -116,7 +117,7 @@ export default function ContactForm() {
       {serverError && <p className="cform__error" role="alert">{serverError}</p>}
 
       <button type="submit" className="btn btn-ink" disabled={sending}>
-        {sending ? "Sending…" : "Send message"}
+        {sending ? text.sendingButton : text.sendButton}
       </button>
     </form>
   );

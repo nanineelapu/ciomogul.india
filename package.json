@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "sanity": "sanity"
+    "sanity": "sanity",
+    "seed": "node scripts/seed-sanity.mjs",
+    "seed:about": "node scripts/seed-sanity.mjs --only=aboutPage --force"
   },
   "dependencies": {
     "@sanity/image-url": "^2.1.1",

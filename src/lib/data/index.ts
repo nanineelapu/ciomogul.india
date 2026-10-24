@@ -19,6 +19,7 @@ import { TERMS, type LegalContent } from "@/data/terms";
 import { PRIVACY } from "@/data/privacy";
 import { SOCIAL, WHATSAPP_URL, type SocialKey } from "@/data/social";
 import { DEFAULT_DESCRIPTION } from "@/lib/seo";
+import { SITE_TEXT, mergeSiteText, type SiteText } from "@/data/siteText";
 import { WOMEN_LEADERS } from "@/data/womenLeaders";
 import { PODCASTS } from "@/data/podcasts";
 import { TESTIMONIALS } from "@/data/testimonials";
@@ -26,6 +27,7 @@ import { sanityConfigured } from "@/sanity/env";
 import { sanityFetch } from "@/sanity/lib/client";
 import { urlForOrDefault } from "@/sanity/lib/image";
 import {
+  SITE_TEXT_QUERY,
   PAGE_CONTENT_QUERY,
   ABOUT_QUERY,
   ARTICLES_QUERY,
@@ -111,14 +113,15 @@ function mapCover(r: RawCover, fallback: string): Magazine {
 }
 export async function getReleaseCovers(): Promise<Magazine[]> {
   return withFallback<Magazine[]>(async () => {
-    const rows = await sanityFetch<RawCover[]>({ query: RELEASE_COVERS_QUERY });
+    // No homepage document yet means Sanity answers null; treat that as an empty list.
+    const rows = (await sanityFetch<RawCover[] | null>({ query: RELEASE_COVERS_QUERY })) ?? [];
     return rows.map((r, i) => mapCover(r, RELEASE_COVERS[i % RELEASE_COVERS.length].coverImage));
   }, RELEASE_COVERS);
 }
 
 export async function getGetFeaturedCovers(): Promise<Magazine[]> {
   return withFallback<Magazine[]>(async () => {
-    const rows = await sanityFetch<RawCover[]>({ query: GET_FEATURED_COVERS_QUERY });
+    const rows = (await sanityFetch<RawCover[] | null>({ query: GET_FEATURED_COVERS_QUERY })) ?? [];
     return rows.map((r, i) =>
       mapCover(r, GET_FEATURED_COVERS[i % GET_FEATURED_COVERS.length].coverImage)
     );
@@ -136,7 +139,7 @@ type RawCoverStory = {
 };
 export async function getCoverStories(): Promise<CoverStory[]> {
   return withFallback<CoverStory[]>(async () => {
-    const rows = await sanityFetch<RawCoverStory[]>({ query: COVER_STORIES_QUERY });
+    const rows = (await sanityFetch<RawCoverStory[] | null>({ query: COVER_STORIES_QUERY })) ?? [];
     return rows.map((r, i) => ({
       slug: r.slug,
       name: r.name,
@@ -702,27 +705,48 @@ export async function searchMagazineEditions(query: MagazineQuery = {}) {
 }
 
 // ─── About ───────────────────────────────────────────────────────────────
-type RawAbout = {
-  headline?: string;
-  intro?: string;
-  whoWeAre?: string[];
-  whatWeCover?: { title: string; text: string }[];
-  joinTitle?: string;
-  joinText?: string;
-};
+type RawAbout = Partial<{
+  eyebrowLeft: string;
+  eyebrowRight: string;
+  headline: string;
+  intro: string;
+  primaryButton: string;
+  secondaryButton: string;
+  whoWeAre: string[];
+  featureLabel: string;
+  featured: string[];
+  coverTitle: string;
+  coverIntro: string;
+  whatWeCover: { title: string; text: string }[];
+  joinTitle: string;
+  joinText: string;
+  joinPrimaryButton: string;
+  joinSecondaryButton: string;
+}>;
 
+// Any field left empty in Sanity falls back to the built-in text.
 export async function getAboutContent(): Promise<AboutContent> {
   return withFallback<AboutContent>(async () => {
     const r = await sanityFetch<RawAbout | null>({ query: ABOUT_QUERY });
     if (!r) return ABOUT;
     return {
+      eyebrowLeft: r.eyebrowLeft || ABOUT.eyebrowLeft,
+      eyebrowRight: r.eyebrowRight || ABOUT.eyebrowRight,
       headline: r.headline || ABOUT.headline,
       intro: r.intro || ABOUT.intro,
+      primaryButton: r.primaryButton || ABOUT.primaryButton,
+      secondaryButton: r.secondaryButton || ABOUT.secondaryButton,
       whoWeAre: r.whoWeAre?.length ? r.whoWeAre : ABOUT.whoWeAre,
+      featureLabel: r.featureLabel || ABOUT.featureLabel,
+      featured: r.featured?.length ? r.featured : ABOUT.featured,
+      coverTitle: r.coverTitle || ABOUT.coverTitle,
+      coverIntro: r.coverIntro || ABOUT.coverIntro,
       whatWeCover: r.whatWeCover?.length ? r.whatWeCover : ABOUT.whatWeCover,
       join: {
         title: r.joinTitle || ABOUT.join.title,
         text: r.joinText || ABOUT.join.text,
+        primaryButton: r.joinPrimaryButton || ABOUT.join.primaryButton,
+        secondaryButton: r.joinSecondaryButton || ABOUT.join.secondaryButton,
       },
     };
   }, ABOUT);
@@ -739,7 +763,7 @@ export async function getLegalContent(kind: "terms" | "privacy"): Promise<LegalC
   const fallback = kind === "terms" ? TERMS : PRIVACY;
   return withFallback<LegalContent>(async () => {
     const r = await sanityFetch<RawLegal | null>({ query: LEGAL_QUERY, params: { kind } });
-    if (!r) return fallback;
+    if (!r || !r.sections || r.sections.length === 0) return fallback;
     return {
       title: r.title,
       intro: r.intro,
@@ -842,4 +866,12 @@ export async function getPageContent(): Promise<PageContent> {
       contact: pick("contact"),
     };
   }, PAGE_CONTENT);
+}
+
+// ─── Site text (menus, buttons, section titles, form labels) ─────────────
+export async function getSiteText(): Promise<SiteText> {
+  return withFallback<SiteText>(async () => {
+    const remote = await sanityFetch<unknown>({ query: SITE_TEXT_QUERY });
+    return mergeSiteText(SITE_TEXT, remote);
+  }, SITE_TEXT);
 }

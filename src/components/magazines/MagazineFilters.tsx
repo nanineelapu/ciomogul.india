@@ -1,5 +1,6 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
+import type { SiteText } from "@/data/siteText";
 import { useEffect, useState, useTransition } from "react";
 
 // Keeps filter state in the URL (?q=&year=&sort=&page=) so results are
@@ -9,10 +10,12 @@ export default function MagazineFilters({
   years,
   resultCount,
   totalCount,
+  text,
 }: {
   years: number[];
   resultCount: number;
   totalCount: number;
+  text: SiteText["magazines"];
 }) {
   const router = useRouter();
   const params = useSearchParams();
@@ -50,10 +53,10 @@ export default function MagazineFilters({
     <div className={`mag-filters${pending ? " is-pending" : ""}`}>
       <div className="mag-filters__row">
         <label className="mag-filters__search">
-          <span className="sr-only">Search editions</span>
+          <span className="sr-only">{text.searchLabel}</span>
           <input
             type="search"
-            placeholder="Search by name, title or edition…"
+            placeholder={text.searchPlaceholder}
             value={q}
             onChange={(e) => setQ(e.target.value)}
           />
@@ -61,9 +64,9 @@ export default function MagazineFilters({
 
         <div className="mag-filters__selects">
           <label className="mag-filters__select">
-            <span>Year</span>
+            <span>{text.yearLabel}</span>
             <select value={year} onChange={(e) => updateParam("year", e.target.value || null)}>
-              <option value="">All years</option>
+              <option value="">{text.allYears}</option>
               {years.map((y) => (
                 <option key={y} value={y}>{y}</option>
               ))}
@@ -71,17 +74,17 @@ export default function MagazineFilters({
           </label>
 
           <label className="mag-filters__select">
-            <span>Sort</span>
+            <span>{text.sortLabel}</span>
             <select value={sort} onChange={(e) => updateParam("sort", e.target.value)}>
-              <option value="newest">Newest first</option>
-              <option value="oldest">Oldest first</option>
+              <option value="newest">{text.sortNewest}</option>
+              <option value="oldest">{text.sortOldest}</option>
             </select>
           </label>
         </div>
       </div>
 
       <p className="mag-filters__count">
-        <b>{resultCount}</b> of <b>{totalCount}</b> editions
+        <b>{resultCount}</b> of <b>{totalCount}</b> {text.countWord}
         {q || year ? (
           <>
             {" "}·{" "}
@@ -90,7 +93,7 @@ export default function MagazineFilters({
               className="mag-filters__clear"
               onClick={() => { setQ(""); startTransition(() => router.replace("/magazines", { scroll: false })); }}
             >
-              Clear filters
+              {text.clearFilters}
             </button>
           </>
         ) : null}

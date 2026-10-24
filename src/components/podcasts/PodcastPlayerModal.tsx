@@ -1,5 +1,6 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
+import type { SiteText } from "@/data/siteText";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useLenis } from "lenis/react";
@@ -7,7 +8,7 @@ import type { Podcast } from "@/types/content";
 
 // Reads ?watch=<slug> from the URL and renders a dark-backdrop modal with the
 // YouTube embed inside. Closing clears the param (so back/forward also work).
-export default function PodcastPlayerModal({ podcasts }: { podcasts: Podcast[] }) {
+export default function PodcastPlayerModal({ podcasts, text }: { podcasts: Podcast[]; text: SiteText["podcasts"] }) {
   const router = useRouter();
   const params = useSearchParams();
   const slug = params.get("watch");
@@ -77,7 +78,7 @@ export default function PodcastPlayerModal({ podcasts }: { podcasts: Podcast[] }
             type="button"
             className="pod-modal__close"
             onClick={close}
-            aria-label="Close player"
+            aria-label={text.closePlayer}
           >
             ×
           </button>
@@ -95,9 +96,9 @@ export default function PodcastPlayerModal({ podcasts }: { podcasts: Podcast[] }
             />
           ) : (
             <div className="pod-modal__fallback">
-              <p>Couldn&apos;t load the embedded player.</p>
+              <p>{text.embedError}</p>
               <a href={active.youtubeUrl} target="_blank" rel="noopener noreferrer">
-                Open on YouTube ↗
+                {text.openOnYoutube}
               </a>
             </div>
           )}
@@ -110,10 +111,10 @@ export default function PodcastPlayerModal({ podcasts }: { podcasts: Podcast[] }
             rel="noopener noreferrer"
             className="pod-modal__youtube"
           >
-            Open on YouTube ↗
+            {text.openOnYoutube}
           </a>
           <button type="button" onClick={close} className="pod-modal__dismiss">
-            Close
+            {text.close}
           </button>
         </footer>
       </div>

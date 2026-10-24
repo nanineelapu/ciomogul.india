@@ -1,7 +1,8 @@
 "use client";
 import { useState } from "react";
+import type { SiteText } from "@/data/siteText";
 
-export default function Newsletter() {
+export default function Newsletter({ text }: { text: SiteText["home"] }) {
   const [email, setEmail] = useState("");
   const [sending, setSending] = useState(false);
   const [msg, setMsg] = useState<{ text: string; ok: boolean } | null>(null);
@@ -10,7 +11,7 @@ export default function Newsletter() {
     e.preventDefault();
     const value = email.trim();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-      setMsg({ text: "Please enter a valid email address.", ok: false });
+      setMsg({ text: text.newsletterInvalid, ok: false });
       return;
     }
 
@@ -25,13 +26,13 @@ export default function Newsletter() {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok || !data.ok) {
-        setMsg({ text: data.error || "Something went wrong. Please try again.", ok: false });
+        setMsg({ text: data.error || text.newsletterError, ok: false });
         return;
       }
-      setMsg({ text: "Thank you. You are subscribed. Please check your inbox.", ok: true });
+      setMsg({ text: text.newsletterSuccess, ok: true });
       setEmail("");
     } catch {
-      setMsg({ text: "Something went wrong. Please try again.", ok: false });
+      setMsg({ text: text.newsletterError, ok: false });
     } finally {
       setSending(false);
     }
@@ -41,8 +42,8 @@ export default function Newsletter() {
     <section className="newsletter" id="subscribe" aria-labelledby="nl-title">
       <div className="wrap newsletter__inner">
         <div>
-          <h2 className="s-title" id="nl-title">Subscribe to our newsletter</h2>
-          <p>New editions, news and podcasts. Once a week.</p>
+          <h2 className="s-title" id="nl-title">{text.newsletterTitle}</h2>
+          <p>{text.newsletterText}</p>
         </div>
         <form className="nl-form" noValidate onSubmit={onSubmit}>
           <label htmlFor="nl-email" className="sr-only">Email</label>
@@ -50,14 +51,14 @@ export default function Newsletter() {
             <input
               id="nl-email"
               type="email"
-              placeholder="Your email address"
+              placeholder={text.newsletterPlaceholder}
               autoComplete="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
             <button className="btn btn-ink" type="submit" disabled={sending}>
-              {sending ? "Subscribing…" : "Subscribe"}
+              {sending ? text.newsletterSending : text.newsletterButton}
             </button>
           </div>
           <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="cform__trap" />

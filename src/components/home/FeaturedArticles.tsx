@@ -1,15 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getFeaturedArticles } from "@/lib/data";
+import { getFeaturedArticles, getSiteText } from "@/lib/data";
 
 export default async function FeaturedArticles() {
-  const rows = await getFeaturedArticles();
-
+  const [rows, t] = await Promise.all([getFeaturedArticles(), getSiteText()]);
   return (
     <section className="section" id="articles" aria-labelledby="art-title">
       <div className="wrap">
         <header className="s-head">
-          <h2 className="s-title" id="art-title">Featured articles</h2>
+          <h2 className="s-title" id="art-title">{t.home.featuredArticlesTitle}</h2>
           <span className="s-rule" aria-hidden />
         </header>
         <div className="articles">

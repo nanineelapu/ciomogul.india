@@ -66,7 +66,7 @@ export const magazineEdition = defineType({
       title: "Role tags",
       type: "array",
       of: [{ type: "string" }],
-      description: "Not shown on the site at the moment.",
+      description: "The first tag is shown under the name in the home page Cover stories.",
       options: { layout: "tags" },
     }),
     defineField({

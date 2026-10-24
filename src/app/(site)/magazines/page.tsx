@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { getSiteText } from "@/lib/data";
 import JsonLd from "@/components/seo/JsonLd";
 import { buildMetadata, breadcrumbLd, pageLd } from "@/lib/seo";
 import { getPageContent } from "@/lib/data";
@@ -89,6 +90,7 @@ async function ArchiveResults({
 
   const query = parseParams(urlParams);
   const result = await searchMagazineEditions(query);
+  const t = await getSiteText();
 
   return (
     <>
@@ -97,13 +99,14 @@ async function ArchiveResults({
           years={result.years}
           resultCount={result.total}
           totalCount={totalCount}
+          text={t.magazines}
         />
       )}
 
       {result.items.length === 0 ? (
         <div className="mag-empty">
-          <b>No editions match those filters.</b>
-          <p>Try a different year or clear the search.</p>
+          <b>{t.magazines.noResultsTitle}</b>
+          <p>{t.magazines.noResultsText}</p>
         </div>
       ) : (
         <>

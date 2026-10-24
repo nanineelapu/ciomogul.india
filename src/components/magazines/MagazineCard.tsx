@@ -1,8 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
+import { getSiteText } from "@/lib/data";
 import type { MagazineEdition } from "@/types/content";
 
-export default function MagazineCard({
+export default async function MagazineCard({
   edition,
   index,
 }: {
@@ -10,6 +11,7 @@ export default function MagazineCard({
   // Index used only to render the "N°" chip in the corner — not stored data.
   index?: number;
 }) {
+  const t = await getSiteText();
   return (
     <Link href={`/magazines/${edition.slug}`} className="mag-card">
       <span className="mag-card__cover">
@@ -29,7 +31,7 @@ export default function MagazineCard({
       <span className="mag-card__name">{edition.featuredPersonName}</span>
       <span className="mag-card__role">{edition.subtitle}</span>
       <span className="mag-card__foot">
-        <span className="mag-card__cta">Read edition</span>
+        <span className="mag-card__cta">{t.magazines.readEdition}</span>
         <span className="mag-card__date">{edition.publishedOn}</span>
       </span>
     </Link>

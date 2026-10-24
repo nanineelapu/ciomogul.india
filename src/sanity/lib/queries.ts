@@ -43,7 +43,7 @@ export const COVER_STORIES_QUERY = /* groq */ `
   *[_type == "homepageConfig" && _id == "homepageConfig"][0].coverStories[]->{
     "slug": slug.current,
     "name": featuredPersonName,
-    "role": coalesce(editionLabel, ""),
+    "role": coalesce(roleTags[0], editionLabel, ""),
     "tag": coalesce(subtitle, ""),
     "image": cover
   }
@@ -167,17 +167,27 @@ export const ARTICLES_QUERY = /* groq */ `
 
 export const ABOUT_QUERY = /* groq */ `
   *[_type == "aboutPage" && _id == "aboutPage"][0] {
+    eyebrowLeft,
+    eyebrowRight,
     headline,
     intro,
+    primaryButton,
+    secondaryButton,
     "whoWeAre": coalesce(whoWeAre, []),
+    featureLabel,
+    "featured": coalesce(featured, []),
+    coverTitle,
+    coverIntro,
     "whatWeCover": coalesce(whatWeCover[]{ title, text }, []),
     joinTitle,
-    joinText
+    joinText,
+    joinPrimaryButton,
+    joinSecondaryButton
   }
 `;
 
 export const LEGAL_QUERY = /* groq */ `
-  *[_type == "legalPage" && kind == $kind][0] {
+  *[_type == "legalPage" && kind == $kind && count(sections) > 0] | order(_updatedAt desc)[0] {
     title,
     "intro": coalesce(intro, ""),
     "sections": coalesce(sections[]{
@@ -198,4 +208,8 @@ export const PAGE_CONTENT_QUERY = /* groq */ `
   *[_type == "pageContent" && _id == "pageContent"][0] {
     magazines, podcasts, hallOfFame, womenSpotlight, articles, contact
   }
+`;
+
+export const SITE_TEXT_QUERY = /* groq */ `
+  *[_type == "siteText" && _id == "siteText"][0]
 `;

@@ -25,7 +25,6 @@ export const metadata: Metadata = buildMetadata({
 export default async function AboutPage() {
   const about = await getAboutContent();
   const words = about.headline.split(" ");
-  const featured = ["CIOs", "Entrepreneurs", "Startup founders", "Healthcare leaders", "Industry pioneers"];
 
   return (
     <main className="abt">
@@ -38,8 +37,8 @@ export default async function AboutPage() {
       <section className="abt-mast" aria-labelledby="abt-title">
         <div className="wrap">
           <div className="abt-mast__bar">
-            <span>About us</span>
-            <span>Digital magazine &amp; broadcast</span>
+            <span>{about.eyebrowLeft}</span>
+            <span>{about.eyebrowRight}</span>
           </div>
 
           <h1 className="abt-mast__title" id="abt-title">
@@ -54,16 +53,16 @@ export default async function AboutPage() {
             <div className="abt-mast__lead">
               <p>{about.intro}</p>
               <div className="abt-actions">
-                <Link href="/magazines" className="btn btn-ink">Read the Magazine <span aria-hidden>→</span></Link>
-                <Link href="/contact" className="btn btn-line">Get in Touch</Link>
+                <Link href="/magazines" className="btn btn-ink">{about.primaryButton} <span aria-hidden>→</span></Link>
+                <Link href="/contact" className="btn btn-line">{about.secondaryButton}</Link>
               </div>
             </div>
             <div className="abt-mast__body">
               {about.whoWeAre.map((p, i) => <p key={i}>{p}</p>)}
               <div className="abt-feature">
-                <span className="abt-feature__label">Who we feature</span>
+                <span className="abt-feature__label">{about.featureLabel}</span>
                 <ul className="abt-feature__list">
-                  {featured.map((f) => <li key={f}>{f}</li>)}
+                  {about.featured.map((f) => <li key={f}>{f}</li>)}
                 </ul>
               </div>
             </div>
@@ -74,8 +73,8 @@ export default async function AboutPage() {
       <section className="abt-cover" aria-labelledby="abt-cover-title">
         <div className="wrap">
           <div className="abt-cover__head">
-            <h2 className="abt-cover__title" id="abt-cover-title">What we cover</h2>
-            <p>Three formats, one purpose: telling the stories of the people shaping India&apos;s business and technology.</p>
+            <h2 className="abt-cover__title" id="abt-cover-title">{about.coverTitle}</h2>
+            <p>{about.coverIntro}</p>
           </div>
 
           <ol className="abt-panels">
@@ -89,15 +88,19 @@ export default async function AboutPage() {
               </li>
             ))}
           </ol>
+        </div>
+      </section>
 
+      <section className="abt-joinband" aria-labelledby="abt-join-title">
+        <div className="wrap">
           <div className="abt-join">
             <div>
-              <h3 className="abt-join__title">{about.join.title}</h3>
+              <h2 className="abt-join__title" id="abt-join-title">{about.join.title}</h2>
               <p className="abt-join__text">{about.join.text}</p>
             </div>
             <div className="abt-actions abt-actions--light">
-              <Link href="/podcasts" className="btn btn-paper">Watch the Broadcasts <span aria-hidden>→</span></Link>
-              <Link href="/articles" className="btn abt-btn-ghost">Explore Articles</Link>
+              <Link href="/podcasts" className="btn btn-paper">{about.join.primaryButton} <span aria-hidden>→</span></Link>
+              <Link href="/articles" className="btn abt-btn-ghost">{about.join.secondaryButton}</Link>
             </div>
           </div>
         </div>

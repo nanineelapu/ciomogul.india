@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import type { SiteText } from "@/data/siteText";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTransition } from "react";
 import type { Podcast } from "@/types/content";
@@ -10,8 +11,10 @@ import type { Podcast } from "@/types/content";
 export default function PodcastCard({
   podcast,
   index,
+  text,
 }: {
   podcast: Podcast;
+  text: SiteText["podcasts"];
   // Shown as a small "EP ##" chip; purely a visual device.
   index?: number;
 }) {
@@ -60,7 +63,7 @@ export default function PodcastCard({
       </span>
       <span className="pod-card__title">{podcast.title}</span>
       <span className="pod-card__foot">
-        <span className="pod-card__cta">Watch episode</span>
+        <span className="pod-card__cta">{text.watchEpisode}</span>
         <span className="mag-card__date">{podcast.date.replace(/^\d{1,2}\s+/, "")}</span>
       </span>
     </button>

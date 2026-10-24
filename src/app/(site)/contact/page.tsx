@@ -3,7 +3,7 @@ import ContactForm from "@/components/contact/ContactForm";
 import JsonLd from "@/components/seo/JsonLd";
 import { buildMetadata, breadcrumbLd, pageLd } from "@/lib/seo";
 import { getPageContent } from "@/lib/data";
-import { getSiteSettings } from "@/lib/data";
+import { getSiteSettings, getSiteText } from "@/lib/data";
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = (await getPageContent()).contact;
@@ -16,12 +16,12 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ContactPage() {
-  const settings = await getSiteSettings();
+  const [settings, t] = await Promise.all([getSiteSettings(), getSiteText()]);
   const DETAILS: { label: string; value: string; href?: string }[] = [
-    { label: "Email", value: settings.email, href: `mailto:${settings.email}` },
-    { label: "Phone", value: settings.phone, href: settings.phoneHref },
-    { label: "WhatsApp", value: "Start a chat", href: settings.whatsappUrl },
-    { label: "Office", value: settings.office },
+    { label: t.contact.emailLabel, value: settings.email, href: `mailto:${settings.email}` },
+    { label: t.contact.phoneLabel, value: settings.phone, href: settings.phoneHref },
+    { label: t.contact.whatsappLabel, value: t.contact.whatsappCta, href: settings.whatsappUrl },
+    { label: t.contact.officeLabel, value: settings.office },
   ];
 
   const page = (await getPageContent()).contact;
@@ -58,7 +58,7 @@ export default async function ContactPage() {
           </aside>
 
           <div className="contact-form">
-            <ContactForm />
+            <ContactForm text={t.contact} />
           </div>
         </div>
       </section>

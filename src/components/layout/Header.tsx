@@ -5,17 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useLenis } from "lenis/react";
 import type { SocialKey } from "@/data/social";
-
-const NAV = [
-  { label: "Home", href: "/" },
-  { label: "Magazines", href: "/magazines" },
-  { label: "Hall of Fame", href: "/hall-of-fame" },
-  { label: "Women Spotlight", href: "/women-spotlight" },
-  { label: "Podcasts", href: "/podcasts" },
-  { label: "Articles", href: "/articles" },
-  { label: "About Us", href: "/about" },
-  { label: "Contact Us", href: "/contact" },
-];
+import type { SiteText } from "@/data/siteText";
 
 // A nav link is "active" when the current URL is the link itself, or sits
 // below it (so /news/some-article still highlights "News"). The root "/" has
@@ -27,7 +17,9 @@ function isActive(pathname: string, href: string) {
 
 export default function Header({
   social,
+  text,
 }: {
+  text: SiteText["header"];
   social: { key: SocialKey; label: string; href: string }[];
 }) {
   const pathname = usePathname();
@@ -78,7 +70,7 @@ export default function Header({
                 <a key={s.key} href={s.href} target="_blank" rel="noopener noreferrer" className="social-btn" aria-label={s.label}><Icon name={s.key} /></a>
               ))}
             </div>
-            <Link href="/#subscribe" className="btn btn-ink btn-sm">Subscribe</Link>
+            <Link href="/#subscribe" className="btn btn-ink btn-sm">{text.subscribe}</Link>
           </div>
         </div>
       </header>
@@ -88,7 +80,7 @@ export default function Header({
           <div className="masthead__inner">
             <Link href="/" className="masthead__brand">CIO Mogul India</Link>
             <div className={`nav${open ? " is-open" : ""}`}>
-              {NAV.map((item) => {
+              {text.nav.map((item) => {
                 const active = isActive(pathname, item.href);
                 return (
                   <Link key={item.href} href={item.href} className={`nav__link${active ? " is-active" : ""}`} aria-current={active ? "page" : undefined} onClick={() => setOpen(false)}>
@@ -97,7 +89,7 @@ export default function Header({
                 );
               })}
             </div>
-            <Link href="/magazines" className="masthead__edition">Latest edition <span aria-hidden>→</span></Link>
+            <Link href="/magazines" className="masthead__edition">{text.latestEdition} <span aria-hidden>→</span></Link>
             <button className="menu-btn" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} onClick={() => setOpen(!open)}>
               <span /><span />
             </button>

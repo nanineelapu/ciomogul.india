@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { getSiteText } from "@/lib/data";
 import JsonLd from "@/components/seo/JsonLd";
 import { breadcrumbLd, buildMetadata, mergeKeywords, profileLd } from "@/lib/seo";
 import Image from "next/image";
@@ -50,6 +51,7 @@ async function HallProfileContent({ params }: { params: Promise<Params> }) {
   const { slug } = await params;
   const entry = await getHallEntryBySlug(slug);
   if (!entry) notFound();
+  const t = await getSiteText();
 
   const others = await getOtherHallEntries(slug, 4);
 
@@ -73,7 +75,7 @@ async function HallProfileContent({ params }: { params: Promise<Params> }) {
       />
       <div className="wrap">
         <Link href="/hall-of-fame" className="back-link">
-          Back to Hall of Fame
+          {t.hallOfFame.backLink}
         </Link>
       </div>
 
@@ -85,7 +87,7 @@ async function HallProfileContent({ params }: { params: Promise<Params> }) {
               {entry.role}
               {entry.organization && <> · <span>{entry.organization}</span></>}
             </p>
-            <p className="ws-profile__meta">Inducted · {entry.inductedOn}</p>
+            <p className="ws-profile__meta">{t.hallOfFame.inducted} · {entry.inductedOn}</p>
           </header>
 
           <div className="ws-profile__body">
@@ -107,7 +109,7 @@ async function HallProfileContent({ params }: { params: Promise<Params> }) {
               ))}
               {entry.editionSlug && (
                 <Link href={`/magazines/${entry.editionSlug}`} className="hall-entry__cta">
-                  Read the edition
+                  {t.hallOfFame.readEdition}
                 </Link>
               )}
             </div>
@@ -116,7 +118,7 @@ async function HallProfileContent({ params }: { params: Promise<Params> }) {
       </article>
 
       {others.length > 0 && (
-        <MoreBlock title="More inductees" viewAll={{ label: "View all", href: "/hall-of-fame" }}>
+        <MoreBlock title={t.hallOfFame.moreTitle} viewAll={{ label: t.hallOfFame.viewAll, href: "/hall-of-fame" }}>
           {others.map((o) => (
             <HallCard key={o.slug} entry={o} />
           ))}

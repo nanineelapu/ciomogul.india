@@ -11,7 +11,7 @@ import Podcasts from "@/components/home/Podcasts";
 import Testimonials from "@/components/home/Testimonials";
 import GetFeatured from "@/components/home/GetFeatured";
 import Newsletter from "@/components/home/Newsletter";
-import { getHeadlines } from "@/lib/data";
+import { getHeadlines, getSiteText } from "@/lib/data";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
@@ -24,7 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Home() {
-  const headlines = await getHeadlines();
+  const [headlines, text] = await Promise.all([getHeadlines(), getSiteText()]);
 
   return (
     <main>
@@ -37,7 +37,7 @@ export default async function Home() {
       <Podcasts />
       <Testimonials />
       <GetFeatured />
-      <Newsletter />
+      <Newsletter text={text.home} />
     </main>
   );
 }

@@ -1,15 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getPodcasts } from "@/lib/data";
+import { getPodcasts, getSiteText } from "@/lib/data";
 
 export default async function Podcasts() {
-  const pods = (await getPodcasts()).slice(0, 4);
+  const [all, t] = await Promise.all([getPodcasts(), getSiteText()]);
+  const pods = all.slice(0, 4);
 
   return (
     <section className="section" id="podcasts" aria-labelledby="pod-title">
       <div className="wrap">
         <header className="s-head">
-          <h2 className="s-title" id="pod-title">Podcasts</h2>
+          <h2 className="s-title" id="pod-title">{t.home.podcastsTitle}</h2>
           <span className="s-rule" aria-hidden />
         </header>
         <div className="pods">

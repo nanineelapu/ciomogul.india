@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { getSiteText } from "@/lib/data";
 import JsonLd from "@/components/seo/JsonLd";
 import { buildMetadata, breadcrumbLd, pageLd } from "@/lib/seo";
 import { getPageContent } from "@/lib/data";
@@ -32,6 +33,7 @@ export default async function PodcastsPage({
   // searchParams, so it goes inside <Suspense> — same pattern as /magazines.
   const allPodcasts = await getPodcasts();
   const totalEpisodes = allPodcasts.length;
+  const t = await getSiteText();
 
   const page = (await getPageContent()).podcasts;
 
@@ -62,7 +64,7 @@ export default async function PodcastsPage({
       {/* Mounted at page level so any card on this page can open it. The modal
           itself reads ?watch=<slug> from the URL and renders when set. */}
       <Suspense fallback={null}>
-        <PodcastPlayerModal podcasts={allPodcasts} />
+        <PodcastPlayerModal podcasts={allPodcasts} text={t.podcasts} />
       </Suspense>
     </main>
   );
@@ -95,6 +97,7 @@ async function PodcastResults({
 
   const query = parseParams(urlParams);
   const result = await searchPodcasts(query);
+  const t = await getSiteText();
 
   return (
     <>
@@ -103,13 +106,14 @@ async function PodcastResults({
           years={result.years}
           resultCount={result.total}
           totalCount={totalCount}
+          text={t.podcasts}
         />
       )}
 
       {result.items.length === 0 ? (
         <div className="mag-empty">
-          <b>No episodes match those filters.</b>
-          <p>Try a different year or clear the search.</p>
+          <b>{t.podcasts.noResultsTitle}</b>
+          <p>{t.podcasts.noResultsText}</p>
         </div>
       ) : (
         <>
@@ -118,6 +122,7 @@ async function PodcastResults({
               <PodcastCard
                 key={podcast.slug}
                 podcast={podcast}
+                text={t.podcasts}
                 index={(result.page - 1) * result.perPage + i}
               />
             ))}

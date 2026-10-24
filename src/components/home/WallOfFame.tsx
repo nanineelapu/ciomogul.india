@@ -1,18 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getWomenLeaders } from "@/lib/data";
+import { getSiteText, getWomenLeaders } from "@/lib/data";
 import { isPublishedProfile, profileHref } from "@/data/womenSpotlightData";
 
 export default async function WallOfFame() {
-  const leaders = await getWomenLeaders();
-
+  const [leaders, t] = await Promise.all([getWomenLeaders(), getSiteText()]);
   return (
     <section className="section" id="women-spotlight" aria-labelledby="wall-title">
       <div className="wrap">
         <header className="s-head">
-          <h2 className="s-title" id="wall-title">Wall of fame</h2>
+          <h2 className="s-title" id="wall-title">{t.home.wallTitle}</h2>
           <span className="s-rule" aria-hidden />
-          <p className="s-intro">Women leaders featured on the cover of CIO Mogul India.</p>
+          <p className="s-intro">{t.home.wallIntro}</p>
         </header>
         <div className="leaders">
           {leaders.map((l) => (
@@ -22,12 +21,12 @@ export default async function WallOfFame() {
                 <span className="leader__org">{l.organization}</span>
                 <span className="leader__name">{l.name}</span>
                 <span className="leader__role">{l.role}</span>
-                <span className="leader__link">Read feature →</span>
+                <span className="leader__link">{t.home.wallReadFeature}</span>
               </span>
             </Link>
           ))}
         </div>
-        <p className="center-link wall-more"><Link href="/women-spotlight" className="btn btn-line">See all women leaders</Link></p>
+        <p className="center-link wall-more"><Link href="/women-spotlight" className="btn btn-line">{t.home.wallButton}</Link></p>
       </div>
     </section>
   );

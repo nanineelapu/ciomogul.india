@@ -14,6 +14,7 @@ import { aboutPage } from "./aboutPage";
 import { legalPage } from "./legalPage";
 import { siteSettings } from "./siteSettings";
 import { pageContent } from "./pageContent";
+import { siteText } from "./siteText";
 
 export const schemaTypes: SchemaTypeDefinition[] = [
   magazineEdition,
@@ -31,7 +32,11 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   legalPage,
   siteSettings,
   pageContent,
+  siteText,
 ];
 
+// The two legal pages are fixed documents, one per page.
+export const LEGAL_DOC_IDS = ["legalPage-terms", "legalPage-privacy"];
+
 // Documents that must exist exactly once.
-export const SINGLETON_TYPES = ["homepageConfig", "aboutPage", "siteSettings", "pageContent"];
+export const SINGLETON_TYPES = ["homepageConfig", "aboutPage", "siteSettings", "pageContent", "siteText"];

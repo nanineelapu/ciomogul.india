@@ -16,6 +16,7 @@ export const structure: StructureResolver = (S) =>
       single(S, "homepageConfig", "Homepage"),
       single(S, "aboutPage", "About page"),
       single(S, "pageContent", "Page headings"),
+      single(S, "siteText", "Site text (menus, buttons, titles)"),
       single(S, "siteSettings", "Site settings"),
       S.divider(),
       S.documentTypeListItem("magazineEdition").title("Magazine Editions"),
@@ -24,7 +25,26 @@ export const structure: StructureResolver = (S) =>
       S.documentTypeListItem("podcast").title("Podcasts"),
       S.documentTypeListItem("article").title("Articles"),
       S.divider(),
-      S.documentTypeListItem("legalPage").title("Terms & Privacy"),
+      S.listItem()
+        .title("Terms of Service")
+        .id("legalPage-terms")
+        .child(S.document().schemaType("legalPage").documentId("legalPage-terms")),
+      S.listItem()
+        .title("Privacy Policy")
+        .id("legalPage-privacy")
+        .child(S.document().schemaType("legalPage").documentId("legalPage-privacy")),
+      S.listItem()
+        .title("Other legal documents (extra copies)")
+        .id("legalPage-extra")
+        .child(
+          S.documentList()
+            .title("Other legal documents")
+            .filter('_type == "legalPage" && !(_id in $ids) && !(_id in $drafts)')
+            .params({
+              ids: ["legalPage-terms", "legalPage-privacy"],
+              drafts: ["drafts.legalPage-terms", "drafts.legalPage-privacy"],
+            })
+        ),
       S.divider(),
       S.documentTypeListItem("headline").title("Headlines (ticker)"),
       S.documentTypeListItem("newsCard").title("Homepage news cards"),

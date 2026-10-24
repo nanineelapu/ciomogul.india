@@ -1,9 +1,10 @@
 import Link from "next/link";
+import { getSiteText } from "@/lib/data";
 
 // Server-rendered pagination. Each button is a plain Link that updates the
 // ?page= search param while keeping any existing filters (q, year, sort).
 // Numbers get elided with "…" once the range gets long.
-export default function Pagination({
+export default async function Pagination({
   page,
   totalPages,
   basePath,
@@ -14,6 +15,7 @@ export default function Pagination({
   basePath: string;
   params: URLSearchParams;
 }) {
+  const t = await getSiteText();
   if (totalPages <= 1) return null;
 
   function hrefForPage(p: number) {
@@ -34,7 +36,7 @@ export default function Pagination({
         aria-disabled={page <= 1}
         tabIndex={page <= 1 ? -1 : 0}
       >
-        ← Prev
+        {t.general.paginationPrev}
       </Link>
 
       <ol className="pagination__list">
@@ -63,7 +65,7 @@ export default function Pagination({
         aria-disabled={page >= totalPages}
         tabIndex={page >= totalPages ? -1 : 0}
       >
-        Next →
+        {t.general.paginationNext}
       </Link>
     </nav>
   );

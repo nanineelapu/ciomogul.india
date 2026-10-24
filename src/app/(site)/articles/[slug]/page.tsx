@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { getSiteText } from "@/lib/data";
 import JsonLd from "@/components/seo/JsonLd";
 import { breadcrumbLd, buildMetadata, mergeKeywords, newsArticleLd } from "@/lib/seo";
 import Image from "next/image";
@@ -51,6 +52,7 @@ async function ArticleContent({ params }: { params: Promise<Params> }) {
   const { slug } = await params;
   const article = await getArticleBySlug(slug);
   if (!article) notFound();
+  const t = await getSiteText();
 
   const related = await getRelatedArticles(slug, 4);
 
@@ -76,7 +78,7 @@ async function ArticleContent({ params }: { params: Promise<Params> }) {
       />
       <div className="wrap">
         <Link href="/articles" className="back-link">
-          Back to Articles
+          {t.articles.backLink}
         </Link>
       </div>
 
@@ -113,7 +115,7 @@ async function ArticleContent({ params }: { params: Promise<Params> }) {
       </article>
 
       {related.length > 0 && (
-        <MoreBlock title="More articles" viewAll={{ label: "View all", href: "/articles" }}>
+        <MoreBlock title={t.articles.moreTitle} viewAll={{ label: t.articles.viewAll, href: "/articles" }}>
           {related.map((a) => (
             <ArticleCard key={a.slug} article={a} />
           ))}

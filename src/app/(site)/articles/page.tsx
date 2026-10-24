@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { getSiteText } from "@/lib/data";
 import JsonLd from "@/components/seo/JsonLd";
 import { buildMetadata, breadcrumbLd, pageLd } from "@/lib/seo";
 import { getPageContent } from "@/lib/data";
@@ -40,6 +41,7 @@ export default async function ArticlesPage({
   ]);
 
   const page = (await getPageContent()).articles;
+  const t = await getSiteText();
 
   return (
     <main>
@@ -55,7 +57,7 @@ export default async function ArticlesPage({
       <section className="section">
         <div className="wrap">
           <header className="section-head">
-            <h2 className="section-head__title">Top stories</h2>
+            <h2 className="section-head__title">{t.articles.topTitle}</h2>
             <span className="section-head__rule" aria-hidden />
           </header>
           <div className="article-grid">
@@ -70,7 +72,7 @@ export default async function ArticlesPage({
       <section className="section">
         <div className="wrap">
           <header className="section-head">
-            <h2 className="section-head__title">Latest news</h2>
+            <h2 className="section-head__title">{t.articles.latestTitle}</h2>
             <span className="section-head__rule" aria-hidden />
           </header>
           <div className="article-grid">
@@ -85,7 +87,7 @@ export default async function ArticlesPage({
       <section className="section explore">
         <div className="wrap">
           <header className="section-head">
-            <h2 className="section-head__title">Explore by category</h2>
+            <h2 className="section-head__title">{t.articles.exploreTitle}</h2>
             <span className="section-head__rule" aria-hidden />
           </header>
           <Suspense fallback={<ExploreSkeleton />}>
@@ -123,18 +125,19 @@ async function Explore({
 
   const query = parseParams(urlParams);
   const result = await searchArticles(query);
+  const t = await getSiteText();
 
   return (
     <>
       <div className="explore__controls">
         <CategoryTabs categories={categories} activeSlug={query.category ?? ""} />
-        <ArticleSearch />
+        <ArticleSearch text={t.articles} />
       </div>
 
       {result.items.length === 0 ? (
         <div className="mag-empty">
-          <b>No articles match those filters.</b>
-          <p>Try a different category or clear the search.</p>
+          <b>{t.articles.noResultsTitle}</b>
+          <p>{t.articles.noResultsText}</p>
         </div>
       ) : (
         <>

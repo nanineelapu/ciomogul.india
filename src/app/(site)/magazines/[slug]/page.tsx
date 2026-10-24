@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { getSiteText } from "@/lib/data";
 import JsonLd from "@/components/seo/JsonLd";
 import { breadcrumbLd, buildMetadata, magazineIssueLd, mergeKeywords } from "@/lib/seo";
 import Image from "next/image";
@@ -52,6 +53,7 @@ async function MagazineDetailPageContent({
   const { slug } = await params;
   const edition = await getMagazineEditionBySlug(slug);
   if (!edition) notFound();
+  const t = await getSiteText();
 
   const others = await getOtherMagazineEditions(slug, 4);
 
@@ -75,7 +77,7 @@ async function MagazineDetailPageContent({
       />
       <div className="wrap">
         <Link href="/magazines" className="back-link">
-          Back to magazines
+          {t.magazines.backLink}
         </Link>
       </div>
 
@@ -114,15 +116,15 @@ async function MagazineDetailPageContent({
                   className="btn btn-ink"
                   aria-disabled={!edition.pdfUrl}
                 >
-                  Read the edition
+                  {t.magazines.readButton}
                 </a>
                 {edition.pdfUrl ? (
                   <a href={edition.pdfUrl} download className="btn btn-line">
-                    Download PDF
+                    {t.magazines.downloadButton}
                   </a>
                 ) : (
                   <span className="btn btn-line" aria-disabled>
-                    PDF coming soon
+                    {t.magazines.pdfSoon}
                   </span>
                 )}
               </div>
@@ -135,7 +137,7 @@ async function MagazineDetailPageContent({
         <div className="wrap">
           <article className="mag-body">
             <aside className="mag-body__label">
-              Inside this edition
+              {t.magazines.insideLabel}
               <span aria-hidden />
             </aside>
             <div className="mag-body__text">
@@ -151,9 +153,9 @@ async function MagazineDetailPageContent({
         <div className="wrap">
           <div className="mag-pdf">
             <header className="mag-pdf__head">
-              <h2 className="mag-pdf__title">Read the magazine</h2>
+              <h2 className="mag-pdf__title">{t.magazines.readerTitle}</h2>
               <span className="mag-pdf__hint">
-                {edition.pdfUrl ? "← → to turn pages · + − to zoom" : "Preview coming soon"}
+                {edition.pdfUrl ? t.magazines.readerHint : t.magazines.readerSoon}
               </span>
             </header>
             {edition.pdfUrl ? (
@@ -165,10 +167,9 @@ async function MagazineDetailPageContent({
               <div className="mag-pdf__frame">
                 <div className="mag-pdf__placeholder" role="status">
                   <div className="mag-pdf__placeholder-inner">
-                    <b>PDF viewer</b>
+                    <b>{t.magazines.readerPlaceholderTitle}</b>
                     <p>
-                      The embedded reader will appear here once the edition&apos;s
-                      PDF is uploaded in Sanity.
+                      {t.magazines.readerPlaceholderText}
                     </p>
                   </div>
                 </div>
@@ -182,9 +183,9 @@ async function MagazineDetailPageContent({
         <div className="wrap">
           <div className="mag-more">
             <header className="mag-more__head">
-              <h2 className="mag-more__title">More editions</h2>
+              <h2 className="mag-more__title">{t.magazines.moreTitle}</h2>
               <Link href="/magazines" className="mag-more__view-all">
-                View the archive
+                {t.magazines.viewArchive}
               </Link>
             </header>
             <div className="mag-grid">

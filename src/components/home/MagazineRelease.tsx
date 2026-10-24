@@ -1,10 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getReleaseCovers } from "@/lib/data";
+import { getReleaseCovers, getSiteText } from "@/lib/data";
 
 export default async function MagazineRelease() {
-  const covers = await getReleaseCovers();
-
+  const [covers, t] = await Promise.all([getReleaseCovers(), getSiteText()]);
   return (
     <section className="section release" aria-labelledby="release-title">
       <div className="wrap release__grid">
@@ -16,10 +15,10 @@ export default async function MagazineRelease() {
           ))}
         </div>
         <div className="release__text">
-          <h1 className="s-title" id="release-title">Magazine release</h1>
+          <h1 className="s-title" id="release-title">{t.home.releaseTitle}</h1>
           <span className="s-rule" aria-hidden />
-          <p>Stories and lessons from India&apos;s technology and business leaders. Each edition features the people shaping how India works.</p>
-          <Link href="/magazines" className="btn btn-ink">View all editions</Link>
+          <p>{t.home.releaseText}</p>
+          <Link href="/magazines" className="btn btn-ink">{t.home.releaseButton}</Link>
         </div>
       </div>
     </section>
