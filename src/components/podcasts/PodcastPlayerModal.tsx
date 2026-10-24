@@ -99,10 +99,6 @@ export default function PodcastPlayerModal({ podcasts }: { podcasts: Podcast[] }
           )}
         </div>
 
-        {active.description && (
-          <p className="pod-modal__desc">{active.description}</p>
-        )}
-
         <footer className="pod-modal__foot">
           <a
             href={active.youtubeUrl}

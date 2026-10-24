@@ -13,6 +13,7 @@ import { article } from "./article";
 import { aboutPage } from "./aboutPage";
 import { legalPage } from "./legalPage";
 import { siteSettings } from "./siteSettings";
+import { pageContent } from "./pageContent";
 
 export const schemaTypes: SchemaTypeDefinition[] = [
   magazineEdition,
@@ -29,7 +30,8 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   aboutPage,
   legalPage,
   siteSettings,
+  pageContent,
 ];
 
 // Documents that must exist exactly once.
-export const SINGLETON_TYPES = ["homepageConfig", "aboutPage", "siteSettings"];
+export const SINGLETON_TYPES = ["homepageConfig", "aboutPage", "siteSettings", "pageContent"];

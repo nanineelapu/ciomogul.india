@@ -1,0 +1,121 @@
+// Receives the contact form. Saves the message to Supabase and emails it to
+// the team through Resend. Each step runs only when its keys are configured;
+// the request succeeds if at least one of them worked.
+import { createClient } from "@supabase/supabase-js";
+import { Resend } from "resend";
+import { NextResponse } from "next/server";
+
+type Body = {
+  name?: unknown;
+  email?: unknown;
+  subject?: unknown;
+  message?: unknown;
+  website?: unknown; // honeypot: real people leave this empty
+};
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Very small in-memory limiter: 5 messages per IP per 10 minutes. It resets
+// when the server restarts, which is fine as a first line of defence.
+const hits = new Map<string, number[]>();
+function tooMany(ip: string) {
+  const now = Date.now();
+  const recent = (hits.get(ip) ?? []).filter((t) => now - t < 10 * 60 * 1000);
+  recent.push(now);
+  hits.set(ip, recent);
+  return recent.length > 5;
+}
+
+const clean = (v: unknown, max: number) =>
+  typeof v === "string" ? v.trim().slice(0, max) : "";
+
+export async function POST(req: Request) {
+  let body: Body;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ ok: false, error: "Invalid request." }, { status: 400 });
+  }
+
+  // Bots fill the hidden field. Pretend it worked and do nothing.
+  if (typeof body.website === "string" && body.website.trim() !== "") {
+    return NextResponse.json({ ok: true });
+  }
+
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+  if (tooMany(ip)) {
+    return NextResponse.json(
+      { ok: false, error: "Too many messages. Please try again later." },
+      { status: 429 }
+    );
+  }
+
+  const name = clean(body.name, 120);
+  const email = clean(body.email, 200);
+  const subject = clean(body.subject, 200).replace(/[\r\n]+/g, " ");
+  const message = clean(body.message, 5000);
+
+  if (!name || !EMAIL_RE.test(email) || !subject || message.length < 10) {
+    return NextResponse.json({ ok: false, error: "Please check the form fields." }, { status: 400 });
+  }
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const resendKey = process.env.RESEND_API_KEY;
+
+  if (!(supabaseUrl && supabaseKey) && !resendKey) {
+    return NextResponse.json(
+      { ok: false, error: "Messages can't be sent right now. Please email us directly." },
+      { status: 503 }
+    );
+  }
+
+  let saved = false;
+  let emailed = false;
+
+  // 1. Save to Supabase (schema cio_india, table contacts)
+  if (supabaseUrl && supabaseKey) {
+    try {
+      const supabase = createClient(supabaseUrl, supabaseKey, { db: { schema: "cio_india" } });
+      const [firstName, ...rest] = name.split(/\s+/);
+      const { error } = await supabase.from("contacts").insert({
+        first_name: firstName,
+        last_name: rest.join(" ") || null,
+        email,
+        subject,
+        message,
+      });
+      if (error) throw error;
+      saved = true;
+    } catch (err) {
+      console.error("[contact] save failed:", err);
+    }
+  }
+
+  // 2. Email the team. Reply-To is the sender, so replying goes to them.
+  if (resendKey) {
+    try {
+      const resend = new Resend(resendKey);
+      const { error } = await resend.emails.send({
+        from: process.env.CONTACT_FROM_EMAIL || "CIO Mogul India <onboarding@resend.dev>",
+        to: process.env.CONTACT_TO_EMAIL || "info@ciomogulindia.com",
+        replyTo: email,
+        subject: `[Website contact] ${subject}`,
+        text: `Name: ${name}\nEmail: ${email}\n\n${message}`,
+      });
+      if (error) throw error;
+      emailed = true;
+    } catch (err) {
+      console.error("[contact] email failed:", err);
+    }
+  }
+
+  if (!saved && !emailed) {
+    return NextResponse.json(
+      { ok: false, error: "Something went wrong. Please try again or email us directly." },
+      { status: 500 }
+    );
+  }
+
+  return NextResponse.json({ ok: true });
+}

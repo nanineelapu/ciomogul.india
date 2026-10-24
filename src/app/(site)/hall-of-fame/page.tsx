@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { getPageContent } from "@/lib/data";
 import { Suspense } from "react";
 import HallEntry from "@/components/hallOfFame/HallEntry";
 import HallFilters from "@/components/hallOfFame/HallFilters";
@@ -21,16 +22,14 @@ export default async function HallOfFamePage({
   const all = await getHallOfFame();
   const totalInductees = all.length;
 
+  const page = (await getPageContent()).hallOfFame;
+
   return (
     <main>
       <section className="page-lead">
         <div className="wrap">
-          <h1 className="page-lead__title">Hall of Fame</h1>
-          <p className="page-lead__sub">
-            Every leader we&apos;ve featured on the cover of CIO Mogul India
-            — the people whose work has shaped how India&apos;s technology,
-            business and industry think, build and lead.
-          </p>
+          <h1 className="page-lead__title">{page.title}</h1>
+          <p className="page-lead__sub">{page.intro}</p>
           <dl className="page-lead__meta">
             <div>
               Inductees

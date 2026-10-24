@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import ContactForm from "@/components/contact/ContactForm";
+import { getPageContent } from "@/lib/data";
 import { getSiteSettings } from "@/lib/data";
 
 export const metadata: Metadata = {
@@ -17,15 +18,14 @@ export default async function ContactPage() {
     { label: "Office", value: settings.office },
   ];
 
+  const page = (await getPageContent()).contact;
+
   return (
     <main>
       <section className="page-lead page-lead--light">
         <div className="wrap">
-          <h1 className="page-lead__title">Contact us</h1>
-          <p className="page-lead__sub">
-            Have an enquiry or a story to share? Send us a message and our team
-            will get back to you.
-          </p>
+          <h1 className="page-lead__title">{page.title}</h1>
+          <p className="page-lead__sub">{page.intro}</p>
         </div>
       </section>
 

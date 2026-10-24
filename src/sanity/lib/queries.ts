@@ -190,3 +190,9 @@ export const SITE_SETTINGS_QUERY = /* groq */ `
     email, phone, office, instagram, facebook, linkedin, x, whatsapp
   }
 `;
+
+export const PAGE_CONTENT_QUERY = /* groq */ `
+  *[_type == "pageContent" && _id == "pageContent"][0] {
+    magazines, podcasts, hallOfFame, womenSpotlight, articles, contact
+  }
+`;

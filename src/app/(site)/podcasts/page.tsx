@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { getPageContent } from "@/lib/data";
 import PodcastCard from "@/components/podcasts/PodcastCard";
 import PodcastFilters from "@/components/podcasts/PodcastFilters";
 import PodcastPlayerModal from "@/components/podcasts/PodcastPlayerModal";
@@ -26,16 +27,14 @@ export default async function PodcastsPage({
   const allPodcasts = await getPodcasts();
   const totalEpisodes = allPodcasts.length;
 
+  const page = (await getPageContent()).podcasts;
+
   return (
     <main>
       <section className="page-lead">
         <div className="wrap">
-          <h1 className="page-lead__title">Podcasts</h1>
-          <p className="page-lead__sub">
-            Long-form interviews with CIOs, founders, operators and the
-            thinkers whose work ends up in the magazine. Every episode is
-            free, archived here, and lives on YouTube.
-          </p>
+          <h1 className="page-lead__title">{page.title}</h1>
+          <p className="page-lead__sub">{page.intro}</p>
           <dl className="page-lead__meta">
             <div>
               Episodes

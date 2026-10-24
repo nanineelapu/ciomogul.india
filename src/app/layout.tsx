@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Poppins } from "next/font/google";
 import "./globals.css";
+import { SITE_URL } from "@/lib/site";
 
 // Root layout — nothing but the html/body shell + global fonts. Site chrome
 // (Header, Footer) lives in (site)/layout so the /studio route can render
@@ -20,6 +21,13 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+  openGraph: {
+    siteName: "CIO Mogul India",
+    type: "website",
+    locale: "en_IN",
+    images: ["/assets/logo.png"],
+  },
   title: "CIO Mogul India — The Magazine for India's Technology Leaders",
   description:
     "Cover stories, news and podcasts for India's technology and business leaders.",

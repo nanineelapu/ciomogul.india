@@ -15,6 +15,7 @@ export const structure: StructureResolver = (S) =>
     .items([
       single(S, "homepageConfig", "Homepage"),
       single(S, "aboutPage", "About page"),
+      single(S, "pageContent", "Page headings"),
       single(S, "siteSettings", "Site settings"),
       S.divider(),
       S.documentTypeListItem("magazineEdition").title("Magazine Editions"),

@@ -15,26 +15,47 @@ function validate(v: Fields): Errors {
   return e;
 }
 
-// Validates in the browser only. Sending is not wired up yet; when the backend
-// is ready, replace the body of onSubmit with the request. Fields already match
-// what the contact intake needs (name, email, subject, message).
+// Validates in the browser, then posts to /api/contact, which saves the message
+// and emails the team.
 export default function ContactForm() {
   const [values, setValues] = useState<Fields>(EMPTY);
   const [errors, setErrors] = useState<Errors>({});
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
 
   function set<K extends keyof Fields>(key: K, value: string) {
     setValues((v) => ({ ...v, [key]: value }));
     if (errors[key]) setErrors((e) => ({ ...e, [key]: undefined }));
   }
 
-  function onSubmit(e: React.FormEvent) {
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const found = validate(values);
     setErrors(found);
     if (Object.keys(found).length > 0) return;
-    setSent(true);
-    setValues(EMPTY);
+
+    setSending(true);
+    setServerError(null);
+    try {
+      const website = (new FormData(e.currentTarget).get("website") as string) ?? "";
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...values, website }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.ok) {
+        setServerError(data.error || "Something went wrong. Please try again.");
+        return;
+      }
+      setSent(true);
+      setValues(EMPTY);
+    } catch {
+      setServerError("Something went wrong. Please try again.");
+    } finally {
+      setSending(false);
+    }
   }
 
   if (sent) {
@@ -90,7 +111,13 @@ export default function ContactForm() {
         />
       </Field>
 
-      <button type="submit" className="btn btn-ink">Send message</button>
+      <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="cform__trap" />
+
+      {serverError && <p className="cform__error" role="alert">{serverError}</p>}
+
+      <button type="submit" className="btn btn-ink" disabled={sending}>
+        {sending ? "Sending…" : "Send message"}
+      </button>
     </form>
   );
 }

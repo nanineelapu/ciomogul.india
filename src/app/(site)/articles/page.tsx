@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { getPageContent } from "@/lib/data";
 import ArticleCard from "@/components/articles/ArticleCard";
 import ArticleSearch from "@/components/articles/ArticleSearch";
 import CategoryTabs from "@/components/articles/CategoryTabs";
@@ -32,15 +33,14 @@ export default async function ArticlesPage({
     getCategoriesWithCounts(),
   ]);
 
+  const page = (await getPageContent()).articles;
+
   return (
     <main>
       <section className="page-lead page-lead--light">
         <div className="wrap">
-          <h1 className="page-lead__title">Articles</h1>
-          <p className="page-lead__sub">
-            What&apos;s new, what&apos;s read, and what we think is worth your
-            time — plus the full archive filtered the way you want it.
-          </p>
+          <h1 className="page-lead__title">{page.title}</h1>
+          <p className="page-lead__sub">{page.intro}</p>
         </div>
       </section>
 

@@ -65,7 +65,7 @@ export const magazineEdition = defineType({
       title: "Role tags",
       type: "array",
       of: [{ type: "string" }],
-      description: 'Shown as chips in the hero. e.g. ["Fractional CISO", "Board Advisor"]',
+      description: "Not shown on the site at the moment.",
       options: { layout: "tags" },
     }),
     defineField({

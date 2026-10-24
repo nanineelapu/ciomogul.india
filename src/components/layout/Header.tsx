@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { SocialKey } from "@/data/social";
 
 const NAV = [
@@ -32,7 +32,7 @@ export default function Header({
   const pathname = usePathname();
   const [date, setDate] = useState("");
   const [compact, setCompact] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const barRef = useRef<HTMLSpanElement>(null);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -42,7 +42,9 @@ export default function Header({
       const y = window.scrollY;
       setCompact(y > 40);
       const max = document.documentElement.scrollHeight - window.innerHeight;
-      setProgress(max > 0 ? Math.min(y / max, 1) : 0);
+      if (barRef.current) {
+        barRef.current.style.transform = `scaleX(${max > 0 ? Math.min(y / max, 1) : 0})`;
+      }
       ticking = false;
     };
     const onScroll = () => { if (!ticking) { requestAnimationFrame(update); ticking = true; } };
@@ -72,7 +74,7 @@ export default function Header({
                 <a key={s.key} href={s.href} target="_blank" rel="noopener noreferrer" className="social-btn" aria-label={s.label}><Icon name={s.key} /></a>
               ))}
             </div>
-            <Link href="#subscribe" className="btn btn-ink btn-sm">Subscribe</Link>
+            <Link href="/#subscribe" className="btn btn-ink btn-sm">Subscribe</Link>
           </div>
         </div>
       </header>
@@ -95,7 +97,7 @@ export default function Header({
             <button className="menu-btn" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} onClick={() => setOpen(!open)}>
               <span /><span />
             </button>
-            <span className="read-progress" aria-hidden style={{ transform: `scaleX(${progress})` }} />
+            <span className="read-progress" aria-hidden ref={barRef} style={{ transform: "scaleX(0)" }} />
           </div>
         </div>
       </nav>

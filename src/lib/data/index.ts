@@ -14,6 +14,7 @@ import { COVER_STORIES } from "@/data/coverStories";
 import { NEWS_CARDS, VITAL_UPDATES, FEATURED_ARTICLES } from "@/data/news";
 import { ARTICLES, CATEGORY_ORDER } from "@/data/articles";
 import { ABOUT, type AboutContent } from "@/data/about";
+import { PAGE_CONTENT, type PageContent, type PageText } from "@/data/pageContent";
 import { TERMS, type LegalContent } from "@/data/terms";
 import { PRIVACY } from "@/data/privacy";
 import { SOCIAL, WHATSAPP_URL, type SocialKey } from "@/data/social";
@@ -24,6 +25,7 @@ import { sanityConfigured } from "@/sanity/env";
 import { sanityFetch } from "@/sanity/lib/client";
 import { urlForOrDefault } from "@/sanity/lib/image";
 import {
+  PAGE_CONTENT_QUERY,
   ABOUT_QUERY,
   ARTICLES_QUERY,
   HALL_OF_FAME_QUERY,
@@ -802,4 +804,26 @@ export async function getRelatedArticles(slug: string, limit = 4): Promise<Artic
   const same = others.filter((a) => current && a.categorySlug === current.categorySlug);
   const rest = others.filter((a) => !same.includes(a));
   return [...same, ...rest].slice(0, limit);
+}
+
+// ─── Page headings ───────────────────────────────────────────────────────
+type RawPageContent = Partial<Record<keyof PageContent, Partial<PageText> | null>>;
+
+export async function getPageContent(): Promise<PageContent> {
+  return withFallback<PageContent>(async () => {
+    const r = await sanityFetch<RawPageContent | null>({ query: PAGE_CONTENT_QUERY });
+    if (!r) return PAGE_CONTENT;
+    const pick = (key: keyof PageContent): PageText => ({
+      title: r[key]?.title || PAGE_CONTENT[key].title,
+      intro: r[key]?.intro || PAGE_CONTENT[key].intro,
+    });
+    return {
+      magazines: pick("magazines"),
+      podcasts: pick("podcasts"),
+      hallOfFame: pick("hallOfFame"),
+      womenSpotlight: pick("womenSpotlight"),
+      articles: pick("articles"),
+      contact: pick("contact"),
+    };
+  }, PAGE_CONTENT);
 }

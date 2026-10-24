@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { getPageContent } from "@/lib/data";
 import MagazineCard from "@/components/magazines/MagazineCard";
 import MagazineFilters from "@/components/magazines/MagazineFilters";
 import Pagination from "@/components/shared/Pagination";
@@ -26,16 +27,14 @@ export default async function MagazinesPage({
   // searchParams synchronously.
   const total = (await getMagazineEditions()).length;
 
+  const page = (await getPageContent()).magazines;
+
   return (
     <main>
       <section className="page-lead">
         <div className="wrap">
-          <h1 className="page-lead__title">Magazines</h1>
-          <p className="page-lead__sub">
-            Each issue of CIO Mogul India features the people shaping how
-            India&apos;s technology, business and industry work. Browse the
-            archive, read a cover story, or revisit an edition.
-          </p>
+          <h1 className="page-lead__title">{page.title}</h1>
+          <p className="page-lead__sub">{page.intro}</p>
           <dl className="page-lead__meta">
             <div>
               Editions

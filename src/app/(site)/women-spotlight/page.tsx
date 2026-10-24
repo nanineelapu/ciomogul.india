@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { getPageContent } from "@/lib/data";
 import LeaderCard from "@/components/womenSpotlight/LeaderCard";
 import LeaderFilters from "@/components/womenSpotlight/LeaderFilters";
 import Pagination from "@/components/shared/Pagination";
@@ -22,14 +23,14 @@ export default async function WomenSpotlightPage({
 }) {
   const total = (await getWomenLeaders()).length;
 
+  const page = (await getPageContent()).womenSpotlight;
+
   return (
     <main>
       <section className="page-lead page-lead--light">
         <div className="wrap">
-          <h1 className="page-lead__title">Women Spotlight</h1>
-          <p className="page-lead__sub">
-            The women leaders we have featured in CIO Mogul India.
-          </p>
+          <h1 className="page-lead__title">{page.title}</h1>
+          <p className="page-lead__sub">{page.intro}</p>
         </div>
       </section>
 

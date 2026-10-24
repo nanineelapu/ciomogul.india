@@ -58,12 +58,11 @@ export default function PodcastCard({
           </span>
         )}
       </span>
-      <span className="pod-card__kicker">{podcast.date}</span>
       <span className="pod-card__title">{podcast.title}</span>
-      {podcast.description && (
-        <span className="pod-card__desc">{podcast.description}</span>
-      )}
-      <span className="pod-card__cta">Watch episode</span>
+      <span className="pod-card__foot">
+        <span className="pod-card__cta">Watch episode</span>
+        <span className="mag-card__date">{podcast.date.replace(/^\d{1,2}\s+/, "")}</span>
+      </span>
     </button>
   );
 }

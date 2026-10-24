@@ -20,7 +20,7 @@ export const podcast = defineType({
       validation: (r) => r.integer().min(2000).max(2100),
     }),
     defineField({ name: "duration", title: "Duration (e.g. 42:16)", type: "string" }),
-    defineField({ name: "description", title: "Description", type: "text", rows: 3 }),
+    defineField({ name: "description", title: "Description (not shown on the site)", type: "text", rows: 3 }),
     defineField({
       name: "youtubeUrl",
       title: "YouTube URL",

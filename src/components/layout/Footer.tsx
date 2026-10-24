@@ -31,9 +31,13 @@ export default async function Footer() {
         {cols.map((col) => (
           <nav key={col.head} className="footer__col" aria-label={col.head}>
             <p className="footer__head">{col.head}</p>
-            {col.links.map(([label, href]) => (
-              <Link key={label} href={href}>{label}</Link>
-            ))}
+            {col.links.map(([label, href]) =>
+              href.startsWith("http") ? (
+                <a key={label} href={href} target="_blank" rel="noopener noreferrer">{label}</a>
+              ) : (
+                <Link key={label} href={href}>{label}</Link>
+              )
+            )}
           </nav>
         ))}
       </div>

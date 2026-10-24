@@ -4,8 +4,6 @@
 import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 
-export const dynamic = "force-dynamic";
-
 export async function POST(req: Request) {
   const url = new URL(req.url);
   const secret = url.searchParams.get("secret") ?? req.headers.get("x-sanity-secret");

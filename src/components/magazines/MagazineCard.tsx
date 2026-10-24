@@ -26,10 +26,12 @@ export default function MagazineCard({
           sizes="(max-width: 420px) 100vw, (max-width: 820px) 50vw, (max-width: 1080px) 33vw, 25vw"
         />
       </span>
-      <span className="mag-card__kicker">{edition.editionLabel}</span>
       <span className="mag-card__name">{edition.featuredPersonName}</span>
       <span className="mag-card__role">{edition.subtitle}</span>
-      <span className="mag-card__cta">Read edition</span>
+      <span className="mag-card__foot">
+        <span className="mag-card__cta">Read edition</span>
+        <span className="mag-card__date">{edition.publishedOn}</span>
+      </span>
     </Link>
   );
 }
