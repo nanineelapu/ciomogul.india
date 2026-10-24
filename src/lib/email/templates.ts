@@ -1,7 +1,8 @@
-// HTML emails for the contact form, in the website's light theme: white page,
-// white card, dark text, and navy only as an accent. Email programs ignore most
-// CSS, so these use tables, inline styles, and fonts every program has
-// (Georgia for headings, Arial for text).
+// HTML emails (contact confirmation, team notification, newsletter welcome) in
+// the website's light theme, styled like the front of the magazine: a centred
+// masthead with a double rule, a serif headline, and navy as the only accent.
+// Email programs ignore most CSS, so everything is tables with inline styles and
+// fonts every program has (Georgia for headings, Arial for text).
 import { SITE_URL } from "@/lib/site";
 import { SOCIAL } from "@/data/social";
 
@@ -27,22 +28,72 @@ export function escapeHtml(value: string): string {
 }
 
 const withBreaks = (value: string) => escapeHtml(value).replace(/\r?\n/g, "<br>");
-
 const siteHost = SITE_URL.replace(/^https?:\/\//, "");
+
+// ── building blocks ──────────────────────────────────────────────────────
+
+const paragraph = (html: string) =>
+  `<p style="margin:0 0 18px;font-family:${SANS};font-size:15px;line-height:1.75;color:${INK_2};">${html}</p>`;
+
+const sectionLabel = (text: string) =>
+  `<div style="font-family:${SANS};font-size:10px;font-weight:bold;letter-spacing:.24em;text-transform:uppercase;color:${NAVY};margin:6px 0 12px;">${escapeHtml(text)}</div>`;
+
+const button = (label: string, href: string) =>
+  `<table role="presentation" cellpadding="0" cellspacing="0" style="margin:6px 0 0;"><tr><td style="background:${NAVY};">
+     <a href="${href}" style="display:inline-block;font-family:${SANS};font-size:13px;font-weight:bold;letter-spacing:.12em;text-transform:uppercase;color:${WHITE};text-decoration:none;padding:15px 32px;">${escapeHtml(label)}</a>
+   </td></tr></table>`;
+
+// Light grey box with a navy bar on the left, like a quote on the website.
+const quoteBox = (label: string, html: string) =>
+  `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:4px 0 24px;">
+     <tr><td style="background:${PAPER};border-left:3px solid ${NAVY};padding:18px 20px;">
+       <div style="font-family:${SANS};font-size:10px;font-weight:bold;letter-spacing:.2em;text-transform:uppercase;color:${MUTED};margin-bottom:10px;">${escapeHtml(label)}</div>
+       <div style="font-family:${SANS};font-size:14px;line-height:1.75;color:${INK};">${html}</div>
+     </td></tr>
+   </table>`;
+
+// Numbered list with square navy markers.
+const steps = (items: string[]) =>
+  `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;border-top:1px solid ${RULE};">` +
+  items
+    .map(
+      (text, i) => `<tr>
+        <td width="44" valign="top" style="padding:14px 0;border-bottom:1px solid ${RULE};">
+          <div style="width:26px;height:26px;line-height:26px;background:${NAVY};color:${WHITE};font-family:${SERIF};font-size:13px;font-weight:bold;text-align:center;">${i + 1}</div>
+        </td>
+        <td valign="middle" style="padding:14px 0;border-bottom:1px solid ${RULE};font-family:${SANS};font-size:14px;line-height:1.6;color:${INK};">${escapeHtml(text)}</td>
+      </tr>`
+    )
+    .join("") +
+  `</table>`;
+
+// Four links to the main sections of the site.
+function exploreRow() {
+  const links = [
+    ["Magazines", "/magazines"],
+    ["Podcasts", "/podcasts"],
+    ["Articles", "/articles"],
+    ["Hall of Fame", "/hall-of-fame"],
+  ];
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:34px 0 0;border-top:2px solid ${NAVY};border-bottom:1px solid ${RULE};">
+    <tr>${links
+      .map(
+        ([label, path], i) =>
+          `<td align="center" style="padding:14px 4px;${i < links.length - 1 ? `border-right:1px solid ${RULE};` : ""}">
+             <a href="${SITE_URL}${path}" style="font-family:${SANS};font-size:11px;font-weight:bold;letter-spacing:.14em;text-transform:uppercase;color:${NAVY};text-decoration:none;">${label}</a>
+           </td>`
+      )
+      .join("")}</tr>
+  </table>`;
+}
 
 function layout(opts: {
   preheader: string;
+  kicker: string;
   title: string;
   body: string;
-  button?: { label: string; href: string };
   footerNote?: string;
 }) {
-  const button = opts.button
-    ? `<tr><td style="padding:4px 40px 40px;">
-         <a href="${opts.button.href}" style="display:inline-block;background:${NAVY};color:${WHITE};font-family:${SANS};font-size:13px;font-weight:bold;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;padding:15px 30px;">${escapeHtml(opts.button.label)}</a>
-       </td></tr>`
-    : `<tr><td style="padding:0 40px 24px;font-size:0;line-height:0;">&nbsp;</td></tr>`;
-
   const social = SOCIAL.filter((s) => s.key !== "whatsapp")
     .map((s) => `<a href="${s.href}" style="color:${NAVY};text-decoration:none;font-weight:bold;">${escapeHtml(s.label)}</a>`)
     .join(`<span style="color:${RULE};">&nbsp;&nbsp;|&nbsp;&nbsp;</span>`);
@@ -58,25 +109,35 @@ function layout(opts: {
 </head>
 <body style="margin:0;padding:0;background:${WHITE};">
   <span style="display:none;max-height:0;overflow:hidden;opacity:0;color:${WHITE};">${escapeHtml(opts.preheader)}</span>
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${WHITE};padding:28px 12px;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${WHITE};padding:24px 12px;">
     <tr><td align="center">
       <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;background:${WHITE};border:1px solid ${RULE};">
-        <tr><td style="padding:34px 40px 22px;">
-          <div style="font-family:${SERIF};font-size:24px;font-weight:bold;line-height:1.2;color:${INK};letter-spacing:.01em;">CIO Mogul India</div>
-          <div style="font-family:${SANS};font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:${MUTED};margin-top:6px;">Magazine</div>
+
+        <tr><td style="background:${NAVY};height:6px;line-height:6px;font-size:0;">&nbsp;</td></tr>
+
+        <tr><td align="center" style="padding:38px 40px 22px;">
+          <div style="font-family:${SERIF};font-size:30px;font-weight:bold;line-height:1.1;letter-spacing:.08em;text-transform:uppercase;color:${INK};">CIO Mogul India</div>
+          <div style="font-family:${SANS};font-size:10px;letter-spacing:.42em;text-transform:uppercase;color:${MUTED};margin-top:10px;">Magazine</div>
         </td></tr>
-        <tr><td style="padding:0 40px;"><div style="height:2px;background:${NAVY};line-height:2px;font-size:0;">&nbsp;</div></td></tr>
-        <tr><td style="padding:34px 40px 8px;">
-          <h1 style="margin:0 0 20px;font-family:${SERIF};font-size:28px;line-height:1.25;font-weight:bold;color:${INK};">${escapeHtml(opts.title)}</h1>
+
+        <tr><td style="padding:0 40px;">
+          <div style="border-top:2px solid ${NAVY};font-size:0;line-height:0;">&nbsp;</div>
+          <div style="border-top:1px solid ${RULE};margin-top:3px;font-size:0;line-height:0;">&nbsp;</div>
+        </td></tr>
+
+        <tr><td style="padding:34px 40px 36px;">
+          <div style="font-family:${SANS};font-size:11px;font-weight:bold;letter-spacing:.26em;text-transform:uppercase;color:${NAVY};margin-bottom:14px;">${escapeHtml(opts.kicker)}</div>
+          <h1 style="margin:0 0 22px;font-family:${SERIF};font-size:30px;line-height:1.2;font-weight:bold;color:${INK};">${escapeHtml(opts.title)}</h1>
           ${opts.body}
         </td></tr>
-        ${button}
-        <tr><td style="padding:24px 40px 30px;border-top:1px solid ${RULE};font-family:${SANS};font-size:12px;line-height:1.7;color:${MUTED};">
+
+        <tr><td style="padding:24px 40px 30px;background:${PAPER};border-top:1px solid ${RULE};font-family:${SANS};font-size:12px;line-height:1.8;color:${MUTED};" align="center">
           <div style="margin-bottom:10px;">${social}</div>
           CIO Mogul India &middot; Digital magazine and media platform for technology leaders in India.<br>
           <a href="${SITE_URL}" style="color:${NAVY};">${siteHost}</a>
           ${opts.footerNote ? `<div style="margin-top:14px;padding-top:14px;border-top:1px solid ${RULE};">${opts.footerNote}</div>` : ""}
         </td></tr>
+
       </table>
     </td></tr>
   </table>
@@ -84,56 +145,55 @@ function layout(opts: {
 </html>`;
 }
 
-const paragraph = (html: string) =>
-  `<p style="margin:0 0 18px;font-family:${SANS};font-size:15px;line-height:1.75;color:${INK_2};">${html}</p>`;
-
-const quoteBox = (label: string, html: string) =>
-  `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:4px 0 22px;">
-     <tr><td style="background:${PAPER};border-left:3px solid ${NAVY};padding:18px 20px;">
-       <div style="font-family:${SANS};font-size:10px;font-weight:bold;letter-spacing:.2em;text-transform:uppercase;color:${MUTED};margin-bottom:10px;">${escapeHtml(label)}</div>
-       <div style="font-family:${SANS};font-size:14px;line-height:1.75;color:${INK};">${html}</div>
-     </td></tr>
-   </table>`;
-
 type Submission = { name: string; email: string; subject: string; message: string };
 
-// Sent to the person who filled in the form.
+// ── emails ───────────────────────────────────────────────────────────────
+
+// Sent to the person who filled in the contact form.
 export function confirmationEmail(s: Submission) {
   const first = s.name.split(/\s+/)[0] || s.name;
   const html = layout({
     preheader: "We have received your message and will get back to you shortly.",
+    kicker: "Message received",
     title: `Thank you, ${first}.`,
     body:
-      paragraph("We have received your message. Our editorial team will read it and get back to you shortly.") +
+      paragraph("We have received your message. Our editorial team will read it and get back to you by email.") +
       quoteBox(`Your message  /  ${s.subject}`, withBreaks(s.message)) +
-      paragraph("If you did not send this message, you can safely ignore this email."),
-    button: { label: "Visit CIO Mogul India", href: SITE_URL },
+      sectionLabel("What happens next") +
+      steps(["We read your message", "The right person on our team picks it up", "You hear back from us by email"]) +
+      paragraph("If you did not send this message, you can safely ignore this email.") +
+      button("Visit CIO Mogul India", SITE_URL) +
+      exploreRow(),
   });
 
-  const text = `Thank you, ${first}.\n\nWe have received your message. Our editorial team will read it and get back to you shortly.\n\nYour message (${s.subject}):\n${s.message}\n\nIf you did not send this message, you can safely ignore this email.\n\nCIO Mogul India - ${SITE_URL}`;
+  const text = `Thank you, ${first}.\n\nWe have received your message. Our editorial team will read it and get back to you by email.\n\nYour message (${s.subject}):\n${s.message}\n\nWhat happens next:\n1. We read your message\n2. The right person on our team picks it up\n3. You hear back from us by email\n\nIf you did not send this message, you can safely ignore this email.\n\nCIO Mogul India - ${SITE_URL}`;
 
   return { subject: "We have received your message | CIO Mogul India", html, text };
 }
 
 // Sent to the team inbox.
 export function notificationEmail(s: Submission) {
+  const first = s.name.split(/\s+/)[0] || s.name;
   const row = (label: string, value: string) =>
     `<tr>
-       <td style="padding:11px 0;border-bottom:1px solid ${RULE};font-family:${SANS};font-size:10px;font-weight:bold;letter-spacing:.2em;text-transform:uppercase;color:${MUTED};width:92px;vertical-align:top;">${label}</td>
-       <td style="padding:11px 0;border-bottom:1px solid ${RULE};font-family:${SANS};font-size:15px;color:${INK};">${value}</td>
+       <td style="padding:12px 0;border-bottom:1px solid ${RULE};font-family:${SANS};font-size:10px;font-weight:bold;letter-spacing:.2em;text-transform:uppercase;color:${MUTED};width:92px;vertical-align:top;">${label}</td>
+       <td style="padding:12px 0;border-bottom:1px solid ${RULE};font-family:${SANS};font-size:15px;color:${INK};">${value}</td>
      </tr>`;
+
+  const replyHref = `mailto:${s.email}?subject=${encodeURIComponent(`Re: ${s.subject}`)}`;
 
   const html = layout({
     preheader: `New message from ${s.name}: ${s.subject}`,
-    title: "New message from the website",
+    kicker: "New message",
+    title: `${s.name} wrote to you.`,
     body:
-      `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 22px;border-top:1px solid ${RULE};">` +
+      `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;border-top:2px solid ${NAVY};">` +
       row("Name", escapeHtml(s.name)) +
       row("Email", `<a href="mailto:${escapeHtml(s.email)}" style="color:${NAVY};">${escapeHtml(s.email)}</a>`) +
       row("Subject", escapeHtml(s.subject)) +
       `</table>` +
       quoteBox("Message", withBreaks(s.message)) +
-      paragraph("Press Reply to answer this person directly."),
+      button(`Reply to ${first}`, replyHref),
   });
 
   const text = `New message from the website\n\nName: ${s.name}\nEmail: ${s.email}\nSubject: ${s.subject}\n\n${s.message}`;
@@ -145,17 +205,20 @@ export function notificationEmail(s: Submission) {
 export function welcomeEmail(unsubscribe: string | null) {
   const html = layout({
     preheader: "You're on the list. New editions, news and podcasts, once a week.",
-    title: "Welcome to the newsletter.",
+    kicker: "Welcome",
+    title: "You're on the list.",
     body:
-      paragraph("Thank you for subscribing to CIO Mogul India. Once a week, we will send you new editions, news and podcasts for India's technology and business leaders.") +
-      paragraph("Until then, you can browse the latest magazine editions and episodes on the website."),
-    button: { label: "Read the latest edition", href: `${SITE_URL}/magazines` },
+      paragraph("Thank you for subscribing to CIO Mogul India. Once a week, we will send you the best of the magazine for India's technology and business leaders.") +
+      sectionLabel("What you will receive") +
+      steps(["New magazine editions and cover stories", "News and articles worth your time", "The latest podcast episodes"]) +
+      button("Read the latest edition", `${SITE_URL}/magazines`) +
+      exploreRow(),
     footerNote: unsubscribe
       ? `You are receiving this because you subscribed on our website. <a href="${unsubscribe}" style="color:${NAVY};">Unsubscribe</a>`
       : "You are receiving this because you subscribed on our website.",
   });
 
-  const text = `Welcome to the newsletter.\n\nThank you for subscribing to CIO Mogul India. Once a week, we will send you new editions, news and podcasts for India's technology and business leaders.\n\nRead the latest edition: ${SITE_URL}/magazines\n${unsubscribe ? `\nUnsubscribe: ${unsubscribe}\n` : ""}`;
+  const text = `You're on the list.\n\nThank you for subscribing to CIO Mogul India. Once a week, we will send you the best of the magazine for India's technology and business leaders.\n\nWhat you will receive:\n1. New magazine editions and cover stories\n2. News and articles worth your time\n3. The latest podcast episodes\n\nRead the latest edition: ${SITE_URL}/magazines\n${unsubscribe ? `\nUnsubscribe: ${unsubscribe}\n` : ""}`;
 
   return { subject: "Welcome to the CIO Mogul India newsletter", html, text };
 }
