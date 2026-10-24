@@ -25,7 +25,7 @@ export default async function Footer() {
       <div className="wrap footer__top">
         <div className="footer__brand">
           <Image src="/assets/logo.png" alt="CIO Mogul India — Magazine" width={318} height={63} />
-          <p>Digital magazine and media platform for technology leaders in India.</p>
+          <p>A digital magazine and media platform exploring leadership, business, technology and innovation in India.</p>
           <a href={`mailto:${settings.email}`}>{settings.email}</a>
         </div>
         {cols.map((col) => (

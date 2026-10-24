@@ -1,0 +1,30 @@
+import Link from "next/link";
+
+export default function WsNominateBand() {
+  return (
+    <section className="ws-nominate" aria-labelledby="ws-nominate-heading">
+      <div className="wrap ws-nominate__inner">
+        <div className="ws-nominate__content">
+          <span className="ws-nominate__eyebrow">Call for Nominations · Editorial Desk</span>
+          <h2 className="ws-nominate__title" id="ws-nominate-heading">
+            Know a Woman Leader Reshaping Her Industry?
+          </h2>
+          <p className="ws-nominate__desc">
+            CIO Mogul India reviews executive dossiers monthly across Healthcare, Enterprise Cloud,
+            Infrastructure, Aerospace, and Industrial Innovation. Submit a candidate for our upcoming
+            Wall of Fame inductions and cover story features.
+          </p>
+        </div>
+
+        <div className="ws-nominate__actions">
+          <Link href="/contact" className="btn btn-paper ws-nominate__btn">
+            Submit a Nomination
+          </Link>
+          <Link href="/#women-spotlight" className="ws-read-more ws-nominate__link">
+            Return to Homepage Wall of Fame →
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}

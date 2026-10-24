@@ -1,0 +1,63 @@
+import Link from "next/link";
+
+export default function WsMastheadHero() {
+  return (
+    <section className="ws-masthead" aria-labelledby="ws-masthead-title">
+      <div className="wrap ws-masthead__inner">
+        {/* Breadcrumb back to Wall of Fame on Homepage */}
+        <div className="ws-masthead__breadcrumbs">
+          <Link href="/#women-spotlight" className="ws-read-more ws-masthead__back">
+            <span aria-hidden>←</span> Back to Wall of Fame
+          </Link>
+          <span className="ws-masthead__badge">Special Editorial Series · 2026</span>
+        </div>
+
+        {/* Main Title & Section Introduction */}
+        <div className="ws-masthead__header">
+          <span className="ws-masthead__eyebrow">Women&rsquo;s Spotlight</span>
+          <h1 className="ws-masthead__title" id="ws-masthead-title">
+            Architects of Modern Indian Enterprise
+          </h1>
+          <p className="ws-masthead__intro">
+            An independent editorial series by CIO Mogul India documenting the women leaders,
+            founders, and technologists redefining governance, healthcare, infrastructure, and enterprise
+            systems across India.
+          </p>
+        </div>
+
+        {/* Impact Metrics Bar */}
+        <div className="ws-masthead__stats" aria-label="Editorial Series Metrics">
+          <div className="ws-masthead__stat">
+            <span className="ws-masthead__stat-value">200+</span>
+            <span className="ws-masthead__stat-label">Women Leaders Tracked</span>
+          </div>
+          <div className="ws-masthead__stat">
+            <span className="ws-masthead__stat-value">14</span>
+            <span className="ws-masthead__stat-label">Magazine Edition Covers</span>
+          </div>
+          <div className="ws-masthead__stat">
+            <span className="ws-masthead__stat-value">32</span>
+            <span className="ws-masthead__stat-label">Enterprise Sectors</span>
+          </div>
+          <div className="ws-masthead__stat">
+            <span className="ws-masthead__stat-value">100%</span>
+            <span className="ws-masthead__stat-label">Verified Career Records</span>
+          </div>
+        </div>
+
+        {/* Quick Section Anchor Jump Links */}
+        <div className="ws-masthead__nav">
+          <a href="#featured-profile" className="ws-read-more">
+            Featured Honoree ↓
+          </a>
+          <a href="#spotlight-roster" className="ws-read-more">
+            Full Spotlight Roster ↓
+          </a>
+          <a href="#voices-of-leadership" className="ws-read-more">
+            Voices &amp; Perspectives ↓
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}

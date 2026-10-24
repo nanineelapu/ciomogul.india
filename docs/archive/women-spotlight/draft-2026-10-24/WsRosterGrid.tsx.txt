@@ -1,0 +1,92 @@
+import Image from "next/image";
+import Link from "next/link";
+import { getAllProfiles, type WomanSpotlightProfile } from "@/data/womenSpotlightData";
+
+interface WsRosterGridProps {
+  activeProfileId: string;
+}
+
+export default function WsRosterGrid({ activeProfileId }: WsRosterGridProps) {
+  const allProfiles = getAllProfiles();
+
+  return (
+    <section className="ws-roster" id="spotlight-roster" aria-labelledby="ws-roster-title">
+      <div className="wrap">
+        <header className="ws-roster__head">
+          <div className="ws-roster__head-text">
+            <span className="ws-roster__kicker">Wall of Fame Directory</span>
+            <h2 className="ws-roster__title" id="ws-roster-title">
+              Featured Women Leaders Roster
+            </h2>
+          </div>
+          <p className="ws-roster__lead">
+            Select any profile to view their dedicated editorial feature, career milestones, and leadership story.
+          </p>
+          <span className="s-rule" aria-hidden />
+        </header>
+
+        {/* Profiles Grid */}
+        <div className="ws-roster__grid">
+          {allProfiles.map((p: WomanSpotlightProfile) => {
+            const isActive = p.id === activeProfileId;
+
+            return (
+              <article
+                key={p.id}
+                className={`ws-roster-card ${isActive ? "ws-roster-card--active" : ""}`}
+              >
+                {/* Portrait Container (Aspect ratio 4:5) */}
+                <Link
+                  href={`/women-spotlight?profile=${p.id}#featured-profile`}
+                  className="ws-roster-card__media"
+                  aria-label={`View full profile for ${p.name}`}
+                >
+                  <Image
+                    src={p.image}
+                    alt={p.altText}
+                    width={380}
+                    height={475}
+                    className="ws-roster-card__img"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1080px) 50vw, 25vw"
+                  />
+                  <span className="ws-roster-card__edition">
+                    {p.featuredEdition.split("·")[1]?.trim() || p.featuredEdition}
+                  </span>
+                  {isActive && (
+                    <span className="ws-roster-card__active-badge">
+                      Currently Viewing
+                    </span>
+                  )}
+                </Link>
+
+                {/* Card Information */}
+                <div className="ws-roster-card__body">
+                  <span className="ws-roster-card__category">{p.category}</span>
+                  <h3 className="ws-roster-card__name">
+                    <Link href={`/women-spotlight?profile=${p.id}#featured-profile`}>
+                      {p.name}
+                    </Link>
+                  </h3>
+                  <p className="ws-roster-card__role">
+                    {p.designation} · <strong>{p.organization}</strong>
+                  </p>
+                  <p className="ws-roster-card__desc">
+                    {p.shortDescription}
+                  </p>
+
+                  {/* Read More Link with Underline Hover Effect */}
+                  <Link
+                    href={`/women-spotlight?profile=${p.id}#featured-profile`}
+                    className="ws-read-more ws-roster-card__link"
+                  >
+                    {isActive ? "Viewing Feature ↑" : "Read Full Profile →"}
+                  </Link>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}

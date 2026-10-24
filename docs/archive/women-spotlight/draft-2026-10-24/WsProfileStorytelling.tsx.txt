@@ -1,0 +1,108 @@
+import Link from "next/link";
+import type { WomanSpotlightProfile } from "@/data/womenSpotlightData";
+
+interface WsProfileStorytellingProps {
+  profile: WomanSpotlightProfile;
+}
+
+export default function WsProfileStorytelling({ profile }: WsProfileStorytellingProps) {
+  return (
+    <section className="ws-storytelling" id="editorial-story" aria-labelledby="ws-story-title">
+      <div className="wrap">
+        <header className="ws-storytelling__head">
+          <span className="ws-storytelling__kicker">Editorial Deep-Dive</span>
+          <h2 className="ws-storytelling__title" id="ws-story-title">
+            Leadership Philosophy &amp; Institutional Impact
+          </h2>
+          <span className="s-rule" aria-hidden />
+        </header>
+
+        {/* 2-Column Offset Editorial Layout */}
+        <div className="ws-storytelling__grid">
+          {/* Main Narrative Column */}
+          <div className="ws-storytelling__narrative">
+            {/* Grand Pull-Quote Block */}
+            <div className="ws-pullquote">
+              <span className="ws-pullquote__mark" aria-hidden>&ldquo;</span>
+              <blockquote className="ws-pullquote__quote">
+                {profile.quote}
+              </blockquote>
+              <cite className="ws-pullquote__author">
+                — {profile.name}, <span className="ws-pullquote__context">{profile.quoteContext}</span>
+              </cite>
+            </div>
+
+            {/* Paragraphs */}
+            <div className="ws-biography">
+              {profile.biography.map((p, i) => (
+                <p key={i} className={i === 0 ? "ws-biography__lead" : ""}>
+                  {p}
+                </p>
+              ))}
+            </div>
+
+            {/* Action Links with Animated Underline */}
+            <div className="ws-storytelling__actions">
+              <Link href="/magazines" className="ws-read-more ws-storytelling__link">
+                Read the Complete Edition Cover Story →
+              </Link>
+              <Link href="/contact" className="ws-read-more ws-storytelling__link">
+                Connect with the Editorial Desk →
+              </Link>
+            </div>
+          </div>
+
+          {/* Highlight Sidebar Cards */}
+          <aside className="ws-storytelling__sidebar" aria-label="Achievements and Milestones">
+            {/* 1. Key Achievements */}
+            <div className="ws-card-block">
+              <div className="ws-card-block__header">
+                <span className="ws-card-block__symbol" aria-hidden>✦</span>
+                <h3 className="ws-card-block__heading">Key Achievements &amp; Impact</h3>
+              </div>
+              <ul className="ws-achieve-list">
+                {profile.achievements.map((achieve, i) => (
+                  <li key={i} className="ws-achieve-item">
+                    <strong className="ws-achieve-item__title">{achieve.title}</strong>
+                    <p className="ws-achieve-item__desc">{achieve.desc}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* 2. Career Milestones */}
+            <div className="ws-card-block">
+              <div className="ws-card-block__header">
+                <span className="ws-card-block__symbol" aria-hidden>◈</span>
+                <h3 className="ws-card-block__heading">Career Milestones</h3>
+              </div>
+              <ol className="ws-milestone-list">
+                {profile.milestones.map((ms, i) => (
+                  <li key={i} className="ws-milestone-item">
+                    <span className="ws-milestone-item__year">{ms.year}</span>
+                    <p className="ws-milestone-item__event">{ms.event}</p>
+                  </li>
+                ))}
+              </ol>
+            </div>
+
+            {/* 3. Recognitions & Board Honours */}
+            <div className="ws-card-block">
+              <div className="ws-card-block__header">
+                <span className="ws-card-block__symbol" aria-hidden>★</span>
+                <h3 className="ws-card-block__heading">Honours &amp; Recognitions</h3>
+              </div>
+              <div className="ws-badge-group">
+                {profile.recognitions.map((rec, i) => (
+                  <span key={i} className="ws-badge-pill">
+                    {rec}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  );
+}
