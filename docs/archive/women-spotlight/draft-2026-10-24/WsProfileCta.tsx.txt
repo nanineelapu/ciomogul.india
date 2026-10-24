@@ -1,0 +1,27 @@
+import Link from "next/link";
+
+export default function WsProfileCta() {
+  return (
+    <section className="ws-sub-cta" aria-labelledby="ws-cta-title">
+      <div className="wrap ws-sub-cta__inner">
+        <div className="ws-sub-cta__text">
+          <span className="ws-sub-cta__kicker">Editorial Inquiries &amp; Nominations</span>
+          <h2 className="ws-sub-cta__title" id="ws-cta-title">
+            Know a Woman Leader Who Deserves the Spotlight?
+          </h2>
+          <p className="ws-sub-cta__desc">
+            CIO Mogul India reviews executive nominations monthly across Healthcare, Enterprise Tech, Infrastructure, and Aviation.
+          </p>
+        </div>
+        <div className="ws-sub-cta__actions">
+          <Link href="/contact" className="btn btn-paper ws-cta-btn">
+            Submit a Nomination
+          </Link>
+          <Link href="/#women-spotlight" className="ws-link-animated ws-sub-cta__link">
+            Back to Home Wall of Fame →
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}

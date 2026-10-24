@@ -1,0 +1,73 @@
+import Image from "next/image";
+import Link from "next/link";
+import { getOtherSpotlightProfiles, type SpotlightProfile } from "./spotlightData";
+
+interface WsRelatedLeadersProps {
+  currentSlug: string;
+}
+
+export default function WsRelatedLeaders({ currentSlug }: WsRelatedLeadersProps) {
+  const others = getOtherSpotlightProfiles(currentSlug);
+
+  return (
+    <section className="ws-related-section" aria-labelledby="ws-related-heading">
+      <div className="wrap">
+        {/* Section Head */}
+        <header className="ws-related-head">
+          <div>
+            <span className="ws-section-header__kicker">Wall of Fame Roster</span>
+            <h2 className="ws-related-head__title" id="ws-related-heading">
+              Explore Other Featured Spotlights
+            </h2>
+          </div>
+          <Link href="/#women-spotlight" className="ws-link-animated ws-related-head__all">
+            View All Wall of Fame →
+          </Link>
+        </header>
+
+        {/* 3-Card Mini Grid */}
+        <div className="ws-related-grid">
+          {others.map((leader: SpotlightProfile) => (
+            <Link
+              key={leader.slug}
+              href={`/women-spotlight?leader=${leader.slug}`}
+              className="ws-related-card"
+              aria-label={`Open spotlight profile for ${leader.name}`}
+            >
+              {/* Photo container (aspect ratio 4/5 or 1/1) */}
+              <div className="ws-related-card__media">
+                <Image
+                  src={leader.portrait}
+                  alt={leader.name}
+                  width={340}
+                  height={400}
+                  className="ws-related-card__img"
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                />
+                <span className="ws-related-card__badge">
+                  {leader.ageTier}
+                </span>
+              </div>
+
+              {/* Card Body */}
+              <div className="ws-related-card__body">
+                <span className="ws-related-card__category">
+                  {leader.categoryBadge.split("·")[0]?.trim()}
+                </span>
+                <h3 className="ws-related-card__name">{leader.name}</h3>
+                <p className="ws-related-card__role">
+                  {leader.role} · <strong>{leader.organization}</strong>
+                </p>
+
+                {/* Animated underline action */}
+                <span className="ws-related-card__link ws-link-animated">
+                  Read Spotlight →
+                </span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}

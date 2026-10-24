@@ -1,0 +1,106 @@
+import Image from "next/image";
+import Link from "next/link";
+import type { WomanSpotlightProfile } from "@/data/womenSpotlightData";
+
+interface WsFeaturedProfileProps {
+  profile: WomanSpotlightProfile;
+}
+
+export default function WsFeaturedProfile({ profile }: WsFeaturedProfileProps) {
+  return (
+    <section className="ws-featured" id="featured-profile" aria-labelledby="ws-featured-name">
+      <div className="wrap">
+        <header className="ws-featured__header">
+          <span className="ws-featured__kicker">Featured Honoree</span>
+          <h2 className="ws-featured__heading">Profile in Focus</h2>
+          <span className="s-rule" aria-hidden />
+        </header>
+
+        {/* Asymmetric Split Layout */}
+        <div className="ws-featured__split">
+          {/* Left Column: Styled Portrait Frame */}
+          <div className="ws-featured__media">
+            <div className="ws-portrait">
+              {/* Geometric offset frame accent */}
+              <div className="ws-portrait__accent" aria-hidden />
+
+              <div className="ws-portrait__wrap">
+                <Image
+                  src={profile.image}
+                  alt={profile.altText}
+                  width={460}
+                  height={575}
+                  priority
+                  className="ws-portrait__img"
+                  sizes="(max-width: 900px) 100vw, 460px"
+                />
+
+                {/* Badge Overlay */}
+                <span className="ws-portrait__badge">
+                  <span aria-hidden>★</span> Cover Honoree · Wall of Fame
+                </span>
+              </div>
+
+              {/* Floating Stat Callout Pill */}
+              <div className="ws-portrait__stat-pill">
+                <span className="ws-portrait__stat-num">{profile.stats[0]?.value}</span>
+                <span className="ws-portrait__stat-txt">{profile.stats[0]?.label}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Metadata, Bio & Highlights */}
+          <div className="ws-featured__content">
+            <div className="ws-featured__tags">
+              <span className="ws-badge ws-badge--navy">{profile.category}</span>
+              <span className="ws-badge ws-badge--muted">{profile.ageTier}</span>
+              <span className="ws-badge ws-badge--edition">{profile.featuredEdition}</span>
+            </div>
+
+            <h3 className="ws-featured__name" id="ws-featured-name">
+              {profile.name}
+            </h3>
+
+            <p className="ws-featured__role">
+              {profile.designation} · <strong className="ws-featured__org">{profile.organization}</strong>
+            </p>
+
+            <p className="ws-featured__desc">
+              {profile.shortDescription}
+            </p>
+
+            {/* Quick Quote Highlight */}
+            <div className="ws-featured__quote">
+              <blockquote className="ws-featured__quote-text">
+                &ldquo;{profile.quote}&rdquo;
+              </blockquote>
+              <cite className="ws-featured__quote-cite">
+                — {profile.name}, <span>{profile.quoteContext}</span>
+              </cite>
+            </div>
+
+            {/* 3 Compact Impact Metrics */}
+            <div className="ws-featured__metrics" aria-label="Key Impact Metrics">
+              {profile.stats.map((stat, i) => (
+                <div key={i} className="ws-metric-box">
+                  <span className="ws-metric-box__val">{stat.value}</span>
+                  <span className="ws-metric-box__lbl">{stat.label}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Section CTA Buttons with site theme matching */}
+            <div className="ws-featured__actions">
+              <a href="#editorial-story" className="btn btn-ink">
+                Read Full Story ↓
+              </a>
+              <Link href="/contact" className="ws-read-more ws-featured__link">
+                Nominate a Peer for Cover Feature →
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

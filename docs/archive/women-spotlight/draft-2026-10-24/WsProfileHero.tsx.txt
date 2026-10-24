@@ -1,0 +1,100 @@
+import Image from "next/image";
+import Link from "next/link";
+import type { SpotlightProfile } from "./spotlightData";
+
+interface WsProfileHeroProps {
+  profile: SpotlightProfile;
+}
+
+export default function WsProfileHero({ profile }: WsProfileHeroProps) {
+  return (
+    <section className="ws-sub-hero" aria-labelledby="ws-profile-name">
+      <div className="wrap">
+        {/* Breadcrumb navigation */}
+        <div className="ws-sub-hero__nav">
+          <Link href="/#women-spotlight" className="ws-nav-back ws-link-animated">
+            <span aria-hidden>←</span> Back to Wall of Fame
+          </Link>
+          <span className="ws-sub-hero__edition">{profile.featuredEdition}</span>
+        </div>
+
+        {/* Asymmetric Split Layout */}
+        <div className="ws-sub-hero__split">
+          {/* Left: Styled Portrait Frame with Accents & Overlays */}
+          <div className="ws-sub-hero__media">
+            <div className="ws-portrait-frame">
+              {/* Decorative background geometric accent */}
+              <div className="ws-portrait-frame__accent" aria-hidden />
+
+              {/* Main Profile Photo (aspect ratio 4/5) */}
+              <div className="ws-portrait-frame__img-wrap">
+                <Image
+                  src={profile.portrait}
+                  alt={profile.name}
+                  width={480}
+                  height={600}
+                  priority
+                  className="ws-portrait-frame__img"
+                  sizes="(max-width: 768px) 100vw, 440px"
+                />
+
+                {/* Floating Wall of Fame Badge */}
+                <div className="ws-portrait-frame__badge">
+                  <span className="ws-portrait-frame__badge-star" aria-hidden>★</span>
+                  <span>Wall of Fame Inductee</span>
+                </div>
+              </div>
+
+              {/* Quick Metric Overlay Pill */}
+              <div className="ws-portrait-frame__pill">
+                <span className="ws-portrait-frame__pill-num">{profile.stats[0]?.value}</span>
+                <span className="ws-portrait-frame__pill-lbl">{profile.stats[0]?.label}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Right: Key Metadata, Quick Bio & Impact Stats */}
+          <div className="ws-sub-hero__content">
+            {/* Category & Age badges */}
+            <div className="ws-meta-tags">
+              <span className="ws-tag ws-tag--primary">{profile.categoryBadge}</span>
+              <span className="ws-tag ws-tag--secondary">{profile.ageTier}</span>
+            </div>
+
+            <h1 className="ws-sub-hero__name" id="ws-profile-name">
+              {profile.name}
+            </h1>
+
+            <p className="ws-sub-hero__role">
+              {profile.role} · <strong className="ws-sub-hero__org">{profile.organization}</strong>
+            </p>
+
+            <p className="ws-sub-hero__bio">
+              {profile.quickBio}
+            </p>
+
+            {/* Impact Stats Strip (3 compact blocks) */}
+            <div className="ws-stats-strip" aria-label="Key Impact Metrics">
+              {profile.stats.map((s, idx) => (
+                <div key={idx} className="ws-stat-card">
+                  <span className="ws-stat-card__val">{s.value}</span>
+                  <span className="ws-stat-card__lbl">{s.label}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Action buttons */}
+            <div className="ws-sub-hero__actions">
+              <a href="#spotlight-story" className="btn btn-navy ws-hero-btn">
+                Read Spotlight Story ↓
+              </a>
+              <Link href="/contact" className="ws-link-animated ws-sub-hero__link">
+                Nominate a Peer →
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

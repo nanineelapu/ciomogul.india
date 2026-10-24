@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getWomenLeaders } from "@/lib/data";
+import { isPublishedProfile, profileHref } from "@/data/womenSpotlightData";
 
 export default async function WallOfFame() {
   const leaders = await getWomenLeaders();
@@ -15,7 +16,7 @@ export default async function WallOfFame() {
         </header>
         <div className="leaders">
           {leaders.map((l) => (
-            <Link key={l.slug} href="/women-spotlight" className="leader">
+            <Link key={l.slug} href={isPublishedProfile(l.slug) ? profileHref(l.slug) : "/women-spotlight#profile"} className="leader">
               <span className="leader__img"><Image src={l.image} alt={l.name} width={112} height={112} /></span>
               <span className="leader__body">
                 <span className="leader__org">{l.organization}</span>
@@ -26,7 +27,7 @@ export default async function WallOfFame() {
             </Link>
           ))}
         </div>
-        <p className="center-link"><Link href="/women-spotlight" className="btn btn-line">See all women leaders</Link></p>
+        <p className="center-link wall-more"><Link href="/women-spotlight" className="btn btn-line">See all women leaders</Link></p>
       </div>
     </section>
   );

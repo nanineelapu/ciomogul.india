@@ -1,0 +1,278 @@
+export type SpotlightProfile = {
+  slug: string;
+  name: string;
+  role: string;
+  organization: string;
+  categoryBadge: string;
+  ageTier: string;
+  featuredEdition: string;
+  portrait: string;
+  coverImage: string;
+  quickBio: string;
+  quote: string;
+  quoteContext: string;
+  stats: { value: string; label: string }[];
+  story: string[];
+  achievements: { title: string; desc: string }[];
+  milestones: { year: string; event: string }[];
+  recognitions: string[];
+};
+
+export const SPOTLIGHT_PROFILES: Record<string, SpotlightProfile> = {
+  "sangita-reddy": {
+    slug: "sangita-reddy",
+    name: "Dr. Sangita Reddy",
+    role: "Joint Managing Director",
+    organization: "Apollo Hospitals Group",
+    categoryBadge: "Mid-Career Leader · Healthcare & HealthTech",
+    ageTier: "Age 49",
+    featuredEdition: "Edition 014 · October 2026",
+    portrait: "/assets/leader-sangita.jpg",
+    coverImage: "/assets/women-cover-sangita.jpg",
+    quickBio:
+      "A pioneering healthcare executive reshaping modern Indian medicine through AI diagnostics, telemedicine spanning 57 nations, and large-scale public health infrastructure.",
+    quote:
+      "We did not digitise healthcare. We humanised it — and then we digitised the humanity.",
+    quoteContext: "Keynote Address, Asian Healthcare Leadership Summit",
+    stats: [
+      { value: "57+", label: "Countries in Telehealth Network" },
+      { value: "₹4,200 Cr", label: "Digital Capital Deployed" },
+      { value: "10M+", label: "AI-Assisted Patient Consults" },
+    ],
+    story: [
+      "In a sector where outcomes are counted in human lives rather than quarterly margins, Dr. Sangita Reddy has spent two decades proving that clinical empathy and cutting-edge engineering are two expressions of the exact same purpose.",
+      "Under her operational leadership, Apollo Hospitals expanded from a traditional hospital network into Asia's premier integrated healthcare ecosystem. She spearheaded Apollo 24/7, democratising specialist second opinions across hundreds of tier-2 and tier-3 Indian districts, while implementing AI-assisted pathology models that detect acute cardiac anomalies hours before conventional triage.",
+      "Her governance model blends deep institutional stewardship with an unapologetic appetite for innovation — transforming how one billion people access emergency care.",
+    ],
+    achievements: [
+      {
+        title: "57-Nation Telemedicine Reach",
+        desc: "Created the world's largest cross-border digital clinical referral corridor.",
+      },
+      {
+        title: "Apollo 24/7 Super-App",
+        desc: "Scaled from zero to 22 million active patients with 15-minute diagnostic fulfillment.",
+      },
+      {
+        title: "AI-Assisted Precision Triage",
+        desc: "Reduced emergency department diagnostic turnaround times by 42% across 71 hospitals.",
+      },
+    ],
+    milestones: [
+      {
+        year: "2020",
+        event: "Elected President of FICCI; coordinated national private healthcare pandemic response.",
+      },
+      {
+        year: "2023",
+        event: "Inaugurated Apollo AI-Pathology & Genomic Research Center in Hyderabad.",
+      },
+      {
+        year: "2026",
+        event: "Inducted into CIO Mogul India Wall of Fame as Cover Honoree for Edition 014.",
+      },
+    ],
+    recognitions: [
+      "Padma Shri Nominee & Global Health Ambassador",
+      "ET Business Woman of the Year",
+      "Forbes Asia 50 Power Businesswomen",
+      "Honorary Doctorate in Science & Medicine",
+    ],
+  },
+
+  "arundhati-bhattacharya": {
+    slug: "arundhati-bhattacharya",
+    name: "Arundhati Bhattacharya",
+    role: "Chairperson & CEO",
+    organization: "Salesforce India",
+    categoryBadge: "Lifetime Icon · Enterprise SaaS & Banking",
+    ageTier: "Age 68",
+    featuredEdition: "Edition 013 · September 2026",
+    portrait: "/assets/leader-arundhati.jpg",
+    coverImage: "/assets/women-cover-arundhati.jpg",
+    quickBio:
+      "Former first woman Chairman of the State Bank of India, now leading Salesforce India's multi-billion-dollar enterprise technology expansion.",
+    quote:
+      "A leader does not wait for certainty; your duty is to create clarity out of chaos for everyone behind you.",
+    quoteContext: "CIO Mogul India Cover Conversation",
+    stats: [
+      { value: "$1.2B+", label: "India Annual Run-Rate" },
+      { value: "12,000+", label: "Engineers & Tech Workforce" },
+      { value: "40 Yrs", label: "Institutional Leadership" },
+    ],
+    story: [
+      "Few leaders in modern Indian history have commanded both the apex of public sector finance and the forefront of Silicon Valley enterprise SaaS. Arundhati Bhattacharya shattered century-old conventions when she became the first woman to chair the State Bank of India in 2013.",
+      "She initiated SBI's historic digital pivot, birthing YONO — an application that now powers over 60 million active Indian bank accounts. In 2020, she made another daring transition by taking the helm of Salesforce India, transforming the nation into Salesforce's fastest-growing engineering and market engine outside North America.",
+      "Her leadership philosophy is anchored on relentless meritocracy, deep institutional integrity, and opening doors for future generations of women in corporate governance.",
+    ],
+    achievements: [
+      {
+        title: "First Woman Chair of SBI",
+        desc: "Commanded India's largest lender with $400B+ in balance sheet assets.",
+      },
+      {
+        title: "Tripled Salesforce India Scale",
+        desc: "Expanded Centre of Excellence in Hyderabad into a 12,000-strong engineering hub.",
+      },
+      {
+        title: "YONO Banking Architecture",
+        desc: "Pioneered public sector digital banking serving 60M+ retail customers.",
+      },
+    ],
+    milestones: [
+      {
+        year: "2013",
+        event: "Appointed first woman Chairman of State Bank of India.",
+      },
+      {
+        year: "2020",
+        event: "Assumed role as Chairperson & CEO of Salesforce India.",
+      },
+      {
+        year: "2026",
+        event: "Inducted into CIO Mogul India Wall of Fame; Lifetime Achievement Honoree.",
+      },
+    ],
+    recognitions: [
+      "Fortune World's 50 Greatest Leaders",
+      "Forbes Most Powerful Women in Business",
+      "Lifetime Achievement Award — Indian Banking Federation",
+      "Board Member, Multiple Global Fortune 500 Enterprises",
+    ],
+  },
+
+  "shobha-nv": {
+    slug: "shobha-nv",
+    name: "Shobha NV",
+    role: "Founder & Managing Director",
+    organization: "Shobha Infrastructure",
+    categoryBadge: "Pioneer · Real Estate & Urban Infrastructure",
+    ageTier: "Age 44",
+    featuredEdition: "Edition 012 · August 2026",
+    portrait: "/assets/leader-shobha.jpg",
+    coverImage: "/assets/women-cover-shobha.jpg",
+    quickBio:
+      "Visionary infrastructure founder building next-generation sustainable commercial corridors, green logistics hubs, and smart urban campuses.",
+    quote:
+      "Infrastructure is not concrete and steel; it is the physical foundation of human dignity and economic mobility.",
+    quoteContext: "National Urban Development Conclave",
+    stats: [
+      { value: "18M+", label: "Sq. Ft. Built Infrastructure" },
+      { value: "₹12,000 Cr", label: "Asset Portfolio Value" },
+      { value: "100%", label: "Green Certified Projects" },
+    ],
+    story: [
+      "In an industry traditionally dominated by legacy patriarchal conglomerates, Shobha NV built a ₹12,000 Crore infrastructure enterprise from the ground up, starting with a singular, uncompromising belief: urban spaces must regenerate the communities they inhabit.",
+      "Her company pioneered transit-oriented tech campuses throughout South India, integrating solar micro-grids, zero-discharge wastewater recycling, and earthquake-resilient modular construction.",
+      "Beyond the balance sheet, Shobha has championed safety and fair compensation across over 40,000 construction workers, proving that social responsibility and institutional profitability can reinforce each other.",
+    ],
+    achievements: [
+      {
+        title: "18 Million Sq. Ft. Delivered",
+        desc: "Constructed premium IT corridors housing Fortune 500 tech occupiers.",
+      },
+      {
+        title: "100% IGBC Platinum Portfolio",
+        desc: "Every developed asset operates at net-zero carbon and water neutrality.",
+      },
+      {
+        title: "Women in Engineering Foundation",
+        desc: "Funded full polytechnic scholarships for 2,500+ aspiring female site engineers.",
+      },
+    ],
+    milestones: [
+      {
+        year: "2012",
+        event: "Founded Shobha Infrastructure with an initial single commercial plot in Bengaluru.",
+      },
+      {
+        year: "2021",
+        event: "Surpassed ₹10,000 Crore valuation with pan-India institutional backing.",
+      },
+      {
+        year: "2026",
+        event: "Inducted into CIO Mogul India Wall of Fame as Infrastructure Leader of the Year.",
+      },
+    ],
+    recognitions: [
+      "CREDAI Infrastructure Visionary of the Decade",
+      "Business Today Most Powerful Women in Business",
+      "UN Sustainable Cities Leadership Citation",
+      "ET Real Estate Icon Award",
+    ],
+  },
+
+  "nila-malik": {
+    slug: "nila-malik",
+    name: "Nila Malik",
+    role: "Enterprise Transformation Leader",
+    organization: "Aviation & Aerospace Systems",
+    categoryBadge: "Rising Star · Aviation Systems & IoT",
+    ageTier: "Age 38",
+    featuredEdition: "Edition 011 · July 2026",
+    portrait: "/assets/leader-nila.jpg",
+    coverImage: "/assets/women-cover-nila.jpg",
+    quickBio:
+      "A systems engineering innovator leading predictive fleet telemetry, digital turnaround optimization, and avionics transformation for India's major air carriers.",
+    quote:
+      "In commercial aviation, precision is not an optional virtue — it is the only acceptable baseline for survival.",
+    quoteContext: "Global Aerospace Engineering Forum",
+    stats: [
+      { value: "320+", label: "Commercial Aircraft Monitored" },
+      { value: "₹1,800 Cr", label: "Fuel Optimization Savings" },
+      { value: "99.7%", label: "On-Time Dispatch Reliability" },
+    ],
+    story: [
+      "Few operating environments are as unforgiving as commercial aviation, where minutes on the tarmac equate to millions in operating variance. Nila Malik has redefined the discipline of fleet turnaround through predictive IoT algorithms and real-time avionics telemetry.",
+      "Overseeing the technical migration of over 300 aircraft, she introduced sensor-based diagnostic checks that resolve potential engine anomalies before an aircraft even touches down.",
+      "A role model for young women entering aerospace engineering, Nila proves that relentless analytical rigor and visionary systems thinking can transform legacy heavy industry.",
+    ],
+    achievements: [
+      {
+        title: "Predictive Telemetry Engine",
+        desc: "Reduced unscheduled maintenance groundings by 34% across commercial fleets.",
+      },
+      {
+        title: "Fuel Optimization Algorithms",
+        desc: "Generated ₹1,800 Cr in cumulative carbon credit and jet fuel efficiencies.",
+      },
+      {
+        title: "Real-Time Turnaround Automation",
+        desc: "Slashed gate turnaround intervals by 12 minutes without compromising safety protocols.",
+      },
+    ],
+    milestones: [
+      {
+        year: "2016",
+        event: "Lead Avionics Engineer on fleet modernisation program.",
+      },
+      {
+        year: "2023",
+        event: "Promoted to Enterprise Transformation Leader for Commercial Aviation Systems.",
+      },
+      {
+        year: "2026",
+        event: "Cover Honoree, CIO Mogul India Wall of Fame Edition 011.",
+      },
+    ],
+    recognitions: [
+      "Aviation Week Global 40 Under 40",
+      "International Civil Aviation Organisation Leadership Fellow",
+      "National Systems Engineering Excellence Medal",
+      "Women in Aerospace Trailblazer 2025",
+    ],
+  },
+};
+
+export function getSpotlightProfile(slug?: string): SpotlightProfile {
+  if (slug && SPOTLIGHT_PROFILES[slug]) {
+    return SPOTLIGHT_PROFILES[slug];
+  }
+  return SPOTLIGHT_PROFILES["sangita-reddy"];
+}
+
+export function getOtherSpotlightProfiles(currentSlug: string): SpotlightProfile[] {
+  return Object.values(SPOTLIGHT_PROFILES)
+    .filter((p) => p.slug !== currentSlug)
+    .slice(0, 3);
+}

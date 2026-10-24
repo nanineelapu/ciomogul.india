@@ -1,0 +1,57 @@
+import Image from "next/image";
+import Link from "next/link";
+import { WOMEN_SPOTLIGHT_DATA } from "@/data/womenSpotlightData";
+
+export default function WsVoicesSection() {
+  const quoteLeaders = WOMEN_SPOTLIGHT_DATA.slice(0, 3);
+
+  return (
+    <section className="ws-voices" id="voices-of-leadership" aria-labelledby="ws-voices-heading">
+      <div className="wrap">
+        <header className="ws-voices__head">
+          <span className="ws-voices__kicker">Voices of Leadership</span>
+          <h2 className="ws-voices__title" id="ws-voices-heading">
+            Conviction, Strategy &amp; Purpose
+          </h2>
+          <span className="s-rule" aria-hidden />
+          <p className="ws-voices__intro">
+            Perspectives drawn directly from our cover conversations with the women shaping the future of Indian industry.
+          </p>
+        </header>
+
+        <div className="ws-voices__grid">
+          {quoteLeaders.map((leader) => (
+            <div key={leader.id} className="ws-voice-card">
+              <span className="ws-voice-card__quote-icon" aria-hidden>&ldquo;</span>
+              <blockquote className="ws-voice-card__quote">
+                {leader.quote}
+              </blockquote>
+              <div className="ws-voice-card__profile">
+                <div className="ws-voice-card__avatar">
+                  <Image
+                    src={leader.image}
+                    alt={leader.name}
+                    width={56}
+                    height={56}
+                  />
+                </div>
+                <div className="ws-voice-card__meta">
+                  <strong className="ws-voice-card__name">{leader.name}</strong>
+                  <span className="ws-voice-card__role">
+                    {leader.designation}, {leader.organization}
+                  </span>
+                  <Link
+                    href={`/women-spotlight?profile=${leader.id}#featured-profile`}
+                    className="ws-read-more ws-voice-card__link"
+                  >
+                    View Spotlight Profile →
+                  </Link>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
