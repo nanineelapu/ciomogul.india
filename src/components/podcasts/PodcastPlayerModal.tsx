@@ -2,6 +2,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { useLenis } from "lenis/react";
 import type { Podcast } from "@/types/content";
 
 // Reads ?watch=<slug> from the URL and renders a dark-backdrop modal with the
@@ -22,6 +23,7 @@ export default function PodcastPlayerModal({ podcasts }: { podcasts: Podcast[] }
   );
 
   const closeRef = useRef<HTMLButtonElement>(null);
+  const lenis = useLenis();
 
   const close = useCallback(() => {
     const next = new URLSearchParams(params.toString());
@@ -36,16 +38,18 @@ export default function PodcastPlayerModal({ podcasts }: { podcasts: Podcast[] }
     if (!active) return;
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    lenis?.stop();
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") close(); };
     window.addEventListener("keydown", onKey);
     // defer focus so the button exists by the time we grab it
     const t = setTimeout(() => closeRef.current?.focus(), 50);
     return () => {
       document.body.style.overflow = prevOverflow;
+      lenis?.start();
       window.removeEventListener("keydown", onKey);
       clearTimeout(t);
     };
-  }, [active, close]);
+  }, [active, close, lenis]);
 
   if (!mounted || !active) return null;
 
@@ -62,7 +66,7 @@ export default function PodcastPlayerModal({ podcasts }: { podcasts: Podcast[] }
         if (e.target === e.currentTarget) close();
       }}
     >
-      <div className="pod-modal__panel">
+      <div className="pod-modal__panel" data-lenis-prevent>
         <header className="pod-modal__head">
           <div className="pod-modal__meta">
             <span className="pod-modal__kicker">{active.date}</span>

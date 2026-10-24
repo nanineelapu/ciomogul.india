@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { useLenis } from "lenis/react";
 import type { SocialKey } from "@/data/social";
 
 const NAV = [
@@ -33,6 +34,7 @@ export default function Header({
   const [date, setDate] = useState("");
   const [compact, setCompact] = useState(false);
   const barRef = useRef<HTMLSpanElement>(null);
+  const lenis = useLenis();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -55,10 +57,12 @@ export default function Header({
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
+    if (open) lenis?.stop();
+    else lenis?.start();
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [open]);
+  }, [open, lenis]);
 
   return (
     <>

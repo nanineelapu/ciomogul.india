@@ -86,7 +86,7 @@ export default function PdfViewer({
 
   return (
     <div className="pdfv" ref={frameRef} tabIndex={0} aria-label={`${title} — PDF reader`}>
-      <div className="pdfv__stage">
+      <div className="pdfv__stage" data-lenis-prevent>
         {loadError ? (
           <div className="pdfv__error">
             <b>Could not load PDF</b>

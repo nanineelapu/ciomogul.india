@@ -3,6 +3,7 @@
 // Header/Footer chrome without also wrapping /studio.
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import SmoothScroll from "@/components/layout/SmoothScroll";
 import { getSiteSettings } from "@/lib/data";
 
 export default async function SiteLayout({
@@ -11,10 +12,10 @@ export default async function SiteLayout({
   const settings = await getSiteSettings();
 
   return (
-    <>
+    <SmoothScroll>
       <Header social={settings.social} />
       {children}
       <Footer />
-    </>
+    </SmoothScroll>
   );
 }
