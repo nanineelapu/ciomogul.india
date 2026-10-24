@@ -1,9 +1,11 @@
-// Receives the contact form. Saves the message to Supabase and emails it to
-// the team through Resend. Each step runs only when its keys are configured;
-// the request succeeds if at least one of them worked.
+// Receives the contact form. Saves the message to Supabase, emails the team,
+// and sends the visitor a confirmation at the address they gave. Each step runs
+// only when its keys are configured; the request succeeds if the message was
+// saved or the team was emailed. The visitor's confirmation is best effort.
 import { createClient } from "@supabase/supabase-js";
 import { Resend } from "resend";
 import { NextResponse } from "next/server";
+import { confirmationEmail, notificationEmail } from "@/lib/email/templates";
 
 type Body = {
   name?: unknown;
@@ -92,21 +94,45 @@ export async function POST(req: Request) {
     }
   }
 
-  // 2. Email the team. Reply-To is the sender, so replying goes to them.
+  // 2. Email the team and confirm to the visitor
   if (resendKey) {
+    const resend = new Resend(resendKey);
+    const from = process.env.CONTACT_FROM_EMAIL || "CIO Mogul India <onboarding@resend.dev>";
+    const teamInbox = process.env.CONTACT_TO_EMAIL || "info@ciomogulindia.com";
+    const submission = { name, email, subject, message };
+
+    // Team copy. Reply-To is the visitor, so replying goes straight to them.
     try {
-      const resend = new Resend(resendKey);
+      const mail = notificationEmail(submission);
       const { error } = await resend.emails.send({
-        from: process.env.CONTACT_FROM_EMAIL || "CIO Mogul India <onboarding@resend.dev>",
-        to: process.env.CONTACT_TO_EMAIL || "info@ciomogulindia.com",
+        from,
+        to: teamInbox,
         replyTo: email,
-        subject: `[Website contact] ${subject}`,
-        text: `Name: ${name}\nEmail: ${email}\n\n${message}`,
+        subject: mail.subject,
+        html: mail.html,
+        text: mail.text,
       });
       if (error) throw error;
       emailed = true;
     } catch (err) {
-      console.error("[contact] email failed:", err);
+      console.error("[contact] team email failed:", err);
+    }
+
+    // Visitor copy. Replies go to the team inbox. Until a domain is verified in
+    // Resend, it can only deliver to the Resend account's own address.
+    try {
+      const mail = confirmationEmail(submission);
+      const { error } = await resend.emails.send({
+        from,
+        to: email,
+        replyTo: teamInbox,
+        subject: mail.subject,
+        html: mail.html,
+        text: mail.text,
+      });
+      if (error) throw error;
+    } catch (err) {
+      console.error("[contact] confirmation email failed:", err);
     }
   }
 

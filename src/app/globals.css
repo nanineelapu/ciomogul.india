@@ -4525,22 +4525,23 @@ html.lenis, html.lenis body { height: auto; }
   .newsletter .s-title { font-size: 22px; }
 }
 
-/* Newsletter: navy band, centred, email and button on one row */
+/* Newsletter: light band, centred, email and button on one row */
 .newsletter {
   margin-top: 48px;
   padding: 64px 0;
-  background: var(--color-navy);
-  color: #fff;
+  background: var(--color-paper-2);
+  border-top: 1px solid var(--color-rule-soft);
+  color: var(--color-ink);
 }
 
-.newsletter .s-title { color: #fff; font-size: 26px; margin: 0 0 10px; }
+.newsletter .s-title { color: var(--color-ink); font-size: 26px; margin: 0 0 10px; }
 
 .newsletter__inner p {
   margin-top: 0;
   max-width: 48ch;
   font-size: 16px;
   line-height: 1.6;
-  color: rgba(255, 255, 255, .78);
+  color: var(--color-ink-2);
 }
 
 .newsletter .nl-form { gap: 10px; }
@@ -4550,29 +4551,29 @@ html.lenis, html.lenis body { height: auto; }
 .newsletter .nl-form__row input {
   height: 52px;
   padding: 0 18px;
-  background: rgba(255, 255, 255, .08);
-  border: 1px solid rgba(255, 255, 255, .4);
+  background: #fff;
+  border: 1px solid var(--color-navy);
   border-right: 0;
-  color: #fff;
+  color: var(--color-ink);
   font-family: var(--font-ui);
   font-size: 15px;
 }
 
-.newsletter .nl-form__row input::placeholder { color: rgba(255, 255, 255, .55); }
+.newsletter .nl-form__row input::placeholder { color: var(--color-muted); }
 
 .newsletter .nl-form__row input:focus {
-  border-color: #fff;
-  box-shadow: none;
-  background: rgba(255, 255, 255, .14);
+  border-color: var(--color-navy-2);
+  box-shadow: 0 0 0 3px rgba(27, 58, 107, .15);
+  background: #fff;
 }
 
 .newsletter .nl-form__row .btn { height: 52px; padding: 0 28px; }
 
-.newsletter .nl-form__msg.is-ok { color: #9be7b4; }
-.newsletter .nl-form__msg.is-error { color: #ffb4ab; }
+.newsletter .nl-form__msg.is-ok { color: #1F7A43; }
+.newsletter .nl-form__msg.is-error { color: #B42318; }
 
 @media (max-width: 520px) {
   .newsletter { padding: 48px 0; }
-  .newsletter .nl-form__row input { border-right: 1px solid rgba(255, 255, 255, .4); }
+  .newsletter .nl-form__row input { border-right: 1px solid var(--color-navy); }
   .newsletter .nl-form__row { gap: 10px; }
 }

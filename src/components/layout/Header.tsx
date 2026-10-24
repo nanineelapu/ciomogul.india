@@ -69,7 +69,7 @@ export default function Header({
       <header className="site-head">
         <div className="wrap site-head__top">
           <Link href="/" className="site-head__logo" aria-label="CIO Mogul India home">
-            <Image src="/assets/logo.png" alt="CIO Mogul India — Magazine" width={318} height={63} priority />
+            <Image src="/assets/logo-cio-mogul.png" alt="CIO Mogul India — Magazine" width={1200} height={223} priority />
           </Link>
           <div className="site-head__actions">
             <span className="site-head__date">{date}</span>

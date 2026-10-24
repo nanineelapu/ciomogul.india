@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     siteName: "CIO Mogul India",
     type: "website",
     locale: "en_IN",
-    images: ["/assets/logo.png"],
+    images: ["/assets/logo-cio-mogul.png"],
   },
   title: "CIO Mogul India — The Magazine for India's Technology Leaders",
   description:
