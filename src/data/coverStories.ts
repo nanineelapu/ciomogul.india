@@ -3,6 +3,7 @@ import type { CoverStory } from "@/types/content";
 export const COVER_STORIES: CoverStory[] = [
   {
     slug: "abhirup-guha",
+    href: "/magazines/edition-014-cyber-governance",
     name: "Abhirup Guha",
     role: "Architect of OT Cyber Resilience",
     tag: "Driving secure industrial systems",
@@ -10,6 +11,7 @@ export const COVER_STORIES: CoverStory[] = [
   },
   {
     slug: "umar-balwa",
+    href: "/magazines/edition-013-industrial-leadership",
     name: "Umar Balwa",
     role: "Managing Director | Sealmatic",
     tag: "Redefining industrial leadership",
@@ -17,6 +19,7 @@ export const COVER_STORIES: CoverStory[] = [
   },
   {
     slug: "pradeep-singhal",
+    href: "/magazines/edition-012-finance-leader",
     name: "Dr. Pradeep Singhal",
     role: "Vaccine Quality & Biotechnology",
     tag: "A global supply chain leader",
@@ -24,6 +27,7 @@ export const COVER_STORIES: CoverStory[] = [
   },
   {
     slug: "rohan-rawat",
+    href: "/magazines/edition-011-leader-to-watch",
     name: "Rohan Rawat",
     role: "Leader to Watch in 2026",
     tag: "Global education & market growth",

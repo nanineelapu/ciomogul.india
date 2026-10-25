@@ -105,6 +105,7 @@ const { DEFAULT_DESCRIPTION } = load(path.join(root, "src", "lib", "seo.ts"));
 const key = () => randomBytes(6).toString("hex");
 const ref = (id) => ({ _type: "reference", _ref: id, _key: key() });
 const slugOf = (s) => ({ _type: "slug", current: s });
+const articleRef = (href) => (href && href.startsWith("/articles/") ? { article: ref(`article-${href.slice(10)}`) } : {});
 const withKeys = (items) => items.map((it) => ({ _key: key(), ...it }));
 
 const assetCache = new Map();
@@ -199,7 +200,7 @@ for (const h of HALL_OF_FAME) {
 
 // ── 4. home page lists: headlines, news, updates, featured, testimonials ────
 HEADLINES.forEach((h, i) =>
-  add({ _id: `headline-${h.slug}`, _type: "headline", text: h.text, slug: slugOf(h.slug), order: i + 1 })
+  add({ _id: `headline-${h.slug}`, _type: "headline", text: h.text, slug: slugOf(h.slug), ...articleRef(h.href), order: i + 1 })
 );
 
 console.log("Preparing home page lists…");
@@ -209,6 +210,7 @@ for (const [i, n] of NEWS_CARDS.entries()) {
     _type: "newsCard",
     title: n.title,
     slug: slugOf(n.slug),
+    ...articleRef(n.href),
     category: n.category,
     date: n.date,
     ...(n.image ? { image: await image(n.image, n.alt) } : {}),
@@ -221,6 +223,7 @@ VITAL_UPDATES.forEach((u, i) =>
     _type: "vitalUpdate",
     title: u.title,
     slug: slugOf(u.slug),
+    ...articleRef(u.href),
     ...(u.description ? { description: u.description } : {}),
     order: i + 1,
   })
@@ -231,6 +234,7 @@ for (const [i, a] of FEATURED_ARTICLES.entries()) {
     _type: "featuredArticle",
     title: a.title,
     slug: slugOf(a.slug),
+    ...articleRef(a.href),
     description: a.description,
     image: await image(a.image, a.alt),
     order: i + 1,

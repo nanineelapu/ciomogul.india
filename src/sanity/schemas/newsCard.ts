@@ -22,6 +22,13 @@ export const newsCard = defineType({
       fields: [defineField({ name: "alt", title: "Alt text", type: "string" })],
       description: "Optional. Cards without an image render the Aadhaar-style text tile.",
     }),
+    defineField({
+      name: "article",
+      title: "Article to open",
+      type: "reference",
+      to: [{ type: "article" }],
+      description: "Pick the article this opens on the live site.",
+    }),
     defineField({ name: "order", title: "Order", type: "number", initialValue: 100 }),
   ],
   orderings: [{ title: "Order", name: "order", by: [{ field: "order", direction: "asc" }] }],

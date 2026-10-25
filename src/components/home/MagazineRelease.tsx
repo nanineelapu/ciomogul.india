@@ -9,7 +9,7 @@ export default async function MagazineRelease() {
       <div className="wrap release__grid">
         <div className="release__covers">
           {covers.map((c) => (
-            <Link key={c.slug} href="/magazines" className="mag">
+            <Link key={c.slug} href={c.href} className="mag">
               <Image src={c.coverImage} alt={c.alt} width={713} height={1009} sizes="(max-width: 1080px) 100vw, 33vw" priority />
             </Link>
           ))}

@@ -13,6 +13,13 @@ export const vitalUpdate = defineType({
       validation: (r) => r.required(),
     }),
     defineField({ name: "description", title: "Description", type: "text", rows: 3 }),
+    defineField({
+      name: "article",
+      title: "Article to open",
+      type: "reference",
+      to: [{ type: "article" }],
+      description: "Pick the article this opens on the live site.",
+    }),
     defineField({ name: "order", title: "Order", type: "number", initialValue: 100 }),
   ],
   orderings: [{ title: "Order", name: "order", by: [{ field: "order", direction: "asc" }] }],

@@ -23,7 +23,7 @@ const fill = (tpl: string, vars: Record<string, string | number>) =>
   tpl.replace(/\{(\w+)\}/g, (_, k: string) => String(vars[k] ?? ""));
 
 export default function HallCarousel({ entries, text, prevLabel, nextLabel }: Props) {
-  const trackRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLOListElement>(null);
   const [index, setIndex] = useState(0);
 
   const update = useCallback(() => {

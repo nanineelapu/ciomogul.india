@@ -4,6 +4,7 @@
 
 export type Magazine = {
   slug: string;
+  href: string;          // the edition page this cover opens
   title: string;
   coverImage: string;
   alt: string;
@@ -32,6 +33,7 @@ export type MagazineEdition = {
 
 export type CoverStory = {
   slug: string;
+  href: string;
   name: string;
   role: string;
   tag: string;
@@ -40,6 +42,7 @@ export type CoverStory = {
 
 export type NewsCard = {
   slug: string;
+  href: string;         // the article this card opens
   title: string;
   category: string;
   date: string;
@@ -49,12 +52,14 @@ export type NewsCard = {
 
 export type VitalUpdate = {
   slug: string;
+  href: string;
   title: string;
   description: string | null;
 };
 
 export type FeaturedArticle = {
   slug: string;
+  href: string;
   title: string;
   description: string;
   image: string;
@@ -100,6 +105,7 @@ export type Seo = { title?: string; description?: string; keywords?: string[] };
 
 export type Headline = {
   slug: string;
+  href: string;
   text: string;
 };
 

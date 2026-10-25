@@ -14,10 +14,17 @@ export const headline = defineType({
       validation: (r) => r.required(),
     }),
     defineField({
+      name: "article",
+      title: "Article to open",
+      type: "reference",
+      to: [{ type: "article" }],
+      description: "Pick the article this opens on the live site. If none is picked, the link below is used.",
+    }),
+    defineField({
       name: "href",
-      title: "Link URL",
+      title: "Other link (optional)",
       type: "string",
-      description: 'Where this headline links to. Defaults to "/articles" if blank.',
+      description: 'Only used when no article is picked above. Defaults to "/articles" if blank.',
     }),
     defineField({
       name: "order",

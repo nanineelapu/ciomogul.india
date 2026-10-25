@@ -72,6 +72,13 @@ function mapImage(src: SanityImage | undefined | null, fallback: string): string
   return urlForOrDefault(src, fallback);
 }
 
+// Where a home page item should go: the article an editor picked, else an
+// optional custom link, else the Articles page.
+function articleHref(articleSlug?: string | null, custom?: string | null): string {
+  if (articleSlug) return `/articles/${articleSlug}`;
+  return custom || "/articles";
+}
+
 // Small wrapper that absorbs Sanity failures and returns the fallback.
 async function withFallback<T>(load: () => Promise<T>, fallback: T): Promise<T> {
   if (!sanityConfigured) return fallback;
@@ -89,11 +96,11 @@ async function withFallback<T>(load: () => Promise<T>, fallback: T): Promise<T> 
 
 // ─── Headlines ───────────────────────────────────────────────────────────
 
-type RawHeadline = { slug: string; text: string };
+type RawHeadline = { slug: string; text: string; articleSlug?: string | null; href?: string };
 export async function getHeadlines(): Promise<Headline[]> {
   return withFallback<Headline[]>(async () => {
     const rows = await sanityFetch<RawHeadline[]>({ query: HEADLINES_QUERY });
-    return rows.map((r) => ({ slug: r.slug, text: r.text }));
+    return rows.map((r) => ({ slug: r.slug, text: r.text, href: articleHref(r.articleSlug, r.href) }));
   }, HEADLINES);
 }
 
@@ -108,6 +115,7 @@ type RawCover = {
 function mapCover(r: RawCover, fallback: string): Magazine {
   return {
     slug: r.slug,
+    href: `/magazines/${r.slug}`,
     title: r.title ?? "",
     coverImage: mapImage(r.coverImage, fallback),
     alt: r.alt ?? "",
@@ -144,6 +152,7 @@ export async function getCoverStories(): Promise<CoverStory[]> {
     const rows = (await sanityFetch<RawCoverStory[] | null>({ query: COVER_STORIES_QUERY })) ?? [];
     return rows.map((r, i) => ({
       slug: r.slug,
+      href: `/magazines/${r.slug}`,
       name: r.name,
       role: r.role ?? "",
       tag: r.tag ?? "",
@@ -155,6 +164,7 @@ export async function getCoverStories(): Promise<CoverStory[]> {
 // ─── News ────────────────────────────────────────────────────────────────
 
 type RawNewsCard = {
+  articleSlug?: string | null;
   slug: string;
   title: string;
   category?: string;
@@ -167,6 +177,7 @@ export async function getNewsCards(): Promise<NewsCard[]> {
     const rows = await sanityFetch<RawNewsCard[]>({ query: NEWS_CARDS_QUERY });
     return rows.map((r, i) => ({
       slug: r.slug,
+      href: articleHref(r.articleSlug),
       title: r.title,
       category: r.category ?? "",
       date: r.date ?? "",
@@ -176,16 +187,17 @@ export async function getNewsCards(): Promise<NewsCard[]> {
   }, NEWS_CARDS);
 }
 
-type RawVitalUpdate = { slug: string; title: string; description: string | null };
+type RawVitalUpdate = { slug: string; articleSlug?: string | null; title: string; description: string | null };
 export async function getVitalUpdates(): Promise<VitalUpdate[]> {
   return withFallback<VitalUpdate[]>(async () => {
     const rows = await sanityFetch<RawVitalUpdate[]>({ query: VITAL_UPDATES_QUERY });
-    return rows;
+    return rows.map((r) => ({ ...r, href: articleHref(r.articleSlug) }));
   }, VITAL_UPDATES);
 }
 
 type RawFeaturedArticle = {
   slug: string;
+  articleSlug?: string | null;
   title: string;
   description?: string;
   image?: SanityImage;
@@ -196,6 +208,7 @@ export async function getFeaturedArticles(): Promise<FeaturedArticle[]> {
     const rows = await sanityFetch<RawFeaturedArticle[]>({ query: FEATURED_ARTICLES_QUERY });
     return rows.map((r, i) => ({
       slug: r.slug,
+      href: articleHref(r.articleSlug),
       title: r.title,
       description: r.description ?? "",
       image: mapImage(r.image, FEATURED_ARTICLES[i % FEATURED_ARTICLES.length].image),

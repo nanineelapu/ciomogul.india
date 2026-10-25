@@ -35,6 +35,8 @@ export const MAGAZINE_EDITION_BY_SLUG_QUERY = /* groq */ `
 export const HEADLINES_QUERY = /* groq */ `
   *[_type == "headline"] | order(order asc) {
     "slug": slug.current,
+    "articleSlug": article->slug.current,
+    "href": coalesce(href, ""),
     "text": text
   }
 `;
@@ -70,6 +72,7 @@ export const GET_FEATURED_COVERS_QUERY = /* groq */ `
 export const NEWS_CARDS_QUERY = /* groq */ `
   *[_type == "newsCard"] | order(order asc) {
     "slug": slug.current,
+    "articleSlug": article->slug.current,
     title,
     "category": coalesce(category, ""),
     "date": coalesce(date, ""),
@@ -81,6 +84,7 @@ export const NEWS_CARDS_QUERY = /* groq */ `
 export const VITAL_UPDATES_QUERY = /* groq */ `
   *[_type == "vitalUpdate"] | order(order asc) {
     "slug": slug.current,
+    "articleSlug": article->slug.current,
     title,
     "description": coalesce(description, null)
   }
@@ -89,6 +93,7 @@ export const VITAL_UPDATES_QUERY = /* groq */ `
 export const FEATURED_ARTICLES_QUERY = /* groq */ `
   *[_type == "featuredArticle"] | order(order asc) {
     "slug": slug.current,
+    "articleSlug": article->slug.current,
     title,
     "description": coalesce(description, ""),
     "image": image,
