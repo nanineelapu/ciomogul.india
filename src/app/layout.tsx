@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Playfair_Display, Poppins } from "next/font/google";
 import { BASE_KEYWORDS, DEFAULT_DESCRIPTION, DEFAULT_TITLE, LOGO_PATH, SITE_NAME } from "@/lib/seo";
 import "./globals.css";
+import "./responsive.css";
 import { SITE_URL } from "@/lib/site";
 
 // Root layout — nothing but the html/body shell + global fonts. Site chrome
