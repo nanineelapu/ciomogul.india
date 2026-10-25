@@ -2,12 +2,9 @@ import type { MagazineEdition } from "@/types/content";
 
 // Dummy content for every field. Each string is a placeholder the client will
 // replace in Sanity once the CMS is wired up; the shape doesn't change.
-const LOREM_PARAGRAPH =
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
-const LOREM_PARAGRAPH_2 =
-  "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-const LOREM_PARAGRAPH_3 =
-  "Curabitur pretium tincidunt lacus. Nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris. Integer in mauris eu nibh euismod gravida.";
+const LOREM_PARAGRAPH = "";
+const LOREM_PARAGRAPH_2 = "";
+const LOREM_PARAGRAPH_3 = "";
 
 export const MAGAZINE_EDITIONS: MagazineEdition[] = [
   {
@@ -19,9 +16,8 @@ export const MAGAZINE_EDITIONS: MagazineEdition[] = [
       "A short editorial subtitle that explains the edition in one line. Replaced from Sanity later.",
     coverImage: "/assets/cover-abhirup-guha.jpg",
     coverAlt: "Magazine cover placeholder",
-    pullQuote:
-      "A pull-quote taken from the cover artwork or the feature interview — around twenty to thirty words — sits here as a design anchor.",
-    pullQuoteAttribution: "Featured Leader Name — Role, Organization",
+    pullQuote: "",
+    pullQuoteAttribution: "",
     roleTags: ["Role Tag One", "Role Tag Two", "Role Tag Three"],
     pdfUrl: "/assets/pdfs/sample.pdf",
     publishedOn: "October 2026",
@@ -37,9 +33,8 @@ export const MAGAZINE_EDITIONS: MagazineEdition[] = [
       "A short editorial subtitle that explains the edition in one line. Replaced from Sanity later.",
     coverImage: "/assets/mag-cover-abhirup.jpg",
     coverAlt: "Magazine cover placeholder",
-    pullQuote:
-      "Another dummy pull-quote. Keep the length roughly consistent across editions so the hero block holds its shape.",
-    pullQuoteAttribution: "Featured Leader Name — Role, Organization",
+    pullQuote: "",
+    pullQuoteAttribution: "",
     roleTags: ["Role Tag One", "Role Tag Two"],
     pdfUrl: null,
     publishedOn: "September 2026",
@@ -55,9 +50,8 @@ export const MAGAZINE_EDITIONS: MagazineEdition[] = [
       "A short editorial subtitle that explains the edition in one line. Replaced from Sanity later.",
     coverImage: "/assets/mag-cover-finance.jpg",
     coverAlt: "Magazine cover placeholder",
-    pullQuote:
-      "Pull-quotes read best when they sit between twenty and thirty words. The design holds up at either end of that range.",
-    pullQuoteAttribution: "Featured Leader Name — Role, Organization",
+    pullQuote: "",
+    pullQuoteAttribution: "",
     roleTags: ["Role Tag One", "Role Tag Two", "Role Tag Three"],
     pdfUrl: null,
     publishedOn: "August 2026",
@@ -73,9 +67,8 @@ export const MAGAZINE_EDITIONS: MagazineEdition[] = [
       "A short editorial subtitle that explains the edition in one line. Replaced from Sanity later.",
     coverImage: "/assets/mag-cover-parin.jpg",
     coverAlt: "Magazine cover placeholder",
-    pullQuote:
-      "This quote is the hook. It is the one line the reader remembers from the page, so leave it room to breathe in the layout.",
-    pullQuoteAttribution: "Featured Leader Name — Role, Organization",
+    pullQuote: "",
+    pullQuoteAttribution: "",
     roleTags: ["Role Tag One", "Role Tag Two"],
     pdfUrl: null,
     publishedOn: "July 2026",
@@ -91,9 +84,8 @@ export const MAGAZINE_EDITIONS: MagazineEdition[] = [
       "A short editorial subtitle that explains the edition in one line. Replaced from Sanity later.",
     coverImage: "/assets/cover-chaos-clarity.jpg",
     coverAlt: "Magazine cover placeholder",
-    pullQuote:
-      "Covers that pair a strong portrait with a tight headline tend to earn the longest average dwell time on the detail page.",
-    pullQuoteAttribution: "Featured Leader Name — Role, Organization",
+    pullQuote: "",
+    pullQuoteAttribution: "",
     roleTags: ["Role Tag One", "Role Tag Two", "Role Tag Three"],
     pdfUrl: null,
     publishedOn: "June 2026",
@@ -109,9 +101,8 @@ export const MAGAZINE_EDITIONS: MagazineEdition[] = [
       "A short editorial subtitle that explains the edition in one line. Replaced from Sanity later.",
     coverImage: "/assets/cover-finance-leader.jpg",
     coverAlt: "Magazine cover placeholder",
-    pullQuote:
-      "A short, specific line reads stronger than a long general one. Treat the pull-quote as the second headline of the page.",
-    pullQuoteAttribution: "Featured Leader Name — Role, Organization",
+    pullQuote: "",
+    pullQuoteAttribution: "",
     roleTags: ["Role Tag One", "Role Tag Two"],
     pdfUrl: null,
     publishedOn: "May 2026",
@@ -127,9 +118,8 @@ export const MAGAZINE_EDITIONS: MagazineEdition[] = [
       "A short editorial subtitle that explains the edition in one line. Replaced from Sanity later.",
     coverImage: "/assets/cover-ceo-coach.jpg",
     coverAlt: "Magazine cover placeholder",
-    pullQuote:
-      "The edition's thesis in one breath. Keep the pull-quote within thirty words and the typography will do the rest of the work.",
-    pullQuoteAttribution: "Featured Leader Name — Role, Organization",
+    pullQuote: "",
+    pullQuoteAttribution: "",
     roleTags: ["Role Tag One", "Role Tag Two", "Role Tag Three"],
     pdfUrl: null,
     publishedOn: "April 2026",

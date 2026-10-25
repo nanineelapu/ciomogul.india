@@ -20,7 +20,7 @@ export default async function LatestNews() {
                     <Image src={c.image} alt={c.alt ?? ""} width={800} height={400} sizes="(max-width: 1080px) 100vw, 40vw" />
                   </Link>
                 ) : (
-                  <span className="news-card__img news-card__img--tile" aria-hidden>Aadhaar</span>
+                  <span className="news-card__img news-card__img--tile" aria-hidden>{c.category || t.home.newsTitle}</span>
                 )}
                 <h3 className="news-card__title"><Link href="/articles">{c.title}</Link></h3>
                 <p className="news-card__date">{c.date}</p>

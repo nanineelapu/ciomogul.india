@@ -91,63 +91,51 @@ async function MagazineDetailPageContent({
                 width={713}
                 height={1009}
                 priority
-                sizes="(max-width: 820px) 100vw, (max-width: 1080px) 360px, 440px"
+                sizes="(max-width: 820px) 100vw, (max-width: 1080px) 300px, 360px"
               />
             </div>
 
             <div className="mag-hero__side">
-              <span className="page-lead__eyebrow">{edition.editionLabel}</span>
-              <h1 className="page-lead__title" style={{ fontSize: "clamp(32px, 4vw, 56px)" }}>
-                {edition.featuredPersonName}
-              </h1>
-              <p className="page-lead__sub" style={{ marginTop: 16 }}>
-                {edition.title}
-              </p>
+              <p className="mag-hero__eyebrow">{edition.editionLabel}</p>
+              <h1 className="mag-hero__name">{edition.featuredPersonName}</h1>
+              <div className="mag-hero__rule" aria-hidden />
+              {edition.title && <p className="mag-hero__title">{edition.title}</p>}
+              {edition.subtitle && <p className="mag-hero__sub">{edition.subtitle}</p>}
 
-              <blockquote className="mag-hero__pullquote" style={{ marginTop: 32 }}>
-                {edition.pullQuote}
-              </blockquote>
-              <p className="mag-hero__attrib">{edition.pullQuoteAttribution}</p>
-
+              {edition.roleTags.length > 0 && (
+                <ul className="mag-hero__meta" aria-label="About the featured leader">
+                  {edition.roleTags.slice(0, 3).map((tag) => (
+                    <li key={tag} className="mag-hero__meta-item">{tag}</li>
+                  ))}
+                </ul>
+              )}
 
               <div className="mag-hero__actions">
-                <a
-                  href={edition.pdfUrl ?? "#read"}
-                  className="btn btn-ink"
-                  aria-disabled={!edition.pdfUrl}
-                >
-                  {t.magazines.readButton}
+                <a href="#read" className="btn btn-ink">
+                  {t.magazines.readButton} <span aria-hidden>↓</span>
                 </a>
                 {edition.pdfUrl ? (
                   <a href={edition.pdfUrl} download className="btn btn-line">
                     {t.magazines.downloadButton}
                   </a>
                 ) : (
-                  <span className="btn btn-line" aria-disabled>
-                    {t.magazines.pdfSoon}
-                  </span>
+                  <Link href="/magazines" className="btn btn-line">
+                    {t.magazines.exploreMore}
+                  </Link>
                 )}
               </div>
+
+              <p className="mag-hero__hint">
+                <span aria-hidden>↓</span>
+                {edition.pdfUrl ? t.magazines.scrollToRead : t.magazines.pdfSoon}
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      <section>
-        <div className="wrap">
-          <article className="mag-body">
-            <aside className="mag-body__label">
-              {t.magazines.insideLabel}
-              <span aria-hidden />
-            </aside>
-            <div className="mag-body__text">
-              {edition.body.map((para, i) => (
-                <p key={i}>{para}</p>
-              ))}
-            </div>
-          </article>
-        </div>
-      </section>
+      {/* "Inside this edition" removed per client request — the PDF reader
+          below is the content. */}
 
       <section id="read">
         <div className="wrap">

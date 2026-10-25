@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import type { Headline } from "@/types/content";
 
-export default function Headlines({ headlines }: { headlines: Headline[] }) {
+export default function Headlines({ headlines, label }: { headlines: Headline[]; label: string }) {
   const [date, setDate] = useState("16 October 2026");
   useEffect(() => {
     setDate(new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }));
@@ -12,7 +12,7 @@ export default function Headlines({ headlines }: { headlines: Headline[] }) {
   return (
     <div className="wrap">
       <div className="headlines">
-        <span className="headlines__tab">Latest</span>
+        <span className="headlines__tab">{label}</span>
         <div className="headlines__bar">
           <span className="headlines__date">{date}</span>
           <div className="headlines__viewport">

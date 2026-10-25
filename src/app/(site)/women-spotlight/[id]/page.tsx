@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { findPublishedProfile, getPublishedProfiles, profileHref } from "@/data/womenSpotlightData";
+import { profileHref } from "@/data/womenSpotlightData";
+import { findPublishedProfile, getPublishedProfiles } from "@/lib/data/spotlight";
+import { getSiteText } from "@/lib/data";
 import SpotlightStory from "@/components/womenSpotlight/SpotlightStory";
 import SpotlightPager from "@/components/womenSpotlight/SpotlightPager";
 import JsonLd from "@/components/seo/JsonLd";
@@ -10,13 +12,13 @@ import { breadcrumbLd, buildMetadata, mergeKeywords, profileLd } from "@/lib/seo
 
 type Params = { id: string };
 
-export function generateStaticParams(): Params[] {
-  return getPublishedProfiles().map((p) => ({ id: p.id }));
+export async function generateStaticParams(): Promise<Params[]> {
+  return (await getPublishedProfiles()).map((p) => ({ id: p.id }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
   const { id } = await params;
-  const profile = findPublishedProfile(id);
+  const profile = await findPublishedProfile(id);
   if (!profile) return { title: "Not found | CIO Mogul India", robots: { index: false } };
   return buildMetadata({
     title: `${profile.name}: Her Story | Women Spotlight`,
@@ -38,8 +40,9 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
 
 async function StoryContent({ params }: { params: Promise<Params> }) {
   const { id } = await params;
-  const profile = findPublishedProfile(id);
+  const profile = await findPublishedProfile(id);
   if (!profile) notFound();
+  const t = (await getSiteText()).womenSpotlight;
 
   return (
     <main className="spot spot-story-page">
@@ -61,7 +64,7 @@ async function StoryContent({ params }: { params: Promise<Params> }) {
       />
       <div className="wrap">
         <Link href={profileHref(profile.id)} className="back-link">
-          Back to Women Spotlight
+          {t.backLink}
         </Link>
       </div>
       <SpotlightStory profile={profile} />

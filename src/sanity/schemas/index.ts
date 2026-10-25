@@ -6,8 +6,10 @@ import { newsCard } from "./newsCard";
 import { vitalUpdate } from "./vitalUpdate";
 import { featuredArticle } from "./featuredArticle";
 import { womanLeader } from "./womanLeader";
+import { spotlightProfile } from "./spotlightProfile";
 import { podcast } from "./podcast";
 import { testimonial } from "./testimonial";
+import { industry } from "./industry";
 import { hallOfFame } from "./hallOfFame";
 import { article } from "./article";
 import { aboutPage } from "./aboutPage";
@@ -15,11 +17,14 @@ import { legalPage } from "./legalPage";
 import { siteSettings } from "./siteSettings";
 import { pageContent } from "./pageContent";
 import { siteText } from "./siteText";
+import { withHelp } from "../help";
 
-export const schemaTypes: SchemaTypeDefinition[] = [
+// withHelp adds the plain-language titles and descriptions (see ../help.ts).
+export const schemaTypes: SchemaTypeDefinition[] = withHelp([
   magazineEdition,
   hallOfFame,
   womanLeader,
+  spotlightProfile,
   podcast,
   article,
   homepageConfig,
@@ -28,12 +33,13 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   vitalUpdate,
   featuredArticle,
   testimonial,
+  industry,
   aboutPage,
   legalPage,
   siteSettings,
   pageContent,
   siteText,
-];
+]);
 
 // The two legal pages are fixed documents, one per page.
 export const LEGAL_DOC_IDS = ["legalPage-terms", "legalPage-privacy"];

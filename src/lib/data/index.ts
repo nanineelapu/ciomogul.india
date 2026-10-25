@@ -23,6 +23,7 @@ import { SITE_TEXT, mergeSiteText, type SiteText } from "@/data/siteText";
 import { WOMEN_LEADERS } from "@/data/womenLeaders";
 import { PODCASTS } from "@/data/podcasts";
 import { TESTIMONIALS } from "@/data/testimonials";
+import { INDUSTRIES, type Industry } from "@/data/industries";
 import { sanityConfigured } from "@/sanity/env";
 import { sanityFetch } from "@/sanity/lib/client";
 import { urlForOrDefault } from "@/sanity/lib/image";
@@ -38,6 +39,7 @@ import {
   FEATURED_ARTICLES_QUERY,
   GET_FEATURED_COVERS_QUERY,
   HEADLINES_QUERY,
+  INDUSTRIES_QUERY,
   MAGAZINE_EDITIONS_QUERY,
   MAGAZINE_EDITION_BY_SLUG_QUERY,
   NEWS_CARDS_QUERY,
@@ -575,6 +577,15 @@ export async function getTestimonials(): Promise<Testimonial[]> {
       avatar: mapImage(r.avatar, TESTIMONIALS[i % TESTIMONIALS.length].avatar),
     }));
   }, TESTIMONIALS);
+}
+
+// ─── Industries (home page) ──────────────────────────────────────────────
+
+export async function getIndustries(): Promise<Industry[]> {
+  return withFallback<Industry[]>(async () => {
+    const rows = await sanityFetch<Industry[]>({ query: INDUSTRIES_QUERY });
+    return rows.filter((r) => r.name);
+  }, INDUSTRIES);
 }
 
 // ─── Magazine editions ───────────────────────────────────────────────────

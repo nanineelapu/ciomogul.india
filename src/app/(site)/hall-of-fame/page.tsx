@@ -5,9 +5,8 @@ import JsonLd from "@/components/seo/JsonLd";
 import { buildMetadata, breadcrumbLd, pageLd } from "@/lib/seo";
 import { getPageContent } from "@/lib/data";
 import { Suspense } from "react";
-import HallEntry from "@/components/hallOfFame/HallEntry";
+import HallCarousel from "@/components/hallOfFame/HallCarousel";
 import HallFilters from "@/components/hallOfFame/HallFilters";
-import Pagination from "@/components/shared/Pagination";
 import { getHallOfFame, searchHallOfFame, type HallSort } from "@/lib/data";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -87,9 +86,9 @@ function parseParams(sp: URLSearchParams) {
   const year = yearRaw && /^\d{4}$/.test(yearRaw) ? Number(yearRaw) : undefined;
   const sortRaw = sp.get("sort");
   const sort: HallSort = sortRaw === "oldest" ? "oldest" : "newest";
-  const pageRaw = sp.get("page");
-  const page = pageRaw && /^\d+$/.test(pageRaw) ? Number(pageRaw) : 1;
-  return { q, year, sort, page, perPage: 10 };
+  // Carousel shows every match in one strip — no page slicing. A large perPage
+  // keeps using the existing search helper without changing its signature.
+  return { q, year, sort, page: 1, perPage: 500 };
 }
 
 async function HallRoll({
@@ -127,21 +126,12 @@ async function HallRoll({
           <p>{t.hallOfFame.noResultsText}</p>
         </div>
       ) : (
-        <>
-          <ol className="hall-roll">
-            {result.items.map((entry, i) => (
-              <li key={entry.slug}>
-                <HallEntry entry={entry} side={i % 2 === 0 ? "left" : "right"} />
-              </li>
-            ))}
-          </ol>
-          <Pagination
-            page={result.page}
-            totalPages={result.totalPages}
-            basePath="/hall-of-fame"
-            params={urlParams}
-          />
-        </>
+        <HallCarousel
+          entries={result.items}
+          text={t.hallOfFame}
+          prevLabel={t.general.paginationPrev}
+          nextLabel={t.general.paginationNext}
+        />
       )}
     </>
   );

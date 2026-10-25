@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import JsonLd from "@/components/seo/JsonLd";
-import { getPageContent } from "@/lib/data";
-import { getProfileById } from "@/data/womenSpotlightData";
+import { getPageContent, getSiteText } from "@/lib/data";
+import { getProfileById } from "@/lib/data/spotlight";
 import { buildMetadata, breadcrumbLd, pageLd } from "@/lib/seo";
 import SpotlightHero from "@/components/womenSpotlight/SpotlightHero";
 import SpotlightTabs from "@/components/womenSpotlight/SpotlightTabs";
@@ -37,7 +37,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function WomenSpotlightPage({ searchParams }: { searchParams: SearchParams }) {
-  const page = (await getPageContent()).womenSpotlight;
+  const [content, siteText] = await Promise.all([getPageContent(), getSiteText()]);
+  const page = content.womenSpotlight;
 
   return (
     <main className="spot">
@@ -52,7 +53,7 @@ export default async function WomenSpotlightPage({ searchParams }: { searchParam
       <section className="section spot-profile" id="profile" aria-labelledby="spot-feature-name">
         <div className="wrap">
           <header className="s-head">
-            <h2 className="s-title">In the spotlight</h2>
+            <h2 className="s-title">{siteText.womenSpotlight.sectionTitle}</h2>
             <span className="s-rule" aria-hidden />
           </header>
           <Suspense fallback={<FeatureSkeleton />}>

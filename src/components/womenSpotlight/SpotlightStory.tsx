@@ -1,8 +1,10 @@
 import type { PublishedProfile } from "@/data/womenSpotlightData";
+import { getSiteText } from "@/lib/data";
 
 // Long-form story: narrative with drop cap, headed by the leader's name, and a
 // sticky rail of honours and sources.
-export default function SpotlightStory({ profile }: { profile: PublishedProfile }) {
+export default async function SpotlightStory({ profile }: { profile: PublishedProfile }) {
+  const t = (await getSiteText()).womenSpotlight;
   const [lead, ...rest] = profile.story;
 
   return (
@@ -33,12 +35,12 @@ export default function SpotlightStory({ profile }: { profile: PublishedProfile 
 
           <aside className="spot-rail" aria-label="Honours and sources">
             <div className="spot-rail__block">
-              <h3 className="spot-rail__title">Honours</h3>
+              <h3 className="spot-rail__title">{t.honoursTitle}</h3>
               <p className="spot-rail__text">{profile.honours}</p>
             </div>
 
             <div className="spot-rail__block" id="sources">
-              <h3 className="spot-rail__title">Sources</h3>
+              <h3 className="spot-rail__title">{t.sourcesTitle}</h3>
               <ul className="spot-sources">
                 {profile.sources.map((s) => (
                   <li key={s.href}>

@@ -1,14 +1,38 @@
 {
   "header": {
     "nav": [
-      { "label": "Home", "href": "/" },
-      { "label": "Magazines", "href": "/magazines" },
-      { "label": "Hall of Fame", "href": "/hall-of-fame" },
-      { "label": "Women Spotlight", "href": "/women-spotlight" },
-      { "label": "Podcasts", "href": "/podcasts" },
-      { "label": "Articles", "href": "/articles" },
-      { "label": "About Us", "href": "/about" },
-      { "label": "Contact Us", "href": "/contact" }
+      {
+        "label": "Home",
+        "href": "/"
+      },
+      {
+        "label": "Magazines",
+        "href": "/magazines"
+      },
+      {
+        "label": "Hall of Fame",
+        "href": "/hall-of-fame"
+      },
+      {
+        "label": "Women Spotlight",
+        "href": "/women-spotlight"
+      },
+      {
+        "label": "Podcasts",
+        "href": "/podcasts"
+      },
+      {
+        "label": "Articles",
+        "href": "/articles"
+      },
+      {
+        "label": "About Us",
+        "href": "/about"
+      },
+      {
+        "label": "Contact Us",
+        "href": "/contact"
+      }
     ],
     "latestEdition": "Latest edition",
     "subscribe": "Subscribe"
@@ -17,17 +41,41 @@
     "tagline": "A digital magazine and media platform exploring leadership, business, technology and innovation in India.",
     "platformHeading": "Platform",
     "platformLinks": [
-      { "label": "Home", "href": "/" },
-      { "label": "Magazines", "href": "/magazines" },
-      { "label": "Podcasts", "href": "/podcasts" },
-      { "label": "About Us", "href": "/about" }
+      {
+        "label": "Home",
+        "href": "/"
+      },
+      {
+        "label": "Magazines",
+        "href": "/magazines"
+      },
+      {
+        "label": "Podcasts",
+        "href": "/podcasts"
+      },
+      {
+        "label": "About Us",
+        "href": "/about"
+      }
     ],
     "exploreHeading": "Explore",
     "exploreLinks": [
-      { "label": "Hall of Fame", "href": "/hall-of-fame" },
-      { "label": "Women Spotlight", "href": "/women-spotlight" },
-      { "label": "Articles", "href": "/articles" },
-      { "label": "Contact Us", "href": "/contact" }
+      {
+        "label": "Hall of Fame",
+        "href": "/hall-of-fame"
+      },
+      {
+        "label": "Women Spotlight",
+        "href": "/women-spotlight"
+      },
+      {
+        "label": "Articles",
+        "href": "/articles"
+      },
+      {
+        "label": "Contact Us",
+        "href": "/contact"
+      }
     ],
     "legalHeading": "Legal",
     "termsLabel": "Terms of Service",
@@ -41,6 +89,9 @@
     "releaseButton": "View all editions",
     "coverStoriesTitle": "Cover stories",
     "coverStoryLabel": "Cover story",
+    "industriesTitle": "Industries we cover",
+    "industriesIntro": "From healthcare and banking to enterprise technology and aviation, we tell the stories of the leaders shaping each sector.",
+    "industriesButton": "Explore articles",
     "newsTitle": "Latest news",
     "updatesTitle": "Vital updates",
     "readMore": "Read more",
@@ -62,7 +113,8 @@
     "newsletterSending": "Subscribing…",
     "newsletterSuccess": "Thank you. You are subscribed. Please check your inbox.",
     "newsletterInvalid": "Please enter a valid email address.",
-    "newsletterError": "Something went wrong. Please try again."
+    "newsletterError": "Something went wrong. Please try again.",
+    "tickerLabel": "Latest"
   },
   "magazines": {
     "readEdition": "Read edition",
@@ -81,6 +133,9 @@
     "readButton": "Read the edition",
     "downloadButton": "Download PDF",
     "pdfSoon": "PDF coming soon",
+    "exploreMore": "Explore more magazines",
+    "scrollToRead": "Scroll down to read the magazine",
+    "scrollToInside": "Scroll down to see what is inside this edition",
     "insideLabel": "Inside this edition",
     "readerTitle": "Read the magazine",
     "readerHint": "← → to turn pages · + − to zoom",
@@ -125,6 +180,11 @@
     "viewProfile": "View profile",
     "backLink": "Back to Hall of Fame",
     "readEdition": "Read the edition",
+    "carouselHint": "Swipe or use the arrows to browse all {count} inductees",
+    "carouselEyebrow": "Hall of Fame",
+    "carouselPosition": "Inductee {n} of {total}",
+    "citation": "{name} was inducted into the CIO Mogul India Hall of Fame in {when}, recognised for leadership that is shaping how India's technology, business and industry work.",
+    "citationNoDate": "{name} is an inductee of the CIO Mogul India Hall of Fame, recognised for leadership that is shaping how India's technology, business and industry work.",
     "moreTitle": "More inductees",
     "viewAll": "View all",
     "applyLabel": "Apply",
@@ -172,6 +232,31 @@
     "notFoundHome": "Go to the home page",
     "notFoundMagazines": "Browse magazines",
     "paginationPrev": "← Prev",
-    "paginationNext": "Next →"
+    "paginationNext": "Next →",
+    "alsoRead": "Also read",
+    "contactUs": "Contact us"
+  },
+  "womenSpotlight": {
+    "introOne": "Celebrating women shaping healthcare, banking, enterprise technology, entrepreneurship and the future of business.",
+    "introTwo": "Meet the leaders whose careers reflect innovation, institutional change and a commitment to building what comes next.",
+    "tickerThemes": "Healthcare, Banking, Enterprise Technology, Real Estate, Aviation, The Future of Business",
+    "meetButton": "Meet the Honorees",
+    "nominateButton": "Nominate a Leader",
+    "featuredCount": "Featured profiles",
+    "sectionTitle": "In the spotlight",
+    "exploreProfile": "Explore Profile",
+    "readStory": "Read her story",
+    "readEdition": "Read the edition",
+    "viewSources": "View sources",
+    "coverHonoree": "Cover honoree",
+    "featuredProfile": "Featured profile",
+    "themesLabel": "Leadership themes",
+    "honoursTitle": "Honours",
+    "sourcesTitle": "Sources",
+    "backLink": "Back to Women Spotlight",
+    "pagerBrowse": "Browse",
+    "pagerAll": "All Honorees",
+    "pagerPrev": "← Previous",
+    "pagerNext": "Next →"
   }
 }

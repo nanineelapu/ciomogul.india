@@ -1,17 +1,21 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getPublishedProfiles, profileHref, SPOTLIGHT_COPY } from "@/data/womenSpotlightData";
+import { profileHref } from "@/data/womenSpotlightData";
+import { getPublishedProfiles } from "@/lib/data/spotlight";
+import { getSiteText } from "@/lib/data";
 
 // Opening block: title + intro on the left, a fanned hand of the published
 // profiles on the right, and a navy ticker of names and sectors underneath.
-export default function SpotlightHero({ title }: { title: string }) {
-  const profiles = getPublishedProfiles();
+export default async function SpotlightHero({ title }: { title: string }) {
+  const [profiles, siteText] = await Promise.all([getPublishedProfiles(), getSiteText()]);
+  const t = siteText.womenSpotlight;
+  const themes = t.tickerThemes.split(",").map((x) => x.trim()).filter(Boolean);
   // Each card's offset from the centre of the fan; spread wider when few cards.
   const mid = (profiles.length - 1) / 2;
   const spread = profiles.length <= 2 ? 2 : 1;
   const ticker = [
     ...profiles.map((p) => ({ key: p.id, strong: p.name, rest: p.organization })),
-    ...SPOTLIGHT_COPY.tickerThemes.map((t) => ({ key: t, strong: t, rest: "" })),
+    ...themes.map((t) => ({ key: t, strong: t, rest: "" })),
   ];
 
   return (
@@ -22,16 +26,16 @@ export default function SpotlightHero({ title }: { title: string }) {
             <h1 className="spot-hero__title" id="spot-hero-title">{title}</h1>
             <span className="spot-hero__rule" aria-hidden />
             <div className="spot-hero__intro">
-              {SPOTLIGHT_COPY.intro.map((p) => <p key={p}>{p}</p>)}
+              {[t.introOne, t.introTwo].filter(Boolean).map((p) => <p key={p}>{p}</p>)}
             </div>
 
             <div className="spot-hero__actions">
-              <a href="#profile" className="btn btn-ink">Meet the Honorees <span aria-hidden>↓</span></a>
-              <Link href="/contact" className="btn btn-line">Nominate a Leader</Link>
+              <a href="#profile" className="btn btn-ink">{t.meetButton} <span aria-hidden>↓</span></a>
+              <Link href="/contact" className="btn btn-line">{t.nominateButton}</Link>
             </div>
 
             <dl className="spot-hero__meta">
-              <div><dt>Featured profiles</dt><dd>{profiles.length}</dd></div>
+              <div><dt>{t.featuredCount}</dt><dd>{profiles.length}</dd></div>
             </dl>
           </div>
 

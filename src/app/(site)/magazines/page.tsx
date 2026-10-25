@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import Link from "next/link";
 import { getSiteText } from "@/lib/data";
 import JsonLd from "@/components/seo/JsonLd";
 import { buildMetadata, breadcrumbLd, pageLd } from "@/lib/seo";
@@ -57,6 +58,52 @@ export default async function MagazinesPage({
           <Suspense fallback={<ArchiveSkeleton />}>
             <ArchiveResults searchParams={searchParams} totalCount={total} />
           </Suspense>
+        </div>
+      </section>
+
+      {/* Simple closing block: one line of copy and two theme buttons.
+          Uses the site's existing .btn / .btn-ink / .btn-line classes so it
+          follows the theme automatically. */}
+      <section
+        aria-label="End of the magazine archive"
+        className="pt-6 pb-10"
+        style={{ borderTop: "1px solid var(--color-rule-soft)" }}
+      >
+        <div
+          className="wrap"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            textAlign: "center",
+            gap: 14,
+          }}
+        >
+          <p
+            style={{
+              margin: 0,
+              fontFamily: "var(--font-ui)",
+              fontSize: 15,
+              color: "var(--color-ink-2)",
+            }}
+          >
+            That is the full archive. A new edition releases every week.
+          </p>
+          <div
+            style={{
+              display: "inline-flex",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              gap: 10,
+            }}
+          >
+            <Link href="/podcasts" className="btn btn-ink btn-sm">
+              Listen on the podcast
+            </Link>
+            <Link href="/contact" className="btn btn-line btn-sm">
+              Nominate a leader
+            </Link>
+          </div>
         </div>
       </section>
     </main>

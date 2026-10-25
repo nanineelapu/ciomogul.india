@@ -1,11 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getPublishedProfiles, profileHref } from "@/data/womenSpotlightData";
+import { profileHref } from "@/data/womenSpotlightData";
+import { getPublishedProfiles } from "@/lib/data/spotlight";
+import { getSiteText } from "@/lib/data";
 
 // Row of round portraits that switches which profile the feature shows.
 // Plain links (?profile=…) so it works without client JavaScript.
-export default function SpotlightTabs({ activeId }: { activeId: string }) {
-  const profiles = getPublishedProfiles();
+export default async function SpotlightTabs({ activeId }: { activeId: string }) {
+  const [profiles, siteText] = await Promise.all([getPublishedProfiles(), getSiteText()]);
+  const t = siteText.womenSpotlight;
 
   return (
     <nav className="spot-tabs" aria-label="Choose a profile">
@@ -24,7 +27,7 @@ export default function SpotlightTabs({ activeId }: { activeId: string }) {
             </span>
             <span className="spot-tab__text">
               <span className="spot-tab__name">{p.name}</span>
-              <span className="spot-tab__go">Explore Profile <span aria-hidden>→</span></span>
+              <span className="spot-tab__go">{t.exploreProfile} <span aria-hidden>→</span></span>
             </span>
           </Link>
         );

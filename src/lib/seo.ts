@@ -175,6 +175,23 @@ export function breadcrumbLd(items: { name: string; path: string }[]) {
   };
 }
 
+// A named list of things on a page (for example the industries we cover).
+export function itemListLd(o: { name: string; path: string; items: { name: string; description?: string }[] }) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: o.name,
+    url: absoluteUrl(o.path),
+    numberOfItems: o.items.length,
+    itemListElement: o.items.map((it, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: it.name,
+      ...(it.description ? { description: it.description } : {}),
+    })),
+  };
+}
+
 export function pageLd(
   type: "CollectionPage" | "AboutPage" | "ContactPage" | "WebPage",
   o: { name: string; description: string; path: string }

@@ -213,3 +213,39 @@ export const PAGE_CONTENT_QUERY = /* groq */ `
 export const SITE_TEXT_QUERY = /* groq */ `
   *[_type == "siteText" && _id == "siteText"][0]
 `;
+
+export const SPOTLIGHT_QUERY = /* groq */ `
+  *[_type == "spotlightProfile" && defined(slug.current)] | order(order asc) {
+    "id": slug.current,
+    status,
+    name,
+    designation,
+    organization,
+    sector,
+    tags,
+    image,
+    cover,
+    intro,
+    story,
+    summary,
+    voice,
+    themes,
+    milestones,
+    honours,
+    achievements,
+    sources,
+    quote,
+    edition,
+    statusLabel,
+    note,
+    teaser
+  }
+`;
+
+export const INDUSTRIES_QUERY = /* groq */ `
+  *[_type == "industry"] | order(order asc) {
+    "slug": slug.current,
+    name,
+    "description": coalesce(description, "")
+  }
+`;

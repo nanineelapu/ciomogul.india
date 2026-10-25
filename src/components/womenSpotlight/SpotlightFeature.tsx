@@ -1,11 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { storyHref, type PublishedProfile } from "@/data/womenSpotlightData";
+import { getSiteText } from "@/lib/data";
 
 // The "cover spread": framed image · name and introduction · navy themes panel.
-export default function SpotlightFeature({ profile }: { profile: PublishedProfile }) {
+export default async function SpotlightFeature({ profile }: { profile: PublishedProfile }) {
   const { edition } = profile;
-  const label = edition ? "Cover honoree" : "Featured profile";
+  const t = (await getSiteText()).womenSpotlight;
+  const label = edition ? t.coverHonoree : t.featuredProfile;
 
   return (
     // key: re-run the entrance animation when the profile changes
@@ -51,17 +53,17 @@ export default function SpotlightFeature({ profile }: { profile: PublishedProfil
         </div>
 
         <div className="spot-feature__actions">
-          <Link href={storyHref(profile.id)} className="btn btn-ink">Read her story <span aria-hidden>→</span></Link>
+          <Link href={storyHref(profile.id)} className="btn btn-ink">{t.readStory} <span aria-hidden>→</span></Link>
           {edition ? (
-            <Link href={edition.href} className="btn btn-line">Read the edition</Link>
+            <Link href={edition.href} className="btn btn-line">{t.readEdition}</Link>
           ) : (
-            <Link href={`${storyHref(profile.id)}#sources`} className="btn btn-line">View sources</Link>
+            <Link href={`${storyHref(profile.id)}#sources`} className="btn btn-line">{t.viewSources}</Link>
           )}
         </div>
       </div>
 
       <aside className="spot-impact" aria-label={`${profile.name}: leadership themes`}>
-        <p className="spot-impact__label">Leadership themes</p>
+        <p className="spot-impact__label">{t.themesLabel}</p>
         <ol className="spot-themes">
           {profile.themes.map((t, i) => (
             <li key={t}>

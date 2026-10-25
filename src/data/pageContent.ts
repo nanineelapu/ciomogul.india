@@ -25,7 +25,7 @@ export const PAGE_CONTENT: PageContent = {
   hallOfFame: {
     title: "Hall of Fame",
     intro:
-      "Every leader we've featured on the cover of CIO Mogul India, the people whose work has shaped how India's technology, business and industry think, build and lead.",
+      "Every leader we have featured on the cover of CIO Mogul India.",
   },
   womenSpotlight: {
     title: "Women Spotlight",

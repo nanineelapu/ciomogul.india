@@ -1,0 +1,198 @@
+/* Hall of Fame: large hero carousel.
+   One slide fills the width. The track scrolls natively and snaps per slide;
+   arrows and dots drive it. Kept in its own file, imported by HallCarousel. */
+
+#hall-carousel.hall-car {
+  position: relative;
+  margin-top: 20px;
+}
+
+#hall-carousel .hall-car__track {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+#hall-carousel .hall-car__track::-webkit-scrollbar { display: none; }
+
+#hall-carousel .hall-car__slide {
+  flex: 0 0 100%;
+  width: 100%;
+  min-width: 0;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+#hall-carousel .hall-car__hero {
+  display: grid;
+  grid-template-columns: minmax(0, 380px) minmax(0, 1fr);
+  gap: 56px;
+  align-items: center;
+  padding: 28px;
+  background: var(--color-paper);
+  border: 1px solid var(--color-rule-soft);
+  border-top: 3px solid var(--color-navy);
+}
+
+#hall-carousel .hall-car__cover {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 5;
+  background: var(--color-paper-2);
+  overflow: hidden;
+}
+#hall-carousel .hall-car__cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .5s ease;
+}
+#hall-carousel .hall-car__cover:hover img { transform: scale(1.02); }
+
+#hall-carousel .hall-car__body { min-width: 0; }
+
+#hall-carousel .hall-car__eyebrow {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 16px;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--color-navy);
+}
+#hall-carousel .hall-car__eyebrow [aria-hidden] { color: var(--color-rule-soft); }
+
+#hall-carousel .hall-car__name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(30px, 3.4vw, 48px);
+  line-height: 1.08;
+  letter-spacing: -.01em;
+  color: var(--color-ink);
+}
+
+#hall-carousel .hall-car__meta {
+  margin: 14px 0 0;
+  max-width: 48ch;
+  font-family: var(--font-ui);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--color-ink-2);
+}
+
+#hall-carousel .hall-car__citation {
+  margin: 20px 0 0;
+  max-width: 54ch;
+  font-family: var(--font-ui);
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--color-ink);
+}
+
+#hall-carousel .hall-car__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+/* "Swipe or use the arrows" cue above the slide */
+#hall-carousel .hall-car__hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 0 0 12px;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+#hall-carousel .hall-car__hint span {
+  color: var(--color-navy);
+  font-size: 16px;
+  letter-spacing: 0;
+  animation: hall-car-nudge 1.8s ease-in-out infinite;
+}
+#hall-carousel .hall-car__hint span:first-child { animation-name: hall-car-nudge-left; }
+@keyframes hall-car-nudge { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(4px); } }
+@keyframes hall-car-nudge-left { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-4px); } }
+@media (prefers-reduced-motion: reduce) {
+  #hall-carousel .hall-car__hint span { animation: none; }
+}
+
+#hall-carousel .hall-car__nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+#hall-carousel .hall-car__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  background: var(--color-paper);
+  border: 1px solid var(--color-rule-soft);
+  color: var(--color-navy);
+  font-family: var(--font-ui);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color .2s ease, border-color .2s ease, color .2s ease;
+}
+#hall-carousel .hall-car__btn:hover:not(:disabled) {
+  background: var(--color-navy);
+  border-color: var(--color-navy);
+  color: #fff;
+}
+#hall-carousel .hall-car__btn:disabled { opacity: .3; cursor: not-allowed; }
+
+#hall-carousel .hall-car__dots {
+  display: inline-flex;
+  flex: 1;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+#hall-carousel .hall-car__dot {
+  width: 24px;
+  height: 3px;
+  padding: 0;
+  background: var(--color-rule-soft);
+  border: 0;
+  cursor: pointer;
+  transition: background-color .2s ease, width .2s ease;
+}
+#hall-carousel .hall-car__dot:hover { background: var(--color-navy-light); }
+#hall-carousel .hall-car__dot.is-active {
+  background: var(--color-navy);
+  width: 40px;
+}
+
+@media (max-width: 820px) {
+  #hall-carousel .hall-car__hero {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 20px;
+  }
+  #hall-carousel .hall-car__cover { max-width: 300px; }
+  #hall-carousel .hall-car__meta { font-size: 14px; }
+}

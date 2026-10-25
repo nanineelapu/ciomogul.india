@@ -12,6 +12,7 @@ const GROUP_TITLES: Record<string, string> = {
   magazines: "Magazines pages",
   podcasts: "Podcasts page",
   hallOfFame: "Hall of Fame pages",
+  womenSpotlight: "Women Spotlight pages",
   articles: "Articles pages",
   contact: "Contact page and form",
   general: "Errors and page navigation",

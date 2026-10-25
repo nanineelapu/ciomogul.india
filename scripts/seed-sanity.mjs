@@ -87,8 +87,10 @@ const { MAGAZINE_EDITIONS } = data("magazineEditions.ts");
 const { COVER_STORIES } = data("coverStories.ts");
 const { NEWS_CARDS, VITAL_UPDATES, FEATURED_ARTICLES } = data("news.ts");
 const { WOMEN_LEADERS } = data("womenLeaders.ts");
+const { WOMEN_SPOTLIGHT_DATA } = data("womenSpotlightData.ts");
 const { PODCASTS } = data("podcasts.ts");
 const { TESTIMONIALS } = data("testimonials.ts");
+const { INDUSTRIES } = data("industries.ts");
 const { HALL_OF_FAME } = data("hallOfFame.ts");
 const { ARTICLES } = data("articles.ts");
 const { TERMS } = data("terms.ts");
@@ -246,6 +248,17 @@ for (const [i, t] of TESTIMONIALS.entries()) {
   });
 }
 
+for (const [i, ind] of INDUSTRIES.entries()) {
+  add({
+    _id: `industry-${ind.slug}`,
+    _type: "industry",
+    name: ind.name,
+    slug: slugOf(ind.slug),
+    description: ind.description,
+    order: i + 1,
+  });
+}
+
 // ── 5. women leaders (home page "Wall of fame") and podcasts ────────────────
 for (const [i, w] of WOMEN_LEADERS.entries()) {
   add({
@@ -260,6 +273,41 @@ for (const [i, w] of WOMEN_LEADERS.entries()) {
     featuredOn: w.featuredOn,
     bio: w.bio,
     order: i + 1,
+  });
+}
+console.log("Preparing Women Spotlight profiles…");
+for (const [i, w] of WOMEN_SPOTLIGHT_DATA.entries()) {
+  const base = {
+    _id: `spotlightProfile-${w.id}`,
+    _type: "spotlightProfile",
+    status: w.status,
+    name: w.name,
+    slug: slugOf(w.id),
+    order: i + 1,
+    sector: w.sector,
+    image: await image(w.image, w.name),
+  };
+  if (w.status === "pending") {
+    add({ ...base, statusLabel: w.statusLabel, note: w.note, teaser: w.teaser });
+    continue;
+  }
+  add({
+    ...base,
+    designation: w.designation,
+    organization: w.organization,
+    tags: w.tags,
+    cover: await image(w.cover, w.name),
+    intro: w.intro,
+    story: w.story,
+    summary: w.summary,
+    voice: w.voice,
+    themes: w.themes,
+    milestones: withKeys(w.milestones),
+    honours: w.honours,
+    achievements: withKeys(w.achievements),
+    sources: withKeys(w.sources),
+    ...(w.quote ? { quote: { text: w.quote.text, sourceLabel: w.quote.source.label, sourceHref: w.quote.source.href } } : {}),
+    ...(w.edition ? { edition: w.edition } : {}),
   });
 }
 console.log("Preparing podcasts…");
