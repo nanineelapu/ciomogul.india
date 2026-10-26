@@ -9,23 +9,23 @@ const pageFields = (name: string, title: string) =>
     type: "object",
     options: { collapsible: true, collapsed: true },
     fields: [
-      defineField({ name: "title", title: "Heading", type: "string" }),
-      defineField({ name: "intro", title: "Intro text", type: "text", rows: 3 }),
+      defineField({ name: "title", title: "Page title", type: "string" }),
+      defineField({ name: "intro", title: "Intro under the title", type: "text", rows: 3 }),
       seoField,
     ],
   });
 
 export const pageContent = defineType({
   name: "pageContent",
-  title: "Page headings",
+  title: "Page titles and intros",
   type: "document",
   fields: [
-    pageFields("magazines", "Magazines page"),
-    pageFields("podcasts", "Podcasts page"),
-    pageFields("hallOfFame", "Hall of Fame page"),
-    pageFields("womenSpotlight", "Women Spotlight page"),
-    pageFields("articles", "Articles page"),
-    pageFields("contact", "Contact page"),
+    pageFields("magazines", "Magazines"),
+    pageFields("hallOfFame", "Hall of Fame"),
+    pageFields("womenSpotlight", "Women Spotlight"),
+    pageFields("podcasts", "Podcasts"),
+    pageFields("articles", "Articles"),
+    pageFields("contact", "Contact Us"),
   ],
-  preview: { prepare: () => ({ title: "Page headings" }) },
+  preview: { prepare: () => ({ title: "Page titles and intros" }) },
 });

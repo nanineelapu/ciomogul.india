@@ -5,50 +5,17 @@ import type { CSSProperties } from "react";
 // follows light and dark themes.
 
 const ROWS: { page: string; where: string; changes: string }[] = [
-  {
-    page: "Home page",
-    where: "Home page → Magazine strips",
-    changes: "Which magazine covers appear in the release block, the cover stories strip and the 'Get featured' block.",
-  },
-  {
-    page: "Home page",
-    where: "Home page → Headline ticker, Latest news, Vital updates, Featured articles, Industries, Women leaders, Testimonials",
-    changes: "One item per row of the matching block. Add, edit, reorder or delete items.",
-  },
-  {
-    page: "Magazines",
-    where: "Magazines → Magazine editions",
-    changes: "The archive cards and each edition page: cover, name, quote, PDF.",
-  },
-  { page: "Podcasts", where: "Podcasts → Episodes", changes: "Episode cards and the YouTube player." },
-  { page: "Hall of Fame", where: "Hall of Fame → Inductees", changes: "The roll of honour and each person's page." },
-  {
-    page: "Women Spotlight",
-    where: "Women Spotlight → Profiles",
-    changes: "Each profile: photo, story, themes, milestones, sources. 'Under review' shows only a name card.",
-  },
-  { page: "Articles", where: "Articles → All articles", changes: "Article list, category tabs and each article page." },
-  { page: "About", where: "About page", changes: "Every heading, paragraph, panel and button on the About page." },
-  {
-    page: "Terms and Privacy",
-    where: "Terms of Service / Privacy Policy",
-    changes: "The full legal text. Edit the sections inside; do not create new documents.",
-  },
-  {
-    page: "Footer, Contact, 404",
-    where: "Contact details and links → Site settings",
-    changes: "Email, phone, office address, social links and the description Google shows.",
-  },
-  {
-    page: "Top of every list page",
-    where: "Whole site → Page headings",
-    changes: "The heading and intro paragraph of Magazines, Podcasts, Hall of Fame, Women Spotlight, Articles and Contact.",
-  },
-  {
-    page: "Menus, buttons, small labels",
-    where: "Whole site → Site text",
-    changes: "Menu names, button words, section titles, form messages and footer wording. Open a group to see its fields.",
-  },
+  { page: "Home page", where: "1. Home page", changes: "Each section in order: headline ticker, magazine covers, industries, latest news, vital updates, featured articles, women leaders and testimonials." },
+  { page: "Magazines", where: "2. Magazines", changes: "Each edition: cover, name, headline and PDF." },
+  { page: "Hall of Fame", where: "3. Hall of Fame", changes: "Each inductee and their profile page." },
+  { page: "Women Spotlight", where: "4. Women Spotlight", changes: "Each profile: photo, story, themes and sources." },
+  { page: "Podcasts", where: "5. Podcasts", changes: "Each episode and its YouTube link." },
+  { page: "Articles", where: "6. Articles", changes: "Each article and its category." },
+  { page: "About Us", where: "7. About Us", changes: "Every heading, paragraph and button on the page." },
+  { page: "Contact Us", where: "8. Contact Us: details and social links", changes: "Email, phone, WhatsApp, office and social links. They also appear in the top menu and footer." },
+  { page: "Terms and Privacy", where: "9. Terms and Privacy", changes: "The full legal text, section by section." },
+  { page: "Title at the top of a page", where: "Page titles and intros", changes: "The big title and the line under it on Magazines, Hall of Fame, Women Spotlight, Podcasts, Articles and Contact Us." },
+  { page: "Menu, buttons and footer", where: "Menus, buttons and labels", changes: "Menu names, button words, section headings and footer text. One tab per page, in the same order as the website." },
 ];
 
 const box: CSSProperties = {

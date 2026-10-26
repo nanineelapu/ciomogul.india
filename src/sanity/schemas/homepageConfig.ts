@@ -5,14 +5,14 @@ import { defineField, defineType } from "sanity";
 // means the editor only maintains covers in one place.
 export const homepageConfig = defineType({
   name: "homepageConfig",
-  title: "Homepage",
+  title: "Magazine covers on the home page",
   type: "document",
   // Keep this as a true singleton; configure in sanity.config.ts to hide the
   // "create new" button.
   fields: [
     defineField({
       name: "releaseCovers",
-      title: "Magazine release — covers",
+      title: "2. Magazine release: the large covers",
       type: "array",
       of: [{ type: "reference", to: [{ type: "magazineEdition" }] }],
       description: "Pick 2-3 editions to feature in the big release block.",
@@ -20,7 +20,7 @@ export const homepageConfig = defineType({
     }),
     defineField({
       name: "coverStories",
-      title: "Cover stories — the four featured leaders",
+      title: "3. Cover stories: the four leaders",
       type: "array",
       of: [{ type: "reference", to: [{ type: "magazineEdition" }] }],
       description: "Pick the four editions that make up the Cover Stories strip.",
@@ -28,12 +28,12 @@ export const homepageConfig = defineType({
     }),
     defineField({
       name: "getFeaturedCovers",
-      title: 'Get-featured block — background covers',
+      title: "10. Get featured: the covers behind the box",
       type: "array",
       of: [{ type: "reference", to: [{ type: "magazineEdition" }] }],
       description: "Any 2-3 covers used as the decorative stack behind the CTA.",
       validation: (r) => r.min(1).max(4),
     }),
   ],
-  preview: { prepare: () => ({ title: "Homepage configuration" }) },
+  preview: { prepare: () => ({ title: "Magazine covers on the home page" }) },
 });
