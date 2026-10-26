@@ -1,6 +1,8 @@
 // Heading and intro for each listing page. Used as the fallback when the
 // "Page headings" document in Sanity is empty.
-export type PageText = { title: string; intro: string };
+import type { Seo } from "@/types/content";
+
+export type PageText = { title: string; intro: string; seo?: Seo };
 
 export type PageContent = {
   magazines: PageText;

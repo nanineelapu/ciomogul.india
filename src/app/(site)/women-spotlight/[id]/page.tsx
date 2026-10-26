@@ -35,6 +35,8 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
       "women leaders in India",
     ]),
     type: "profile",
+    kicker: "Women Spotlight",
+    seo: profile.seo,
   });
 }
 

@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { seoField } from "./seoFields";
 
 // One heading + intro per page, grouped so editors can find them easily.
 const pageFields = (name: string, title: string) =>
@@ -10,6 +11,7 @@ const pageFields = (name: string, title: string) =>
     fields: [
       defineField({ name: "title", title: "Heading", type: "string" }),
       defineField({ name: "intro", title: "Intro text", type: "text", rows: 3 }),
+      seoField,
     ],
   });
 

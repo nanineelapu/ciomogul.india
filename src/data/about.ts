@@ -4,6 +4,7 @@ import defaults from "./about.default.json";
 // content here and as the starting content copied into Sanity (see
 // scripts/seed-about.mjs), so the two always match.
 export type AboutContent = {
+  seo?: import("@/types/content").Seo;
   eyebrowLeft: string;
   eyebrowRight: string;
   headline: string;

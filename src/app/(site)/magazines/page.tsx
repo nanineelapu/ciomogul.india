@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { getSiteText } from "@/lib/data";
 import JsonLd from "@/components/seo/JsonLd";
-import { buildMetadata, breadcrumbLd, pageLd } from "@/lib/seo";
+import { buildMetadata, breadcrumbLd, collectionLd, pageLd } from "@/lib/seo";
 import { getPageContent } from "@/lib/data";
 import MagazineCard from "@/components/magazines/MagazineCard";
 import MagazineFilters from "@/components/magazines/MagazineFilters";
@@ -19,6 +19,8 @@ export async function generateMetadata(): Promise<Metadata> {
   return buildMetadata({
     title: page.title,
     description: page.intro,
+    seo: page.seo,
+    kicker: "Every edition",
     path: "/magazines",
     keywords: ["CIO Mogul India magazine editions","magazine archive","cover stories","digital magazine editions","read magazine online","monthly business magazine India"],
   });
@@ -33,13 +35,14 @@ export default async function MagazinesPage({
   // prerenders statically. The filterable grid is wrapped in <Suspense>
   // because cacheComponents refuses to prerender anything that reads
   // searchParams synchronously.
-  const total = (await getMagazineEditions()).length;
+  const editions = await getMagazineEditions();
+  const total = editions.length;
 
   const page = (await getPageContent()).magazines;
 
   return (
     <main>
-      <JsonLd data={[pageLd("CollectionPage", { name: page.title, description: page.intro, path: "/magazines" }), breadcrumbLd([{ name: page.title, path: "/magazines" }])]} />
+      <JsonLd data={[pageLd("CollectionPage", { name: page.title, description: page.intro, path: "/magazines" }), breadcrumbLd([{ name: page.title, path: "/magazines" }]), collectionLd({ name: page.title, path: "/magazines", items: editions.map((e) => ({ name: `${e.featuredPersonName}: ${e.editionLabel}`, url: `/magazines/${e.slug}`, image: e.coverImage, description: e.subtitle })) })]} />
       <section className="page-lead">
         <div className="wrap">
           <h1 className="page-lead__title">{page.title}</h1>

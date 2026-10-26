@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { seoField } from "./seoFields";
 
 const imageField = (name: string, title: string, description: string, required = true) =>
   defineField({
@@ -19,6 +20,7 @@ export const spotlightProfile = defineType({
     { name: "story", title: "2. Story" },
     { name: "facts", title: "3. Facts and sources" },
     { name: "review", title: "Under review only" },
+    { name: "seo", title: "SEO" },
   ],
   fields: [
     defineField({
@@ -186,6 +188,7 @@ export const spotlightProfile = defineType({
       ],
     }),
 
+    { ...seoField, group: "seo" },
     defineField({ name: "statusLabel", title: "Status label", type: "string", group: "review", description: "Short line under the name, for example: Profile under review." }),
     defineField({ name: "note", title: "Note", type: "text", rows: 2, group: "review" }),
     defineField({ name: "teaser", title: "Teaser", type: "text", rows: 2, group: "review" }),

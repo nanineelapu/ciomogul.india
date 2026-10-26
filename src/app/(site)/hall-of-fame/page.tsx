@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getSiteText } from "@/lib/data";
 import JsonLd from "@/components/seo/JsonLd";
-import { buildMetadata, breadcrumbLd, pageLd } from "@/lib/seo";
+import { buildMetadata, breadcrumbLd, collectionLd, pageLd } from "@/lib/seo";
 import { getPageContent } from "@/lib/data";
 import { Suspense } from "react";
 import HallCarousel from "@/components/hallOfFame/HallCarousel";
@@ -14,6 +14,8 @@ export async function generateMetadata(): Promise<Metadata> {
   return buildMetadata({
     title: page.title,
     description: page.intro,
+    seo: page.seo,
+    kicker: "Roll of honour",
     path: "/hall-of-fame",
     keywords: ["Hall of Fame","top technology leaders in India","India's best CIOs","cover story honorees","industry leaders hall of fame","leadership recognition India"],
   });
@@ -33,7 +35,7 @@ export default async function HallOfFamePage({
 
   return (
     <main>
-      <JsonLd data={[pageLd("CollectionPage", { name: page.title, description: page.intro, path: "/hall-of-fame" }), breadcrumbLd([{ name: page.title, path: "/hall-of-fame" }])]} />
+      <JsonLd data={[pageLd("CollectionPage", { name: page.title, description: page.intro, path: "/hall-of-fame" }), breadcrumbLd([{ name: page.title, path: "/hall-of-fame" }]), collectionLd({ name: page.title, path: "/hall-of-fame", items: all.map((e) => ({ name: e.name, url: `/hall-of-fame/${e.slug}`, image: e.portrait })) })]} />
       <section className="page-lead">
         <div className="wrap">
           <h1 className="page-lead__title">{page.title}</h1>

@@ -35,6 +35,7 @@ type Raw = {
   sources?: { label?: string; href?: string }[];
   quote?: { text?: string; sourceLabel?: string; sourceHref?: string };
   edition?: { label?: string; month?: string; href?: string };
+  seo?: { title?: string; description?: string; keywords?: string[] } | null;
   statusLabel?: string;
   note?: string;
   teaser?: string;
@@ -93,6 +94,7 @@ function fromRaw(r: Raw, fallbackImage: string): SpotlightProfile {
     image,
     cover: urlForOrDefault(r.cover, b?.cover ?? image),
     intro: text(r.intro, b?.intro),
+    ...(r.seo ? { seo: r.seo } : {}),
     story: list(r.story, b?.story ?? []),
     summary: text(r.summary, b?.summary),
     voice: text(r.voice, b?.voice),

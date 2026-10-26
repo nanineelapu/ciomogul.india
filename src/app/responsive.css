@@ -119,3 +119,193 @@
   .footer__brand p { font-size: 14px; }
   .footer__bottom { gap: 8px; font-size: 13px; text-align: center; align-items: center; }
 }
+
+/* ==========================================================================
+   Magazines: archive (/magazines) and edition pages (/magazines/[slug])
+   ========================================================================== */
+
+/* iPad (721–1080px): three covers across, cover beside the details */
+@media (min-width: 721px) and (max-width: 1080px) {
+  .mag-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px 20px; }
+  .mag-card__name { font-size: 16px; }
+  .mag-card__role {
+    font-size: 13px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .mag-card__foot { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .mag-card__cta { white-space: nowrap; }
+
+  .mag-hero .mag-hero__cover { max-width: none; }
+  .mag-hero { grid-template-columns: minmax(0, 260px) minmax(0, 1fr); gap: 36px; align-items: center; }
+}
+
+/* Phones (≤720px) */
+@media (max-width: 720px) {
+  /* Archive and "More editions": two covers across */
+  .mag-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 14px; }
+  .mag-card__name { font-size: 15px; line-height: 1.3; margin-bottom: 4px; }
+  .mag-card__role {
+    font-size: 12px;
+    line-height: 1.45;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .mag-card__foot { margin-top: 10px; flex-direction: column; align-items: flex-start; gap: 4px; }
+
+  /* Edition hero: centred cover, full-width buttons */
+  .mag-hero .mag-hero__cover { max-width: 240px; margin: 0 auto; }
+  .mag-hero .mag-hero__name { font-size: 30px; }
+  .mag-hero .mag-hero__title { font-size: 16px; }
+  .mag-hero .mag-hero__actions { flex-direction: column; }
+  .mag-hero .mag-hero__actions .btn { width: 100%; }
+
+  /* Reader and "More editions" headings stack instead of squeezing */
+  .mag-pdf { padding: 32px 0; }
+  .mag-pdf__head,
+  .mag-more__head { flex-direction: column; align-items: flex-start; gap: 6px; margin-bottom: 16px; }
+  .mag-pdf__title,
+  .mag-more__title { font-size: 22px; }
+  .mag-pdf__frame:has(.mag-pdf__placeholder) { aspect-ratio: auto; min-height: 220px; }
+  .mag-more { padding: 32px 0 48px; }
+}
+
+/* ==========================================================================
+   Hall of Fame: inductee profile (/hall-of-fame/[slug])
+   (the list page carousel has its own file: components/hallOfFame/hallCarousel.css)
+   ========================================================================== */
+
+/* iPad: cover beside the story; four inductees across in "More inductees" */
+@media (min-width: 721px) and (max-width: 1080px) {
+  .ws-profile__body { grid-template-columns: minmax(0, 260px) minmax(0, 1fr); gap: 36px; padding-top: 28px; }
+  .ws-profile__portrait { max-width: none; }
+  .ws-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px 16px; }
+  .more-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px 16px; }
+  .ws-card__name { font-size: 15px; }
+}
+
+/* Phones: smaller centred cover; two inductees across */
+@media (max-width: 720px) {
+  .ws-profile__body { gap: 24px; padding-top: 24px; }
+  .ws-profile__portrait { width: 100%; max-width: 240px; margin: 0 auto; }
+  .ws-profile__name { font-size: 30px; }
+  .ws-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 14px; padding: 20px 0 40px; }
+  /* "More inductees" / "More articles" blocks: two across */
+  .more-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 14px; }
+  .more-block__head { margin-bottom: 16px; }
+  .ws-card__name { font-size: 15px; line-height: 1.3; }
+  .ws-card__role,
+  .ws-card__org { font-size: 12px; }
+}
+
+/* ==========================================================================
+   Women Spotlight (/women-spotlight)
+   ========================================================================== */
+
+/* iPad: hero text beside a smaller cover fan; profile cover beside its details */
+@media (min-width: 721px) and (max-width: 1080px) {
+  .spot-hero__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 300px); gap: 24px; }
+  .spot-fan { height: 340px; }
+  .spot-fan__card { width: 168px; bottom: 56px; }
+
+  .spot-feature { grid-template-columns: minmax(0, 250px) minmax(0, 1fr); gap: 32px; }
+  .spot-feature__cover { width: auto; justify-self: stretch; }
+  .spot-impact { grid-column: 1 / -1; }
+
+  /* Story page: Honours and Sources side by side */
+  .spot-rail { grid-template-columns: 1fr 1fr; gap: 20px; }
+}
+
+/* Phones: the four profile tabs become one swipeable row of chips */
+@media (max-width: 720px) {
+  .spot-tabs {
+    display: flex;
+    gap: 8px;
+    margin: 0 -24px 24px;
+    padding: 2px 24px 8px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 24px;
+    scrollbar-width: none;
+  }
+  .spot-tabs::-webkit-scrollbar { display: none; }
+  .spot-tab {
+    flex: 0 0 auto;
+    flex-direction: row;
+    gap: 10px;
+    padding: 6px 14px 6px 6px;
+    text-align: left;
+    scroll-snap-align: start;
+  }
+  .spot-tab__img { width: 40px; height: 40px; }
+  .spot-tab__name { font-size: 14px; white-space: nowrap; }
+  .spot-tab__go { display: none; }
+
+  .spot-feature__cover { width: min(240px, 72%); }
+  .spot-feature__name { font-size: 30px; }
+}
+
+/* ==========================================================================
+   Articles (/articles and /articles/[slug])
+   ========================================================================== */
+
+@media (max-width: 720px) {
+  /* Category filter: one swipeable row instead of five wrapped rows */
+  .cat-tabs {
+    flex-wrap: nowrap;
+    width: 100vw;
+    max-width: 100vw;
+    margin: 0 -24px;
+    padding: 0 24px 6px;
+    overflow-x: auto;
+    scroll-padding-inline: 24px;
+    scrollbar-width: none;
+  }
+  .cat-tabs::-webkit-scrollbar { display: none; }
+  .cat-tabs__tab { flex: 0 0 auto; }
+
+  /* Story lists: compact rows, thumbnail beside the headline */
+  .article-grid { gap: 18px; }
+  .article-card {
+    display: grid;
+    grid-template-columns: 112px minmax(0, 1fr);
+    column-gap: 14px;
+    align-content: start;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--color-rule-soft);
+  }
+  .article-card__img { grid-row: 1 / span 3; aspect-ratio: 4 / 3; margin: 0; }
+  .article-card__img img { width: 100%; height: 100%; object-fit: cover; }
+  .article-card__kicker { margin: 0 0 4px; font-size: 10px; }
+  .article-card__title { margin: 0; font-size: 15px; line-height: 1.35; }
+  .article-card__excerpt { display: none; }
+  .article-card__meta { margin-top: 6px; font-size: 12px; }
+
+  /* "More articles" on an article page: one column of the same compact rows */
+  .more-grid:has(.article-card) { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+
+  /* Article page: byline wraps cleanly, no stray dot at the start of a line */
+  .article-page__meta { gap: 4px 12px; }
+  .article-page__meta span + span::before { margin-right: 12px; }
+}
+
+/* ==========================================================================
+   About and Contact
+   ========================================================================== */
+
+/* iPad: the four contact details in a 2×2 grid instead of one long column */
+@media (min-width: 721px) and (max-width: 1080px) {
+  .contact-details { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 32px; }
+}
+
+@media (max-width: 720px) {
+  /* About: the outline watermark scales to the screen instead of being cut off */
+  .abt-mast__mark { font-size: 18vw; top: 64px; }
+
+  /* Contact: full-width send button, like the other phone buttons */
+  .contact-form .btn[type="submit"] { width: 100%; }
+}

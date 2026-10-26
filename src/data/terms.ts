@@ -9,6 +9,7 @@ export type LegalSection = {
 
 export type LegalContent = {
   title: string;
+  seo?: import("@/types/content").Seo;
   intro: string;
   sections: LegalSection[];
 };

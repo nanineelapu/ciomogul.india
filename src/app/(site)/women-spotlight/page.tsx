@@ -3,7 +3,9 @@ import { Suspense } from "react";
 import JsonLd from "@/components/seo/JsonLd";
 import { getPageContent, getSiteText } from "@/lib/data";
 import { getProfileById } from "@/lib/data/spotlight";
-import { buildMetadata, breadcrumbLd, pageLd } from "@/lib/seo";
+import { buildMetadata, breadcrumbLd, collectionLd, pageLd } from "@/lib/seo";
+import { getPublishedProfiles } from "@/lib/data/spotlight";
+import { storyHref } from "@/data/womenSpotlightData";
 import SpotlightHero from "@/components/womenSpotlight/SpotlightHero";
 import SpotlightTabs from "@/components/womenSpotlight/SpotlightTabs";
 import SpotlightFeature from "@/components/womenSpotlight/SpotlightFeature";
@@ -25,6 +27,8 @@ export async function generateMetadata(): Promise<Metadata> {
   return buildMetadata({
     title: page.title,
     description: page.intro,
+    seo: page.seo,
+    kicker: "Leadership profiles",
     path: "/women-spotlight",
     keywords: [
       "women leaders in technology India",
@@ -37,7 +41,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function WomenSpotlightPage({ searchParams }: { searchParams: SearchParams }) {
-  const [content, siteText] = await Promise.all([getPageContent(), getSiteText()]);
+  const [content, siteText, profiles] = await Promise.all([getPageContent(), getSiteText(), getPublishedProfiles()]);
   const page = content.womenSpotlight;
 
   return (
@@ -46,6 +50,11 @@ export default async function WomenSpotlightPage({ searchParams }: { searchParam
         data={[
           pageLd("CollectionPage", { name: page.title, description: page.intro, path: "/women-spotlight" }),
           breadcrumbLd([{ name: page.title, path: "/women-spotlight" }]),
+          collectionLd({
+            name: page.title,
+            path: "/women-spotlight",
+            items: profiles.map((p) => ({ name: p.name, url: storyHref(p.id), image: p.cover, description: p.intro })),
+          }),
         ]}
       />
       <SpotlightHero title={page.title} />

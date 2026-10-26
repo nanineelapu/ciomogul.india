@@ -172,6 +172,7 @@ export const ARTICLES_QUERY = /* groq */ `
 
 export const ABOUT_QUERY = /* groq */ `
   *[_type == "aboutPage" && _id == "aboutPage"][0] {
+    "seo": seo{ "title": metaTitle, "description": metaDescription, keywords },
     eyebrowLeft,
     eyebrowRight,
     headline,
@@ -194,6 +195,7 @@ export const ABOUT_QUERY = /* groq */ `
 export const LEGAL_QUERY = /* groq */ `
   *[_type == "legalPage" && kind == $kind && count(sections) > 0] | order(_updatedAt desc)[0] {
     title,
+    "seo": seo{ "title": metaTitle, "description": metaDescription, keywords },
     "intro": coalesce(intro, ""),
     "sections": coalesce(sections[]{
       title,
@@ -222,6 +224,7 @@ export const SITE_TEXT_QUERY = /* groq */ `
 export const SPOTLIGHT_QUERY = /* groq */ `
   *[_type == "spotlightProfile" && defined(slug.current)] | order(order asc) {
     "id": slug.current,
+    "seo": seo{ "title": metaTitle, "description": metaDescription, keywords },
     status,
     name,
     designation,

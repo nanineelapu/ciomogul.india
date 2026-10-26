@@ -730,6 +730,7 @@ export async function searchMagazineEditions(query: MagazineQuery = {}) {
 
 // ─── About ───────────────────────────────────────────────────────────────
 type RawAbout = Partial<{
+  seo: Seo | null;
   eyebrowLeft: string;
   eyebrowRight: string;
   headline: string;
@@ -754,6 +755,7 @@ export async function getAboutContent(): Promise<AboutContent> {
     const r = await sanityFetch<RawAbout | null>({ query: ABOUT_QUERY });
     if (!r) return ABOUT;
     return {
+      seo: r.seo ?? undefined,
       eyebrowLeft: r.eyebrowLeft || ABOUT.eyebrowLeft,
       eyebrowRight: r.eyebrowRight || ABOUT.eyebrowRight,
       headline: r.headline || ABOUT.headline,
@@ -779,6 +781,7 @@ export async function getAboutContent(): Promise<AboutContent> {
 // ─── Terms and Privacy ───────────────────────────────────────────────────
 type RawLegal = {
   title: string;
+  seo?: Seo | null;
   intro: string;
   sections: { title: string; paragraphs: { ref?: string; text: string }[]; email?: string }[];
 };
@@ -790,6 +793,7 @@ export async function getLegalContent(kind: "terms" | "privacy"): Promise<LegalC
     if (!r || !r.sections || r.sections.length === 0) return fallback;
     return {
       title: r.title,
+      seo: r.seo ?? undefined,
       intro: r.intro,
       sections: r.sections.map((sec) => ({
         title: sec.title,
@@ -871,7 +875,8 @@ export async function getRelatedArticles(slug: string, limit = 4): Promise<Artic
 }
 
 // ─── Page headings ───────────────────────────────────────────────────────
-type RawPageContent = Partial<Record<keyof PageContent, Partial<PageText> | null>>;
+type RawSeo = { metaTitle?: string; metaDescription?: string; keywords?: string[] } | null;
+type RawPageContent = Partial<Record<keyof PageContent, (Partial<Omit<PageText, "seo">> & { seo?: RawSeo }) | null>>;
 
 export async function getPageContent(): Promise<PageContent> {
   return withFallback<PageContent>(async () => {
@@ -880,6 +885,9 @@ export async function getPageContent(): Promise<PageContent> {
     const pick = (key: keyof PageContent): PageText => ({
       title: r[key]?.title || PAGE_CONTENT[key].title,
       intro: r[key]?.intro || PAGE_CONTENT[key].intro,
+      seo: r[key]?.seo
+        ? { title: r[key]?.seo?.metaTitle, description: r[key]?.seo?.metaDescription, keywords: r[key]?.seo?.keywords }
+        : undefined,
     });
     return {
       magazines: pick("magazines"),

@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { seoField } from "./seoFields";
 
 export const legalPage = defineType({
   name: "legalPage",
@@ -21,6 +22,7 @@ export const legalPage = defineType({
     }),
     defineField({ name: "title", title: "Title", type: "string", validation: (r) => r.required() }),
     defineField({ name: "intro", title: "Intro", type: "text", rows: 3 }),
+    seoField,
     defineField({
       name: "sections",
       title: "Sections",

@@ -4,12 +4,17 @@ import JsonLd from "@/components/seo/JsonLd";
 import { buildMetadata, breadcrumbLd, pageLd } from "@/lib/seo";
 import { getLegalContent, getSiteText } from "@/lib/data";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Terms of Service",
-  description: "The terms that apply when you use the CIO Mogul India website.",
-  path: "/terms",
-  keywords: [],
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getLegalContent("terms");
+  return buildMetadata({
+    title: "Terms of Service",
+    description: "The terms that apply when you use the CIO Mogul India website.",
+    path: "/terms",
+    keywords: [],
+    seo: content.seo,
+    kicker: "Legal",
+  });
+}
 
 export default async function TermsPage() {
   const [content, text] = await Promise.all([getLegalContent("terms"), getSiteText()]);

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { getSiteText } from "@/lib/data";
 import JsonLd from "@/components/seo/JsonLd";
-import { buildMetadata, breadcrumbLd, pageLd } from "@/lib/seo";
+import { buildMetadata, breadcrumbLd, collectionLd, pageLd } from "@/lib/seo";
 import { getPageContent } from "@/lib/data";
 import ArticleCard from "@/components/articles/ArticleCard";
 import ArticleSearch from "@/components/articles/ArticleSearch";
@@ -21,6 +21,8 @@ export async function generateMetadata(): Promise<Metadata> {
   return buildMetadata({
     title: page.title,
     description: page.intro,
+    seo: page.seo,
+    kicker: "News and analysis",
     path: "/articles",
     keywords: ["technology news India","business news India","startup news India","cybersecurity news India","AI news India","policy news India","healthcare technology news","leadership articles"],
   });
@@ -45,7 +47,7 @@ export default async function ArticlesPage({
 
   return (
     <main>
-      <JsonLd data={[pageLd("CollectionPage", { name: page.title, description: page.intro, path: "/articles" }), breadcrumbLd([{ name: page.title, path: "/articles" }])]} />
+      <JsonLd data={[pageLd("CollectionPage", { name: page.title, description: page.intro, path: "/articles" }), breadcrumbLd([{ name: page.title, path: "/articles" }]), collectionLd({ name: page.title, path: "/articles", items: [...topStories, ...latest].filter((a, i, list) => list.findIndex((b) => b.slug === a.slug) === i).map((a) => ({ name: a.title, url: `/articles/${a.slug}`, image: a.image, description: a.excerpt })) })]} />
       <section className="page-lead page-lead--light">
         <div className="wrap">
           <h1 className="page-lead__title">{page.title}</h1>

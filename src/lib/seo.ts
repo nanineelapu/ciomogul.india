@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { SITE_URL } from "@/lib/site";
+import type { Seo } from "@/types/content";
 
 export const SITE_NAME = "CIO Mogul India";
 export const DEFAULT_TITLE = "CIO Mogul India | Digital Magazine for India's Technology Leaders";
@@ -74,23 +75,41 @@ export type SeoOptions = {
   type?: "website" | "article" | "profile";
   noIndex?: boolean;
   publishedTime?: string;
+  modifiedTime?: string;
   authors?: string[];
   section?: string;
+  // Small label on the share card, for example "Magazine" or "Hall of Fame".
+  kicker?: string;
+  // Optional overrides typed by editors in Sanity ("SEO (optional)").
+  seo?: Seo | null;
 };
+
+// Address of the generated share card for a page (see app/og/route.tsx).
+export function ogImageUrl(o: { title: string; kicker?: string; subtitle?: string; image?: string }): string {
+  const q = new URLSearchParams({ title: o.title });
+  if (o.kicker) q.set("kicker", o.kicker);
+  if (o.subtitle) q.set("subtitle", o.subtitle);
+  if (o.image) q.set("image", o.image);
+  return absoluteUrl(`/og?${q.toString()}`);
+}
 
 // One place that builds the head tags for a page: title, description, canonical
 // address (without search filters, so filtered pages don't compete with each
 // other), Open Graph and Twitter cards, and keywords.
 export function buildMetadata(o: SeoOptions): Metadata {
-  const fullTitle = o.title.includes(SITE_NAME) ? o.title : `${o.title} | ${SITE_NAME}`;
-  const description = truncate(o.description);
+  // Editor overrides from Sanity win over the values written from the content.
+  const title = o.seo?.title?.trim() || o.title;
+  const fullTitle = title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`;
+  const description = truncate(o.seo?.description?.trim() || o.description);
   const url = absoluteUrl(o.path);
-  const image = absoluteUrl(o.image || LOGO_PATH);
+  // Cards without a photo show the page description under the title.
+  const image = ogImageUrl({ title, kicker: o.kicker, image: o.image, subtitle: o.image ? undefined : truncate(description, 110) });
+  const imageAlt = o.imageAlt || title;
 
   return {
     title: { absolute: fullTitle },
     description,
-    keywords: mergeKeywords(o.keywords, BASE_KEYWORDS),
+    keywords: mergeKeywords(o.seo?.keywords, o.keywords, BASE_KEYWORDS),
     alternates: { canonical: url },
     robots: o.noIndex ? { index: false, follow: false } : { index: true, follow: true },
     openGraph: {
@@ -100,16 +119,16 @@ export function buildMetadata(o: SeoOptions): Metadata {
       locale: "en_IN",
       title: fullTitle,
       description,
-      images: [{ url: image, alt: o.imageAlt || fullTitle }],
+      images: [{ url: image, width: 1200, height: 630, alt: imageAlt }],
       ...(o.type === "article"
-        ? { publishedTime: o.publishedTime, authors: o.authors, section: o.section }
+        ? { publishedTime: o.publishedTime, modifiedTime: o.modifiedTime || o.publishedTime, authors: o.authors, section: o.section }
         : {}),
     },
     twitter: {
       card: "summary_large_image",
       title: fullTitle,
       description,
-      images: [image],
+      images: [{ url: image, alt: imageAlt }],
     },
   };
 }
@@ -188,6 +207,30 @@ export function itemListLd(o: { name: string; path: string; items: { name: strin
       position: i + 1,
       name: it.name,
       ...(it.description ? { description: it.description } : {}),
+    })),
+  };
+}
+
+// A list of linked items on a listing page, so search engines can see every
+// edition, inductee, episode or profile the page links to.
+export function collectionLd(o: {
+  name: string;
+  path: string;
+  items: { name: string; url: string; image?: string; description?: string }[];
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: o.name,
+    url: absoluteUrl(o.path),
+    numberOfItems: o.items.length,
+    itemListElement: o.items.map((it, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      url: absoluteUrl(it.url),
+      name: it.name,
+      ...(it.image ? { image: absoluteUrl(it.image) } : {}),
+      ...(it.description ? { description: truncate(it.description) } : {}),
     })),
   };
 }

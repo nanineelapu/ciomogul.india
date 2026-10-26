@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Poppins } from "next/font/google";
-import { BASE_KEYWORDS, DEFAULT_DESCRIPTION, DEFAULT_TITLE, LOGO_PATH, SITE_NAME } from "@/lib/seo";
+import { BASE_KEYWORDS, DEFAULT_DESCRIPTION, DEFAULT_TITLE, SITE_NAME, ogImageUrl } from "@/lib/seo";
 import "./globals.css";
 import "./responsive.css";
 import { SITE_URL } from "@/lib/site";
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     type: "website",
     locale: "en_IN",
-    images: [LOGO_PATH],
+    images: [{ url: ogImageUrl({ title: SITE_NAME, kicker: "Digital magazine" }), width: 1200, height: 630 }],
   },
   twitter: { card: "summary_large_image" },
   verification: { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined },

@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { seoField } from "./seoFields";
 
 // Every piece of text on the About page, grouped the way the page is laid out.
 export const aboutPage = defineType({
@@ -9,6 +10,7 @@ export const aboutPage = defineType({
     { name: "top", title: "Top section", default: true },
     { name: "cover", title: "What we cover" },
     { name: "join", title: "Closing band" },
+    { name: "seo", title: "SEO" },
   ],
   fields: [
     defineField({ name: "eyebrowLeft", title: "Small label (left)", type: "string", group: "top" }),
@@ -44,6 +46,7 @@ export const aboutPage = defineType({
     defineField({ name: "joinTitle", title: "Title", type: "string", group: "join" }),
     defineField({ name: "joinText", title: "Text", type: "text", rows: 3, group: "join" }),
     defineField({ name: "joinPrimaryButton", title: "First button text", type: "string", group: "join", description: "Links to the Podcasts page." }),
+    { ...seoField, group: "seo" },
     defineField({ name: "joinSecondaryButton", title: "Second button text", type: "string", group: "join", description: "Links to the Articles page." }),
   ],
   preview: { prepare: () => ({ title: "About page" }) },

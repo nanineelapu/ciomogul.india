@@ -8,18 +8,23 @@ import { buildMetadata, breadcrumbLd, pageLd } from "@/lib/seo";
 const DESCRIPTION =
   "CIO Mogul India is a premier digital magazine and broadcast platform showcasing the visionaries, innovators and leaders shaping India's business, technology and industry.";
 
-export const metadata: Metadata = buildMetadata({
-  title: "About Us",
-  description: DESCRIPTION,
-  path: "/about",
-  keywords: [
-    "about CIO Mogul India",
-    "digital magazine platform India",
-    "broadcast publication India",
-    "magazine features CIOs",
-    "industry insights India",
-  ],
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const about = await getAboutContent();
+  return buildMetadata({
+    title: "About Us",
+    description: DESCRIPTION,
+    path: "/about",
+    seo: about.seo,
+    kicker: "About",
+    keywords: [
+      "about CIO Mogul India",
+      "digital magazine platform India",
+      "broadcast publication India",
+      "magazine features CIOs",
+      "industry insights India",
+    ],
+  });
+}
 
 // Two bands, styled like pages of the magazine: an opening (labels, watermark,
 // one-line word-by-word headline, then intro, who we are, actions and who we

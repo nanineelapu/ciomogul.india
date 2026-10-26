@@ -131,6 +131,10 @@ export const FIELD_HELP: Record<string, string> = {
   "aboutPage.joinTitle": "About page · heading of the blue 'Join our community' band at the bottom.",
   "aboutPage.joinText": "About page · text in the blue band.",
 
+  "aboutPage.seo": "Optional. Change what Google and share cards show for the About page. Leave empty to use the page text.",
+  "spotlightProfile.seo": "Optional. Change what Google and share cards show for this profile. Leave empty to use her name and introduction.",
+  "legalPage.seo": "Optional. Change what Google shows for this page.",
+
   // ── Terms and Privacy
   "legalPage.title": "Heading of the page.",
   "legalPage.intro": "Opening paragraph under the heading.",

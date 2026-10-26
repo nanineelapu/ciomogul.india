@@ -20,6 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: DEFAULT_TITLE,
     description: settings.description,
     path: "/",
+    kicker: "Digital magazine",
     keywords: mergeKeywords(settings.keywords, industries.map((i) => i.name)),
   });
 }

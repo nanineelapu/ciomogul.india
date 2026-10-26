@@ -45,6 +45,7 @@ export async function generateMetadata({
     publishedTime: article.isoDate,
     authors: article.author ? [article.author] : undefined,
     section: article.category,
+    kicker: article.category,
   });
 }
 

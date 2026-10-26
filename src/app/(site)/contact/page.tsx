@@ -10,6 +10,8 @@ export async function generateMetadata(): Promise<Metadata> {
   return buildMetadata({
     title: page.title,
     description: page.intro,
+    seo: page.seo,
+    kicker: "Get in touch",
     path: "/contact",
     keywords: ["contact CIO Mogul India","get featured in magazine","pitch a story","magazine advertising India","media partnership India"],
   });

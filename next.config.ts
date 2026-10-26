@@ -4,6 +4,10 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
   poweredByHeader: false,
+  // Fonts read from disk by the share-card route (app/og/route.tsx).
+  outputFileTracingIncludes: {
+    "/og": ["./src/app/og/fonts/**"],
+  },
   // Images uploaded in Sanity are served from its CDN.
   images: {
     remotePatterns: [{ protocol: "https", hostname: "cdn.sanity.io" }],

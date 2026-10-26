@@ -34,6 +34,8 @@ export type PublishedProfile = {
   quote?: { text: string; source: SpotlightSource };
   // Set only when the real CIO Mogul India issue is confirmed.
   edition?: { label: string; month: string; href: string };
+  // Optional search overrides from Sanity.
+  seo?: { title?: string; description?: string; keywords?: string[] };
 };
 
 export type PendingProfile = {

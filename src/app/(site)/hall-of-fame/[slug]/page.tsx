@@ -44,6 +44,7 @@ export async function generateMetadata({
       "Hall of Fame",
     ]),
     type: "profile",
+    kicker: "Hall of Fame",
   });
 }
 

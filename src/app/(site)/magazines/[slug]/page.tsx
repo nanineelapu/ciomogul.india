@@ -35,6 +35,7 @@ export async function generateMetadata({
     path: `/magazines/${edition.slug}`,
     image: edition.coverImage,
     imageAlt: edition.coverAlt || edition.title,
+    kicker: edition.editionLabel || "Magazine",
     keywords: mergeKeywords(edition.seo?.keywords, [
       edition.featuredPersonName,
       `${edition.featuredPersonName} interview`,

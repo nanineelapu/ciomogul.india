@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { getSiteText } from "@/lib/data";
 import JsonLd from "@/components/seo/JsonLd";
-import { buildMetadata, breadcrumbLd, pageLd } from "@/lib/seo";
+import { buildMetadata, breadcrumbLd, collectionLd, pageLd } from "@/lib/seo";
 import { getPageContent } from "@/lib/data";
 import PodcastCard from "@/components/podcasts/PodcastCard";
 import PodcastFilters from "@/components/podcasts/PodcastFilters";
@@ -19,6 +19,8 @@ export async function generateMetadata(): Promise<Metadata> {
   return buildMetadata({
     title: page.title,
     description: page.intro,
+    seo: page.seo,
+    kicker: "Watch and listen",
     path: "/podcasts",
     keywords: ["technology podcast India","leadership podcast","CIO interviews podcast","business podcast India","founder interviews","watch podcast episodes"],
   });
@@ -39,7 +41,7 @@ export default async function PodcastsPage({
 
   return (
     <main>
-      <JsonLd data={[pageLd("CollectionPage", { name: page.title, description: page.intro, path: "/podcasts" }), breadcrumbLd([{ name: page.title, path: "/podcasts" }])]} />
+      <JsonLd data={[pageLd("CollectionPage", { name: page.title, description: page.intro, path: "/podcasts" }), breadcrumbLd([{ name: page.title, path: "/podcasts" }]), collectionLd({ name: page.title, path: "/podcasts", items: allPodcasts.map((p) => ({ name: p.title, url: p.youtubeUrl, image: p.thumbnail, description: p.description })) })]} />
       <section className="page-lead">
         <div className="wrap">
           <h1 className="page-lead__title">{page.title}</h1>

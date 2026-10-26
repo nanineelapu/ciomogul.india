@@ -187,12 +187,33 @@
   width: 40px;
 }
 
-@media (max-width: 820px) {
+/* iPad: cover beside the text, a little smaller */
+@media (min-width: 721px) and (max-width: 1080px) {
+  #hall-carousel .hall-car__hero {
+    grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
+    gap: 32px;
+    padding: 24px;
+  }
+  #hall-carousel .hall-car__name { font-size: 34px; }
+}
+
+/* Phones: stacked, with a smaller centred cover so a slide fits the screen */
+@media (max-width: 720px) {
   #hall-carousel .hall-car__hero {
     grid-template-columns: 1fr;
-    gap: 20px;
-    padding: 20px;
+    gap: 16px;
+    padding: 18px;
   }
-  #hall-carousel .hall-car__cover { max-width: 300px; }
-  #hall-carousel .hall-car__meta { font-size: 14px; }
+  #hall-carousel .hall-car__cover { width: 100%; max-width: 220px; margin: 0 auto; }
+  #hall-carousel .hall-car__eyebrow { margin-bottom: 10px; font-size: 11px; letter-spacing: .16em; }
+  #hall-carousel .hall-car__name { font-size: 26px; }
+  #hall-carousel .hall-car__meta { margin-top: 8px; font-size: 14px; }
+  #hall-carousel .hall-car__citation { margin-top: 12px; font-size: 14px; }
+  #hall-carousel .hall-car__actions { margin-top: 18px; }
+  #hall-carousel .hall-car__actions .btn { flex: 1 1 0; }
+  #hall-carousel .hall-car__hint { font-size: 11px; }
+  #hall-carousel .hall-car__btn { width: 40px; height: 40px; }
+  #hall-carousel .hall-car__dots { flex-wrap: nowrap; gap: 6px; }
+  #hall-carousel .hall-car__dot { width: 14px; }
+  #hall-carousel .hall-car__dot.is-active { width: 26px; }
 }
