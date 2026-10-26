@@ -309,3 +309,27 @@
   /* Contact: full-width send button, like the other phone buttons */
   .contact-form .btn[type="submit"] { width: 100%; }
 }
+
+/* ==========================================================================
+   Women Spotlight: simpler profile block (all screen sizes)
+   Plain cover, no tilted frame or badge; smaller name and intro; the
+   repeated avatar line is dropped (the tabs above already show her photo).
+   ========================================================================== */
+.spot-feature__cover,
+.spot-feature__cover:hover {
+  padding: 0;
+  background: none;
+  box-shadow: none;
+  transform: none;
+  border: 1px solid var(--color-rule-soft);
+}
+.spot-feature__edition { display: none; }
+.spot-feature__name { margin-top: 10px; font-size: clamp(28px, 2.6vw, 40px); line-height: 1.1; }
+.spot-feature__role { margin-top: 8px; font-size: 15px; }
+.spot-feature__lead { margin-top: 18px; padding-top: 18px; font-size: 15px; line-height: 1.7; }
+.spot-feature__byline { display: none; }
+.spot-feature__actions { margin-top: 24px; }
+.spot-feature__actions .btn { height: 44px; padding: 0 22px; font-size: 14px; }
+/* Profile block is now two columns (the themes panel was removed) */
+.spot-feature { grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 48px; }
+@media (max-width: 720px) { .spot-feature { grid-template-columns: 1fr; gap: 24px; } }

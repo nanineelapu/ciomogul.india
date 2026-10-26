@@ -61,21 +61,6 @@ export default async function SpotlightFeature({ profile }: { profile: Published
           )}
         </div>
       </div>
-
-      <aside className="spot-impact" aria-label={`${profile.name}: leadership themes`}>
-        <p className="spot-impact__label">{t.themesLabel}</p>
-        <ol className="spot-themes">
-          {profile.themes.map((t, i) => (
-            <li key={t}>
-              <span className="spot-themes__num" aria-hidden>{String(i + 1).padStart(2, "0")}</span>
-              {t}
-            </li>
-          ))}
-        </ol>
-        <p className="spot-impact__foot">
-          <span aria-hidden>★</span> CIO Mogul India · {label}
-        </p>
-      </aside>
     </div>
   );
 }
