@@ -9,6 +9,8 @@ export const SITE_TEXT: SiteText = defaults;
 
 // Layers values from Sanity over the built-in text. Anything left empty in
 // Sanity keeps the built-in wording, so a half-filled editor never breaks a page.
+import { safeHref } from "@/lib/safeHref";
+
 export function mergeSiteText<T>(base: T, remote: unknown): T {
   if (typeof base === "string") {
     return (typeof remote === "string" && remote.trim() ? remote : base) as T;
@@ -19,7 +21,13 @@ export function mergeSiteText<T>(base: T, remote: unknown): T {
     if (!keys) return remote as T;
     // Keep only the fields we know about (drops Sanity's internal _key).
     return remote.map((item) =>
-      Object.fromEntries(keys.map((k) => [k, (item as Record<string, unknown>)?.[k] ?? ""]))
+      Object.fromEntries(
+        keys.map((k) => {
+          const v = (item as Record<string, unknown>)?.[k] ?? "";
+          // Menu and footer links typed in the CMS must be real web links.
+          return [k, k === "href" ? safeHref(v) : v];
+        })
+      )
     ) as T;
   }
   if (base && typeof base === "object") {

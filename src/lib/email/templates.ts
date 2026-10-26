@@ -40,7 +40,7 @@ const sectionLabel = (text: string) =>
 
 const button = (label: string, href: string) =>
   `<table role="presentation" cellpadding="0" cellspacing="0" style="margin:6px 0 0;"><tr><td style="background:${NAVY};">
-     <a href="${href}" style="display:inline-block;font-family:${SANS};font-size:13px;font-weight:bold;letter-spacing:.12em;text-transform:uppercase;color:${WHITE};text-decoration:none;padding:15px 32px;">${escapeHtml(label)}</a>
+     <a href="${escapeHtml(href)}" style="display:inline-block;font-family:${SANS};font-size:13px;font-weight:bold;letter-spacing:.12em;text-transform:uppercase;color:${WHITE};text-decoration:none;padding:15px 32px;">${escapeHtml(label)}</a>
    </td></tr></table>`;
 
 // Light grey box with a navy bar on the left, like a quote on the website.
@@ -95,7 +95,7 @@ function layout(opts: {
   footerNote?: string;
 }) {
   const social = SOCIAL.filter((s) => s.key !== "whatsapp")
-    .map((s) => `<a href="${s.href}" style="color:${NAVY};text-decoration:none;font-weight:bold;">${escapeHtml(s.label)}</a>`)
+    .map((s) => `<a href="${escapeHtml(s.href)}" style="color:${NAVY};text-decoration:none;font-weight:bold;">${escapeHtml(s.label)}</a>`)
     .join(`<span style="color:${RULE};">&nbsp;&nbsp;|&nbsp;&nbsp;</span>`);
 
   return `<!doctype html>
@@ -151,14 +151,17 @@ type Submission = { name: string; email: string; subject: string; message: strin
 
 // Sent to the person who filled in the contact form.
 export function confirmationEmail(s: Submission) {
-  const first = s.name.split(/\s+/)[0] || s.name;
+  // This email goes to whatever address was typed into the form, so it repeats
+  // nothing the sender wrote (otherwise anyone could send their own text
+  // through our domain). Only a plain first name is kept.
+  const candidate = s.name.split(/\s+/)[0] ?? "";
+  const first = /^[\p{L}][\p{L}'.-]{0,29}$/u.test(candidate) ? candidate : "there";
   const html = layout({
     preheader: "We have received your message and will get back to you shortly.",
     kicker: "Message received",
     title: `Thank you, ${first}.`,
     body:
       paragraph("We have received your message. Our editorial team will read it and get back to you by email.") +
-      quoteBox(`Your message  /  ${s.subject}`, withBreaks(s.message)) +
       sectionLabel("What happens next") +
       steps(["We read your message", "The right person on our team picks it up", "You hear back from us by email"]) +
       paragraph("If you did not send this message, you can safely ignore this email.") +
@@ -166,7 +169,7 @@ export function confirmationEmail(s: Submission) {
       exploreRow(),
   });
 
-  const text = `Thank you, ${first}.\n\nWe have received your message. Our editorial team will read it and get back to you by email.\n\nYour message (${s.subject}):\n${s.message}\n\nWhat happens next:\n1. We read your message\n2. The right person on our team picks it up\n3. You hear back from us by email\n\nIf you did not send this message, you can safely ignore this email.\n\nCIO Mogul India - ${SITE_URL}`;
+  const text = `Thank you, ${first}.\n\nWe have received your message. Our editorial team will read it and get back to you by email.\n\nWhat happens next:\n1. We read your message\n2. The right person on our team picks it up\n3. You hear back from us by email\n\nIf you did not send this message, you can safely ignore this email.\n\nCIO Mogul India - ${SITE_URL}`;
 
   return { subject: "We have received your message | CIO Mogul India", html, text };
 }
@@ -214,7 +217,7 @@ export function welcomeEmail(unsubscribe: string | null) {
       button("Read the latest edition", `${SITE_URL}/magazines`) +
       exploreRow(),
     footerNote: unsubscribe
-      ? `You are receiving this because you subscribed on our website. <a href="${unsubscribe}" style="color:${NAVY};">Unsubscribe</a>`
+      ? `You are receiving this because you subscribed on our website. <a href="${escapeHtml(unsubscribe)}" style="color:${NAVY};">Unsubscribe</a>`
       : "You are receiving this because you subscribed on our website.",
   });
 

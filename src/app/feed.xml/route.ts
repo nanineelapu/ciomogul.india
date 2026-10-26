@@ -17,7 +17,7 @@ export async function GET() {
 
   const items = articles
     .map((a) => {
-      const link = absoluteUrl(`/articles/${a.slug}`);
+      const link = xml(absoluteUrl(`/articles/${encodeURIComponent(a.slug)}`));
       const pubDate = a.isoDate ? `<pubDate>${new Date(`${a.isoDate}T00:00:00Z`).toUTCString()}</pubDate>` : "";
       return `<item>
   <title>${xml(a.title)}</title>

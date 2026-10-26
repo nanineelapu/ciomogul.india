@@ -25,7 +25,19 @@ export const podcast = defineType({
       name: "youtubeUrl",
       title: "YouTube URL",
       type: "url",
-      validation: (r) => r.required(),
+      validation: (r) =>
+        r
+          .required()
+          .uri({ scheme: ["https"] })
+          .custom((v?: string) => {
+            if (!v) return true;
+            try {
+              const host = new URL(v).hostname.replace(/^www\./, "");
+              return ["youtube.com", "m.youtube.com", "youtu.be"].includes(host) ? true : "Use a YouTube link.";
+            } catch {
+              return "Use a YouTube link.";
+            }
+          }),
     }),
     defineField({
       name: "thumbnail",

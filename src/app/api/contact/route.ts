@@ -6,6 +6,7 @@ import { createClient } from "@supabase/supabase-js";
 import { Resend } from "resend";
 import { NextResponse } from "next/server";
 import { confirmationEmail, notificationEmail } from "@/lib/email/templates";
+import { BadRequest, EMAIL_RE, clientIp, isSameOrigin, rateLimited, readJson } from "@/lib/security";
 
 type Body = {
   name?: unknown;
@@ -15,28 +16,20 @@ type Body = {
   website?: unknown; // honeypot: real people leave this empty
 };
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-// Very small in-memory limiter: 5 messages per IP per 10 minutes. It resets
-// when the server restarts, which is fine as a first line of defence.
-const hits = new Map<string, number[]>();
-function tooMany(ip: string) {
-  const now = Date.now();
-  const recent = (hits.get(ip) ?? []).filter((t) => now - t < 10 * 60 * 1000);
-  recent.push(now);
-  hits.set(ip, recent);
-  return recent.length > 5;
-}
-
 const clean = (v: unknown, max: number) =>
   typeof v === "string" ? v.trim().slice(0, max) : "";
 
 export async function POST(req: Request) {
+  if (!isSameOrigin(req)) {
+    return NextResponse.json({ ok: false, error: "Invalid request." }, { status: 403 });
+  }
+
   let body: Body;
   try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ ok: false, error: "Invalid request." }, { status: 400 });
+    body = await readJson<Body>(req, 16 * 1024);
+  } catch (err) {
+    const status = err instanceof BadRequest ? err.status : 400;
+    return NextResponse.json({ ok: false, error: "Invalid request." }, { status });
   }
 
   // Bots fill the hidden field. Pretend it worked and do nothing.
@@ -44,8 +37,8 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true });
   }
 
-  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-  if (tooMany(ip)) {
+  // 5 messages per visitor per 10 minutes.
+  if (rateLimited("contact", clientIp(req), 5, 10 * 60 * 1000)) {
     return NextResponse.json(
       { ok: false, error: "Too many messages. Please try again later." },
       { status: 429 }

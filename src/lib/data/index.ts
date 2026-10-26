@@ -25,6 +25,7 @@ import { PODCASTS } from "@/data/podcasts";
 import { TESTIMONIALS } from "@/data/testimonials";
 import { INDUSTRIES, type Industry } from "@/data/industries";
 import { sanityConfigured } from "@/sanity/env";
+import { safeHref } from "@/lib/safeHref";
 import { sanityFetch } from "@/sanity/lib/client";
 import { urlForOrDefault } from "@/sanity/lib/image";
 import {
@@ -76,7 +77,7 @@ function mapImage(src: SanityImage | undefined | null, fallback: string): string
 // optional custom link, else the Articles page.
 function articleHref(articleSlug?: string | null, custom?: string | null): string {
   if (articleSlug) return `/articles/${articleSlug}`;
-  return custom || "/articles";
+  return safeHref(custom, "/articles");
 }
 
 // Small wrapper that absorbs Sanity failures and returns the fallback.
@@ -325,7 +326,7 @@ export async function getPodcasts(): Promise<Podcast[]> {
       slug: r.slug,
       title: r.title,
       date: r.date ?? "",
-      youtubeUrl: r.youtubeUrl,
+      youtubeUrl: safeHref(r.youtubeUrl, ""),
       thumbnail: mapImage(r.thumbnail, PODCASTS[i % PODCASTS.length].thumbnail),
       publishedYear: r.publishedYear,
       description: r.description ?? "",
@@ -845,7 +846,7 @@ export async function getSiteSettings(): Promise<SiteSettings> {
       phoneHref: "tel:" + phone.replace(/[^+\d]/g, ""),
       office: r.office || SETTINGS_FALLBACK.office,
       whatsappUrl: r.whatsapp || SETTINGS_FALLBACK.whatsappUrl,
-      social: SOCIAL.map((x) => ({ key: x.key, label: x.label, href: r[x.key] || x.href })),
+      social: SOCIAL.map((x) => ({ key: x.key, label: x.label, href: safeHref(r[x.key], x.href) })),
     };
   }, SETTINGS_FALLBACK);
 }

@@ -2,6 +2,7 @@ import { ImageResponse } from "next/og";
 import type { NextRequest } from "next/server";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { clientIp, rateLimited } from "@/lib/security";
 
 // Share card (1200×630) for any page: /og?title=…&kicker=…&image=…
 // Every page's Open Graph and Twitter image points here (see lib/seo.ts), so
@@ -76,6 +77,12 @@ async function loadImage(raw: string | null, origin: string): Promise<string | n
 }
 
 export async function GET(request: NextRequest) {
+  // Identical cards are served from the CDN cache; this caps how many new ones
+  // one visitor can make the server draw.
+  if (rateLimited("og", clientIp(request), 60, 60 * 1000)) {
+    return new Response("Too many requests.", { status: 429, headers: { "Retry-After": "60" } });
+  }
+
   const { searchParams, origin } = request.nextUrl;
   const title = clip(searchParams.get("title"), 110) || "CIO Mogul India";
   const kicker = clip(searchParams.get("kicker"), 40);

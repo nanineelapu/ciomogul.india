@@ -172,7 +172,7 @@ export const spotlightProfile = defineType({
       fields: [
         defineField({ name: "text", title: "Quotation", type: "text", rows: 3 }),
         defineField({ name: "sourceLabel", title: "Source name", type: "string" }),
-        defineField({ name: "sourceHref", title: "Source link", type: "url" }),
+        defineField({ name: "sourceHref", title: "Source link", type: "url", validation: (r) => r.uri({ scheme: ["https", "http"] }) }),
       ],
     }),
     defineField({

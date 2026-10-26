@@ -25,6 +25,10 @@ export const headline = defineType({
       title: "Other link (optional)",
       type: "string",
       description: 'Only used when no article is picked above. Defaults to "/articles" if blank.',
+      validation: (r) =>
+        r.custom((v?: string) =>
+          !v || /^\/(?!\/)/.test(v) || /^https?:\/\//i.test(v) ? true : "Use a site path like /articles or a full https:// link."
+        ),
     }),
     defineField({
       name: "order",

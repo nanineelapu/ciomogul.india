@@ -4,8 +4,13 @@
 import { NextResponse } from "next/server";
 import { getServiceClient } from "@/lib/supabase/admin";
 import { verifyEmailToken } from "@/lib/newsletter";
+import { clientIp, rateLimited, readJson } from "@/lib/security";
 
 export async function POST(req: Request) {
+  if (rateLimited("unsubscribe", clientIp(req), 20, 10 * 60 * 1000)) {
+    return NextResponse.json({ ok: false, error: "Too many attempts. Please try again later." }, { status: 429 });
+  }
+
   const url = new URL(req.url);
   let email = url.searchParams.get("email") ?? "";
   let token = url.searchParams.get("token") ?? "";
@@ -13,7 +18,7 @@ export async function POST(req: Request) {
   // The page sends JSON; a mail program's one-click unsubscribe uses the URL.
   if (!email) {
     try {
-      const body = await req.json();
+      const body = await readJson<{ email?: unknown; token?: unknown }>(req, 2 * 1024);
       email = typeof body.email === "string" ? body.email : "";
       token = typeof body.token === "string" ? body.token : "";
     } catch {
@@ -21,7 +26,8 @@ export async function POST(req: Request) {
     }
   }
 
-  email = email.trim().toLowerCase();
+  email = email.trim().toLowerCase().slice(0, 200);
+  token = token.slice(0, 128);
   if (!email || !verifyEmailToken(email, token)) {
     return NextResponse.json({ ok: false, error: "This link is not valid." }, { status: 400 });
   }

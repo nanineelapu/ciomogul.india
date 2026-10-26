@@ -3,6 +3,7 @@ import { sanityConfigured } from "@/sanity/env";
 import { sanityFetch } from "@/sanity/lib/client";
 import { urlForOrDefault } from "@/sanity/lib/image";
 import { SPOTLIGHT_QUERY } from "@/sanity/lib/queries";
+import { safeHref } from "@/lib/safeHref";
 import {
   WOMEN_SPOTLIGHT_DATA,
   type PendingProfile,
@@ -73,14 +74,14 @@ function fromRaw(r: Raw, fallbackImage: string): SpotlightProfile {
     .map((a) => ({ title: text(a.title), desc: text(a.desc) }));
   const sources = (r.sources ?? [])
     .filter((s) => text(s.label) && text(s.href))
-    .map((s) => ({ label: text(s.label), href: text(s.href) }));
+    .map((s) => ({ label: text(s.label), href: safeHref(s.href, "#") }));
   const quote =
     text(r.quote?.text) && text(r.quote?.sourceHref)
-      ? { text: text(r.quote?.text), source: { label: text(r.quote?.sourceLabel, "Source"), href: text(r.quote?.sourceHref) } }
+      ? { text: text(r.quote?.text), source: { label: text(r.quote?.sourceLabel, "Source"), href: safeHref(r.quote?.sourceHref, "#") } }
       : b?.quote;
   const edition =
     text(r.edition?.label) && text(r.edition?.href)
-      ? { label: text(r.edition?.label), month: text(r.edition?.month), href: text(r.edition?.href) }
+      ? { label: text(r.edition?.label), month: text(r.edition?.month), href: safeHref(r.edition?.href, "/magazines") }
       : b?.edition;
 
   return {

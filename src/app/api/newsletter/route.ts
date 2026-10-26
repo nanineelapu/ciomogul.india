@@ -8,25 +8,19 @@ import { Resend } from "resend";
 import { getAnonClient, getServiceClient } from "@/lib/supabase/admin";
 import { unsubscribeUrl } from "@/lib/newsletter";
 import { welcomeEmail } from "@/lib/email/templates";
-
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-// 5 attempts per address per 10 minutes. Resets when the server restarts.
-const hits = new Map<string, number[]>();
-function tooMany(ip: string) {
-  const now = Date.now();
-  const recent = (hits.get(ip) ?? []).filter((t) => now - t < 10 * 60 * 1000);
-  recent.push(now);
-  hits.set(ip, recent);
-  return recent.length > 5;
-}
+import { BadRequest, EMAIL_RE, clientIp, isSameOrigin, rateLimited, readJson } from "@/lib/security";
 
 export async function POST(req: Request) {
+  if (!isSameOrigin(req)) {
+    return NextResponse.json({ ok: false, error: "Invalid request." }, { status: 403 });
+  }
+
   let body: { email?: unknown; website?: unknown };
   try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ ok: false, error: "Invalid request." }, { status: 400 });
+    body = await readJson<{ email?: unknown; website?: unknown }>(req, 4 * 1024);
+  } catch (err) {
+    const status = err instanceof BadRequest ? err.status : 400;
+    return NextResponse.json({ ok: false, error: "Invalid request." }, { status });
   }
 
   // Bots fill the hidden field. Pretend it worked.
@@ -34,8 +28,8 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true });
   }
 
-  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-  if (tooMany(ip)) {
+  // 5 attempts per visitor per 10 minutes.
+  if (rateLimited("newsletter", clientIp(req), 5, 10 * 60 * 1000)) {
     return NextResponse.json(
       { ok: false, error: "Too many attempts. Please try again later." },
       { status: 429 }
