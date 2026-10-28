@@ -24,6 +24,7 @@ import { WOMEN_LEADERS } from "@/data/womenLeaders";
 import { PODCASTS } from "@/data/podcasts";
 import { TESTIMONIALS } from "@/data/testimonials";
 import { INDUSTRIES, type Industry } from "@/data/industries";
+import { BRANDS, type Brand } from "@/data/brands";
 import { sanityConfigured } from "@/sanity/env";
 import { safeHref } from "@/lib/safeHref";
 import { sanityFetch } from "@/sanity/lib/client";
@@ -41,6 +42,7 @@ import {
   GET_FEATURED_COVERS_QUERY,
   HEADLINES_QUERY,
   INDUSTRIES_QUERY,
+  BRANDS_QUERY,
   MAGAZINE_EDITIONS_QUERY,
   MAGAZINE_EDITION_BY_SLUG_QUERY,
   NEWS_CARDS_QUERY,
@@ -417,6 +419,7 @@ export async function getAdjacentHallEntries(slug: string): Promise<{
 
 // ─── Articles ────────────────────────────────────────────────────────────
 type RawArticle = {
+  industries?: string[];
   slug: string;
   title: string;
   excerpt: string;
@@ -455,6 +458,7 @@ export async function getArticles(): Promise<Article[]> {
       alt: r.alt,
       readTime: r.readTime || undefined,
       isTopStory: r.isTopStory,
+      industries: r.industries ?? [],
       body: r.body,
       isoDate: r.publishDate,
       seo: r.seo,
@@ -593,13 +597,44 @@ export async function getTestimonials(): Promise<Testimonial[]> {
   }, TESTIMONIALS);
 }
 
+// ─── Trusted brands (home page) ──────────────────────────────────────────
+
+type RawBrand = { slug: string; name: string; logo?: SanityImage | null; website?: string | null };
+export async function getBrands(): Promise<Brand[]> {
+  return withFallback<Brand[]>(async () => {
+    const rows = await sanityFetch<RawBrand[]>({ query: BRANDS_QUERY });
+    return rows.map((r) => ({
+      slug: r.slug || r.name,
+      name: r.name,
+      // No uploaded logo means the name is shown instead.
+      logo: r.logo ? mapImage(r.logo, "") || null : null,
+      website: r.website ? safeHref(r.website, "") || null : null,
+    }));
+  }, BRANDS);
+}
+
 // ─── Industries (home page) ──────────────────────────────────────────────
 
 export async function getIndustries(): Promise<Industry[]> {
   return withFallback<Industry[]>(async () => {
     const rows = await sanityFetch<Industry[]>({ query: INDUSTRIES_QUERY });
-    return rows.filter((r) => r.name);
+    return rows
+      .filter((r) => r.name)
+      .map((r) => {
+        // A missing intro falls back to the built-in industry with the same address.
+        const base = INDUSTRIES.find((b) => b.slug === r.slug);
+        return { ...r, intro: r.intro || base?.intro || r.description };
+      });
   }, INDUSTRIES);
+}
+
+export async function getIndustryBySlug(slug: string): Promise<Industry | null> {
+  return (await getIndustries()).find((i) => i.slug === slug) ?? null;
+}
+
+// Articles for an industry page: only those tagged with this industry in Sanity.
+export async function getIndustryArticles(industry: Industry): Promise<Article[]> {
+  return (await getArticles()).filter((a) => a.industries?.includes(industry.slug));
 }
 
 // ─── Magazine editions ───────────────────────────────────────────────────
@@ -896,6 +931,7 @@ export async function getPageContent(): Promise<PageContent> {
       hallOfFame: pick("hallOfFame"),
       womenSpotlight: pick("womenSpotlight"),
       articles: pick("articles"),
+      industries: pick("industries"),
       contact: pick("contact"),
     };
   }, PAGE_CONTENT);

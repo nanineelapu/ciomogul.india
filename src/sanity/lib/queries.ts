@@ -165,6 +165,7 @@ export const ARTICLES_QUERY = /* groq */ `
     "image": image,
     "alt": coalesce(image.alt, ""),
     "isTopStory": coalesce(isTopStory, false),
+    "industries": coalesce(industries[]->slug.current, []),
     "body": coalesce(body, []),
     "seo": seo{ "title": metaTitle, "description": metaDescription, keywords }
   }
@@ -213,7 +214,7 @@ export const SITE_SETTINGS_QUERY = /* groq */ `
 
 export const PAGE_CONTENT_QUERY = /* groq */ `
   *[_type == "pageContent" && _id == "pageContent"][0] {
-    magazines, podcasts, hallOfFame, womenSpotlight, articles, contact
+    magazines, podcasts, hallOfFame, womenSpotlight, articles, industries, contact
   }
 `;
 
@@ -251,9 +252,20 @@ export const SPOTLIGHT_QUERY = /* groq */ `
 `;
 
 export const INDUSTRIES_QUERY = /* groq */ `
-  *[_type == "industry"] | order(order asc) {
+  *[_type == "industry" && defined(slug.current)] | order(order asc) {
     "slug": slug.current,
     name,
-    "description": coalesce(description, "")
+    "description": coalesce(description, ""),
+    "intro": coalesce(intro, ""),
+    "seo": seo{ "title": metaTitle, "description": metaDescription, keywords }
+  }
+`;
+
+export const BRANDS_QUERY = /* groq */ `
+  *[_type == "trustedBrand" && defined(name)] | order(order asc) {
+    "slug": slug.current,
+    name,
+    "logo": logo,
+    "website": coalesce(website, null)
   }
 `;

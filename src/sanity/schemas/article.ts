@@ -35,6 +35,13 @@ export const article = defineType({
       validation: (r) => r.required(),
     }),
     defineField({
+      name: "industries",
+      title: "Industries",
+      type: "array",
+      of: [{ type: "reference", to: [{ type: "industry" }] }],
+      validation: (r) => r.unique(),
+    }),
+    defineField({
       name: "isTopStory",
       title: "Top story",
       type: "boolean",

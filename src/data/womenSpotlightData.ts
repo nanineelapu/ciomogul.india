@@ -338,7 +338,7 @@ export function getProfileById(id?: string): PublishedProfile {
 }
 
 export function profileHref(id: string) {
-  return `/women-spotlight?profile=${id}#profile`;
+  return `/business-women?profile=${id}#profile`;
 }
 
 // Exact lookup for the story page: no fallback, so unknown ids can 404.
@@ -348,7 +348,7 @@ export function findPublishedProfile(id: string): PublishedProfile | undefined {
 
 // The full story lives on its own page, opened from "Read her story".
 export function storyHref(id: string) {
-  return `/women-spotlight/${id}`;
+  return `/business-women/${id}`;
 }
 
 // Previous / next published profile for the pager. Wraps around; with only

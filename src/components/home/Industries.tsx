@@ -24,15 +24,17 @@ export default async function Industries() {
         </header>
         <ol className="industries">
           {industries.map((i, n) => (
-            <li key={i.slug} className="industry">
-              <span className="industry__num" aria-hidden>{String(n + 1).padStart(2, "0")}</span>
-              <h3 className="industry__name">{i.name}</h3>
-              <p className="industry__text">{i.description}</p>
+            <li key={i.slug}>
+              <Link href={`/industries/${i.slug}`} className="industry">
+                <span className="industry__num" aria-hidden>{String(n + 1).padStart(2, "0")}</span>
+                <h3 className="industry__name">{i.name}</h3>
+                <p className="industry__text">{i.description}</p>
+              </Link>
             </li>
           ))}
         </ol>
         <p className="center-link industries__more">
-          <Link href="/articles" className="btn btn-line">{t.home.industriesButton}</Link>
+          <Link href="/industries" className="btn btn-line">{t.home.industriesButton}</Link>
         </p>
       </div>
     </section>

@@ -28,6 +28,7 @@ export const BASE_KEYWORDS = [
   "technology news India",
   "business news India",
   "startup founders India",
+  "business women India",
   "women leaders in technology India",
   "Hall of Fame technology leaders",
   "technology podcast India",

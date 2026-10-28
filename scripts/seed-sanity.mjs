@@ -91,6 +91,7 @@ const { WOMEN_SPOTLIGHT_DATA } = data("womenSpotlightData.ts");
 const { PODCASTS } = data("podcasts.ts");
 const { TESTIMONIALS } = data("testimonials.ts");
 const { INDUSTRIES } = data("industries.ts");
+const { BRANDS } = data("brands.ts");
 const { HALL_OF_FAME } = data("hallOfFame.ts");
 const { ARTICLES } = data("articles.ts");
 const { TERMS } = data("terms.ts");
@@ -259,8 +260,13 @@ for (const [i, ind] of INDUSTRIES.entries()) {
     name: ind.name,
     slug: slugOf(ind.slug),
     description: ind.description,
+    intro: ind.intro,
     order: i + 1,
   });
+}
+
+for (const [i, b] of BRANDS.entries()) {
+  add({ _id: `trustedBrand-${b.slug}`, _type: "trustedBrand", name: b.name, slug: slugOf(b.slug), order: i + 1 });
 }
 
 // ── 5. women leaders (home page "Wall of fame") and podcasts ────────────────
@@ -279,7 +285,7 @@ for (const [i, w] of WOMEN_LEADERS.entries()) {
     order: i + 1,
   });
 }
-console.log("Preparing Women Spotlight profiles…");
+console.log("Preparing Business Women profiles…");
 for (const [i, w] of WOMEN_SPOTLIGHT_DATA.entries()) {
   const base = {
     _id: `spotlightProfile-${w.id}`,

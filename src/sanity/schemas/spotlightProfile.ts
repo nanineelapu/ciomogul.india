@@ -13,7 +13,7 @@ const imageField = (name: string, title: string, description: string, required =
 
 export const spotlightProfile = defineType({
   name: "spotlightProfile",
-  title: "Women Spotlight profile",
+  title: "Business Women profile",
   type: "document",
   groups: [
     { name: "basics", title: "1. Basics", default: true },
@@ -46,7 +46,7 @@ export const spotlightProfile = defineType({
       title: "Web address (slug)",
       type: "slug",
       group: "basics",
-      description: "Click Generate. It becomes the page address: /women-spotlight/<slug>. Do not change it after publishing.",
+      description: "Click Generate. It becomes the page address: /business-women/<slug>. Do not change it after publishing.",
       options: { source: "name", maxLength: 96 },
       validation: (r) => r.required(),
     }),

@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getArticles, getHallOfFame, getMagazineEditions } from "@/lib/data";
+import { getArticles, getHallOfFame, getIndustries, getMagazineEditions } from "@/lib/data";
 import { getPublishedProfiles } from "@/lib/data/spotlight";
 import { storyHref } from "@/data/womenSpotlightData";
 import { absoluteUrl } from "@/lib/seo";
@@ -48,7 +48,8 @@ const STATIC: { path: string; priority: number; changeFrequency: "daily" | "week
   { path: "/magazines", priority: 0.9, changeFrequency: "weekly" },
   { path: "/podcasts", priority: 0.8, changeFrequency: "weekly" },
   { path: "/hall-of-fame", priority: 0.8, changeFrequency: "weekly" },
-  { path: "/women-spotlight", priority: 0.8, changeFrequency: "weekly" },
+  { path: "/business-women", priority: 0.8, changeFrequency: "weekly" },
+  { path: "/industries", priority: 0.8, changeFrequency: "weekly" },
   { path: "/about", priority: 0.5, changeFrequency: "monthly" },
   { path: "/contact", priority: 0.5, changeFrequency: "yearly" },
   { path: "/terms", priority: 0.2, changeFrequency: "yearly" },
@@ -90,7 +91,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const newest = docs.reduce((max, d) => (d.updated > max ? d.updated : max), "");
   const lastModified = newest ? new Date(newest) : new Date();
 
+  const industries = await getIndustries();
+
   return [
+    ...industries.map((i) => ({
+      url: absoluteUrl(`/industries/${i.slug}`),
+      lastModified,
+      changeFrequency: "weekly" as const,
+      priority: 0.7,
+    })),
     ...STATIC.map((p) => ({
       url: absoluteUrl(p.path),
       lastModified: p.priority >= 0.8 ? lastModified : undefined,

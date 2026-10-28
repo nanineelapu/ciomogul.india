@@ -21,9 +21,9 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const profile = await findPublishedProfile(id);
   if (!profile) return { title: "Not found | CIO Mogul India", robots: { index: false } };
   return buildMetadata({
-    title: `${profile.name}: Her Story | Women Spotlight`,
+    title: `${profile.name}: Her Story | Business Women`,
     description: profile.intro,
-    path: `/women-spotlight/${profile.id}`,
+    path: `/business-women/${profile.id}`,
     image: profile.cover,
     imageAlt: profile.name,
     keywords: mergeKeywords(profile.tags, [
@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
       "women leaders in India",
     ]),
     type: "profile",
-    kicker: "Women Spotlight",
+    kicker: "Business Women",
     seo: profile.seo,
   });
 }
@@ -55,12 +55,12 @@ async function StoryContent({ params }: { params: Promise<Params> }) {
             role: profile.designation,
             organization: profile.organization,
             description: profile.intro,
-            path: `/women-spotlight/${profile.id}`,
+            path: `/business-women/${profile.id}`,
             image: profile.cover,
           }),
           breadcrumbLd([
-            { name: "Women Spotlight", path: "/women-spotlight" },
-            { name: profile.name, path: `/women-spotlight/${profile.id}` },
+            { name: "Business Women", path: "/business-women" },
+            { name: profile.name, path: `/business-women/${profile.id}` },
           ]),
         ]}
       />

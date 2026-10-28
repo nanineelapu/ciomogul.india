@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { useLenis } from "lenis/react";
 import type { SocialKey } from "@/data/social";
 import type { SiteText } from "@/data/siteText";
+import SocialIcon from "./SocialIcon";
 
 // A nav link is "active" when the current URL is the link itself, or sits
 // below it (so /news/some-article still highlights "News"). The root "/" has
@@ -15,14 +16,20 @@ function isActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
+// The menu item that points to /industries opens a dropdown of industries.
+const INDUSTRIES_HREF = "/industries";
+
 export default function Header({
   social,
   text,
+  industries,
 }: {
   text: SiteText["header"];
   social: { key: SocialKey; label: string; href: string }[];
+  industries: { slug: string; name: string; description: string }[];
 }) {
   const pathname = usePathname();
+  const [dropOpen, setDropOpen] = useState(false);
   const [date, setDate] = useState("");
   const [compact, setCompact] = useState(false);
   const barRef = useRef<HTMLSpanElement>(null);
@@ -51,23 +58,29 @@ export default function Header({
     document.body.style.overflow = open ? "hidden" : "";
     if (open) lenis?.stop();
     else lenis?.start();
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") { setOpen(false); setDropOpen(false); } };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, [open, lenis]);
+
+  // Close the menus when the page changes.
+  useEffect(() => {
+    setDropOpen(false);
+    setOpen(false);
+  }, [pathname]);
 
   return (
     <>
       <header className="site-head">
         <div className="wrap site-head__top">
           <Link href="/" className="site-head__logo" aria-label="CIO Mogul India home">
-            <Image src="/assets/logo-cio-mogul.png" alt="CIO Mogul India — Magazine" width={1200} height={223} sizes="300px" priority />
+            <Image src="/assets/logo-cio-mogul.png" alt="CIO Mogul India — Magazine" width={1200} height={374} sizes="300px" priority />
           </Link>
           <div className="site-head__actions">
             <span className="site-head__date">{date}</span>
             <div className="site-head__social" aria-label="Follow CIO Mogul India">
               {social.map((s) => (
-                <a key={s.key} href={s.href} target="_blank" rel="noopener noreferrer" className="social-btn" aria-label={s.label}><Icon name={s.key} /></a>
+                <a key={s.key} href={s.href} target="_blank" rel="noopener noreferrer" className="social-btn" aria-label={s.label}><SocialIcon name={s.key} /></a>
               ))}
             </div>
             <Link href="/#subscribe" className="btn btn-ink btn-sm">{text.subscribe}</Link>
@@ -82,6 +95,41 @@ export default function Header({
             <div className={`nav${open ? " is-open" : ""}`}>
               {text.nav.map((item) => {
                 const active = isActive(pathname, item.href);
+                if (item.href === INDUSTRIES_HREF && industries.length > 0) {
+                  return (
+                    <div
+                      key={item.href}
+                      className={`nav__drop${dropOpen ? " is-open" : ""}`}
+                      onMouseLeave={() => setDropOpen(false)}
+                    >
+                      <button
+                        type="button"
+                        className={`nav__link nav__drop-btn${active ? " is-active" : ""}`}
+                        aria-expanded={dropOpen}
+                        aria-haspopup="true"
+                        onClick={() => setDropOpen((v) => !v)}
+                      >
+                        {item.label}
+                        <svg className="nav__caret" viewBox="0 0 12 8" aria-hidden><path d="M1 1.5l5 5 5-5" fill="none" stroke="currentColor" strokeWidth="1.8" /></svg>
+                      </button>
+                      <div className="nav__menu">
+                        {industries.map((ind) => (
+                          <Link
+                            key={ind.slug}
+                            href={`/industries/${ind.slug}`}
+                            className={`nav__menu-link${pathname === `/industries/${ind.slug}` ? " is-active" : ""}`}
+                          >
+                            <span className="nav__menu-name">{ind.name}</span>
+                            <span className="nav__menu-text">{ind.description}</span>
+                          </Link>
+                        ))}
+                        <Link href={INDUSTRIES_HREF} className="nav__menu-all">
+                          {text.allIndustries} <span aria-hidden>→</span>
+                        </Link>
+                      </div>
+                    </div>
+                  );
+                }
                 return (
                   <Link key={item.href} href={item.href} className={`nav__link${active ? " is-active" : ""}`} aria-current={active ? "page" : undefined} onClick={() => setOpen(false)}>
                     {item.label}
@@ -99,12 +147,4 @@ export default function Header({
       </nav>
     </>
   );
-}
-
-function Icon({ name }: { name: SocialKey }) {
-  if (name === "x") return (<svg viewBox="0 0 24 24" aria-hidden><path d="M17.8 3h3.1l-6.8 7.7L22 21h-6.3l-4.9-6.4L5.2 21H2.1l7.3-8.3L2 3h6.4l4.4 5.9L17.8 3zm-1.1 16.2h1.7L7.3 4.7H5.5l11.2 14.5z" fill="currentColor" /></svg>);
-  if (name === "whatsapp") return (<svg viewBox="0 0 24 24" aria-hidden><path d="M12 3a9 9 0 00-7.8 13.5L3 21l4.6-1.2A9 9 0 1012 3z" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" /><path d="M9 8.5c.3 2.6 2.8 5.2 5.9 6.2l1.1-1.4-1.9-.9-.9.7c-.8-.4-1.7-1.3-2.1-2.1l.7-.9-.9-1.9L9 8.5z" fill="currentColor" /></svg>);
-  if (name === "instagram") return (<svg viewBox="0 0 24 24" aria-hidden><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" strokeWidth="2" /><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" strokeWidth="2" /><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" /></svg>);
-  if (name === "facebook") return (<svg viewBox="0 0 24 24" aria-hidden><path d="M14 8h3V4h-3c-2.8 0-4.5 1.8-4.5 4.6V11H7v4h2.5v7h4v-7h3l.5-4h-3.5V8.8c0-.5.3-.8.5-.8z" fill="currentColor" /></svg>);
-  return (<svg viewBox="0 0 24 24" aria-hidden><path d="M5 9h3.5v11H5zM6.8 3.5a2 2 0 110 4 2 2 0 010-4zM10.5 9H14v1.6c.6-1 1.9-1.9 3.7-1.9 3.3 0 4 2.1 4 5V20h-3.5v-5.4c0-1.4-.1-2.9-1.9-2.9-1.9 0-2.2 1.4-2.2 2.8V20h-3.6z" fill="currentColor" /></svg>);
 }

@@ -5,16 +5,17 @@ import type { CSSProperties } from "react";
 // follows light and dark themes.
 
 const ROWS: { page: string; where: string; changes: string }[] = [
-  { page: "Home page", where: "1. Home page", changes: "Each section in order: headline ticker, magazine covers, industries, latest news, vital updates, featured articles, women leaders and testimonials." },
+  { page: "Home page", where: "1. Home page", changes: "Each section in order: headline ticker, magazine covers, latest news, vital updates, featured articles, business women, testimonials and trusted brands." },
   { page: "Magazines", where: "2. Magazines", changes: "Each edition: cover, name, headline and PDF." },
   { page: "Hall of Fame", where: "3. Hall of Fame", changes: "Each inductee and their profile page." },
-  { page: "Women Spotlight", where: "4. Women Spotlight", changes: "Each profile: photo, story, themes and sources." },
+  { page: "Business Women", where: "4. Business Women", changes: "Each profile: photo, story, themes and sources." },
   { page: "Podcasts", where: "5. Podcasts", changes: "Each episode and its YouTube link." },
   { page: "Articles", where: "6. Articles", changes: "Each article and its category." },
-  { page: "About Us", where: "7. About Us", changes: "Every heading, paragraph and button on the page." },
-  { page: "Contact Us", where: "8. Contact Us: details and social links", changes: "Email, phone, WhatsApp, office and social links. They also appear in the top menu and footer." },
-  { page: "Terms and Privacy", where: "9. Terms and Privacy", changes: "The full legal text, section by section." },
-  { page: "Title at the top of a page", where: "Page titles and intros", changes: "The big title and the line under it on Magazines, Hall of Fame, Women Spotlight, Podcasts, Articles and Contact Us." },
+  { page: "Industries", where: "7. Industries", changes: "Each industry in the menu dropdown and on the home page: name, short line and page intro. To add stories to an industry page, pick that industry in an article's Industries field and publish." },
+  { page: "About Us", where: "8. About Us", changes: "Every heading, paragraph and button on the page." },
+  { page: "Contact Us", where: "9. Contact Us: details and social links", changes: "Email, phone, WhatsApp, office and social links. They also appear in the top menu and footer." },
+  { page: "Terms and Privacy", where: "10. Terms and Privacy", changes: "The full legal text, section by section." },
+  { page: "Title at the top of a page", where: "Page titles and intros", changes: "The big title and the line under it on Magazines, Hall of Fame, Business Women, Podcasts, Articles, Industries and Contact Us." },
   { page: "Menu, buttons and footer", where: "Menus, buttons and labels", changes: "Menu names, button words, section headings and footer text. One tab per page, in the same order as the website." },
 ];
 

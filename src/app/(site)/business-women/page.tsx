@@ -28,9 +28,10 @@ export async function generateMetadata(): Promise<Metadata> {
     title: page.title,
     description: page.intro,
     seo: page.seo,
-    kicker: "Leadership profiles",
-    path: "/women-spotlight",
+    kicker: "Business Women",
+    path: "/business-women",
     keywords: [
+      "business women India",
       "women leaders in technology India",
       "women CEOs India",
       "women in business India",
@@ -48,11 +49,11 @@ export default async function WomenSpotlightPage({ searchParams }: { searchParam
     <main className="spot">
       <JsonLd
         data={[
-          pageLd("CollectionPage", { name: page.title, description: page.intro, path: "/women-spotlight" }),
-          breadcrumbLd([{ name: page.title, path: "/women-spotlight" }]),
+          pageLd("CollectionPage", { name: page.title, description: page.intro, path: "/business-women" }),
+          breadcrumbLd([{ name: page.title, path: "/business-women" }]),
           collectionLd({
             name: page.title,
-            path: "/women-spotlight",
+            path: "/business-women",
             items: profiles.map((p) => ({ name: p.name, url: storyHref(p.id), image: p.cover, description: p.intro })),
           }),
         ]}

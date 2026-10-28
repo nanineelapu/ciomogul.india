@@ -9,6 +9,7 @@ import FeaturedArticles from "@/components/home/FeaturedArticles";
 import WallOfFame from "@/components/home/WallOfFame";
 import Podcasts from "@/components/home/Podcasts";
 import Testimonials from "@/components/home/Testimonials";
+import TrustedBrands from "@/components/home/TrustedBrands";
 import GetFeatured from "@/components/home/GetFeatured";
 import Industries from "@/components/home/Industries";
 import Newsletter from "@/components/home/Newsletter";
@@ -39,6 +40,7 @@ export default async function Home() {
       <WallOfFame />
       <Podcasts />
       <Testimonials />
+      <TrustedBrands />
       <GetFeatured />
       <Newsletter text={text.home} />
     </main>

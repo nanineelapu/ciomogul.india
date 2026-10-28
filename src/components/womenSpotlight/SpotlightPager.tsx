@@ -13,7 +13,7 @@ export default async function SpotlightPager({ currentId }: { currentId: string 
   return (
     <nav className="wrap spot-pager" aria-label="More profiles">
       {prev && <PagerLink dir="prev" p={prev} label={t.pagerPrev} />}
-      <Link href="/women-spotlight#profile" className="spot-pager__all">
+      <Link href="/business-women#profile" className="spot-pager__all">
         <span className="spot-pager__label">{t.pagerBrowse}</span>
         <span className="spot-pager__name">{t.pagerAll}</span>
       </Link>

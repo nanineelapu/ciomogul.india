@@ -17,7 +17,13 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
     key: "header",
     title: "Top menu",
     sections: [
-      { title: "Menu", fields: [["nav", "Menu links", "Each item is a link name and the page it opens, for example /magazines."]] },
+      {
+        title: "Menu",
+        fields: [
+          ["nav", "Menu links", "Each item is a link name and the page it opens, for example /magazines. The item that opens /industries shows the Industries dropdown."],
+          ["allIndustries", "Last link in the Industries dropdown"],
+        ],
+      },
       {
         title: "Buttons",
         fields: [
@@ -48,7 +54,7 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
         ],
       },
       {
-        title: "4. Industries we cover",
+        title: "4. Industries we cover (the industries themselves are in 7. Industries)",
         fields: [
           ["industriesTitle", "Heading"],
           ["industriesIntro", "Line under the heading"],
@@ -65,7 +71,7 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
       },
       { title: "6. Featured articles", fields: [["featuredArticlesTitle", "Heading"]] },
       {
-        title: "7. Women leaders (Wall of fame)",
+        title: "7. Business women (Wall of fame)",
         fields: [
           ["wallTitle", "Heading"],
           ["wallIntro", "Line under the heading"],
@@ -76,7 +82,14 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
       { title: "8. Podcasts", fields: [["podcastsTitle", "Heading"]] },
       { title: "9. Testimonials", fields: [["testimonialsTitle", "Heading"]] },
       {
-        title: "10. Get featured",
+        title: "10. Trusted brands (the logos are in Home page → Trusted brands)",
+        fields: [
+          ["brandsKicker", "Small label above the heading"],
+          ["brandsTitle", "Heading"],
+        ],
+      },
+      {
+        title: "11. Get featured",
         fields: [
           ["getFeaturedKicker", "Small label above the heading"],
           ["getFeaturedTitle", "Heading"],
@@ -85,7 +98,7 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
         ],
       },
       {
-        title: "11. Newsletter",
+        title: "12. Newsletter",
         fields: [
           ["newsletterTitle", "Heading"],
           ["newsletterText", "Text"],
@@ -206,7 +219,7 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
   },
   {
     key: "womenSpotlight",
-    title: "Women Spotlight",
+    title: "Business Women",
     sections: [
       {
         title: "1. Top of the page",
@@ -229,7 +242,6 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
           ["readStory", "Read her story button"],
           ["readEdition", "Read the edition button"],
           ["viewSources", "View sources button"],
-          ["themesLabel", "Heading of the themes panel"],
         ],
       },
       {
@@ -310,6 +322,31 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
     ],
   },
   {
+    key: "industries",
+    title: "Industries",
+    sections: [
+      {
+        title: "1. Industries page",
+        fields: [
+          ["countWord", "Word after the number, as in 4 stories"],
+          ["countWordOne", "Same word for just one, as in 1 story"],
+          ["viewIndustry", "Link on each industry card"],
+        ],
+      },
+      {
+        title: "2. Industry page",
+        fields: [
+          ["backLink", "Back link"],
+          ["storiesTitle", "Stories heading"],
+          ["emptyTitle", "No stories yet: heading"],
+          ["emptyText", "No stories yet: text"],
+          ["emptyButton", "No stories yet: button"],
+          ["otherTitle", "Other industries heading"],
+        ],
+      },
+    ],
+  },
+  {
     key: "contact",
     title: "Contact",
     sections: [
@@ -358,7 +395,13 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
     key: "footer",
     title: "Footer",
     sections: [
-      { title: "1. Under the logo", fields: [["tagline", "Short description"]] },
+      {
+        title: "1. Under the logo",
+        fields: [
+          ["tagline", "Short description"],
+          ["followHeading", "Name of the social icons (read out by screen readers)", "The social links themselves are in 9. Contact Us."],
+        ],
+      },
       {
         title: "2. Link columns",
         fields: [
@@ -366,13 +409,17 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
           ["platformLinks", "First column: links"],
           ["exploreHeading", "Second column: heading"],
           ["exploreLinks", "Second column: links"],
-          ["legalHeading", "Third column: heading"],
-          ["termsLabel", "Terms of Service link"],
-          ["privacyLabel", "Privacy Policy link"],
-          ["followHeading", "Fourth column: heading", "The social links themselves are in Contact details and social links."],
+          ["contactHeading", "Third column: heading", "This column shows the email, phone and office from 9. Contact Us."],
         ],
       },
-      { title: "3. Bottom line", fields: [["copyright", "Copyright line"]] },
+      {
+        title: "3. Bottom line",
+        fields: [
+          ["copyright", "Copyright line"],
+          ["termsLabel", "Terms of Service link"],
+          ["privacyLabel", "Privacy Policy link"],
+        ],
+      },
     ],
   },
   {
@@ -409,4 +456,6 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
 // Kept in the data for older pages but no longer shown on the site.
 export const HIDDEN_TEXT_KEYS: Record<string, string[]> = {
   magazines: ["scrollToInside", "insideLabel"],
+  womenSpotlight: ["themesLabel"],
+  footer: ["legalHeading"],
 };

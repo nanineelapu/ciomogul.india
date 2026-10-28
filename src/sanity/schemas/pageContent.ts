@@ -22,9 +22,10 @@ export const pageContent = defineType({
   fields: [
     pageFields("magazines", "Magazines"),
     pageFields("hallOfFame", "Hall of Fame"),
-    pageFields("womenSpotlight", "Women Spotlight"),
+    pageFields("womenSpotlight", "Business Women"),
     pageFields("podcasts", "Podcasts"),
     pageFields("articles", "Articles"),
+    pageFields("industries", "Industries"),
     pageFields("contact", "Contact Us"),
   ],
   preview: { prepare: () => ({ title: "Page titles and intros" }) },

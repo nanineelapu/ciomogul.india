@@ -10,6 +10,7 @@ import { spotlightProfile } from "./spotlightProfile";
 import { podcast } from "./podcast";
 import { testimonial } from "./testimonial";
 import { industry } from "./industry";
+import { trustedBrand } from "./trustedBrand";
 import { hallOfFame } from "./hallOfFame";
 import { article } from "./article";
 import { aboutPage } from "./aboutPage";
@@ -34,6 +35,7 @@ export const schemaTypes: SchemaTypeDefinition[] = withHelp([
   featuredArticle,
   testimonial,
   industry,
+  trustedBrand,
   aboutPage,
   legalPage,
   siteSettings,

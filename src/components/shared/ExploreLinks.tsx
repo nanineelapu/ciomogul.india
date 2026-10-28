@@ -4,7 +4,7 @@ const LINKS = [
   { title: "Magazines", text: "Every edition, in one place.", href: "/magazines" },
   { title: "Podcasts", text: "Conversations with leaders.", href: "/podcasts" },
   { title: "Hall of Fame", text: "The permanent record.", href: "/hall-of-fame" },
-  { title: "Women Spotlight", text: "Leaders shaping the next decade.", href: "/women-spotlight" },
+  { title: "Business Women", text: "Leaders shaping the next decade.", href: "/business-women" },
 ];
 
 // Small row of links to the main sections. Used at the bottom of About.

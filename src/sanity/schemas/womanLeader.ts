@@ -34,7 +34,7 @@ export const womanLeader = defineType({
       title: "Bio paragraphs",
       type: "array",
       of: [{ type: "text", rows: 4 }],
-      description: "Paragraphs for the women spotlight detail page.",
+      description: "Paragraphs for the Business Women detail page.",
     }),
     defineField({ name: "order", title: "Order", type: "number", initialValue: 100 }),
   ],

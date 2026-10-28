@@ -8,7 +8,7 @@ export default async function WallOfFame() {
   const [leaders, t, profiles] = await Promise.all([getWomenLeaders(), getSiteText(), getPublishedProfiles()]);
   const published = new Set(profiles.map((p) => p.id));
   return (
-    <section className="section" id="women-spotlight" aria-labelledby="wall-title">
+    <section className="section" id="business-women" aria-labelledby="wall-title">
       <div className="wrap">
         <header className="s-head">
           <h2 className="s-title" id="wall-title">{t.home.wallTitle}</h2>
@@ -17,7 +17,7 @@ export default async function WallOfFame() {
         </header>
         <div className="leaders">
           {leaders.map((l) => (
-            <Link key={l.slug} href={published.has(l.slug) ? profileHref(l.slug) : "/women-spotlight#profile"} className="leader">
+            <Link key={l.slug} href={published.has(l.slug) ? profileHref(l.slug) : "/business-women#profile"} className="leader">
               <span className="leader__img"><Image src={l.image} alt={l.name} width={112} height={112} /></span>
               <span className="leader__body">
                 <span className="leader__org">{l.organization}</span>
@@ -28,7 +28,7 @@ export default async function WallOfFame() {
             </Link>
           ))}
         </div>
-        <p className="center-link wall-more"><Link href="/women-spotlight" className="btn btn-line">{t.home.wallButton}</Link></p>
+        <p className="center-link wall-more"><Link href="/business-women" className="btn btn-line">{t.home.wallButton}</Link></p>
       </div>
     </section>
   );

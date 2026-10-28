@@ -70,6 +70,9 @@ const nextConfig: NextConfig = {
       { source: "/news", destination: "/articles", permanent: true },
       { source: "/news/:slug", destination: "/articles/:slug", permanent: true },
       { source: "/home", destination: "/", permanent: true },
+      // Women Spotlight was renamed Business Women. Query strings (?profile=) are kept.
+      { source: "/women-spotlight", destination: "/business-women", permanent: true },
+      { source: "/women-spotlight/:path*", destination: "/business-women/:path*", permanent: true },
     ];
   },
   async headers() {

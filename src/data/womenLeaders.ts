@@ -1,7 +1,7 @@
 import type { WomanLeader } from "@/types/content";
 
 // The four real women leaders shown on the homepage strip, extended with
-// the fields the /women-spotlight archive + detail pages need. Eight more
+// the fields the /business-women archive + detail pages need. Eight more
 // placeholder entries follow so the filter + pagination have material.
 // Replaced per-entry from Sanity later.
 const BIO_LOREM = [

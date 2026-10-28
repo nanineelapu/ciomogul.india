@@ -14,8 +14,8 @@
         "href": "/hall-of-fame"
       },
       {
-        "label": "Women Spotlight",
-        "href": "/women-spotlight"
+        "label": "Business Women",
+        "href": "/business-women"
       },
       {
         "label": "Podcasts",
@@ -26,6 +26,10 @@
         "href": "/articles"
       },
       {
+        "label": "Industries",
+        "href": "/industries"
+      },
+      {
         "label": "About Us",
         "href": "/about"
       },
@@ -34,6 +38,7 @@
         "href": "/contact"
       }
     ],
+    "allIndustries": "All industries",
     "latestEdition": "Latest edition",
     "subscribe": "Subscribe"
   },
@@ -65,8 +70,8 @@
         "href": "/hall-of-fame"
       },
       {
-        "label": "Women Spotlight",
-        "href": "/women-spotlight"
+        "label": "Business Women",
+        "href": "/business-women"
       },
       {
         "label": "Articles",
@@ -75,8 +80,13 @@
       {
         "label": "Contact Us",
         "href": "/contact"
+      },
+      {
+        "label": "Industries",
+        "href": "/industries"
       }
     ],
+    "contactHeading": "Get in touch",
     "legalHeading": "Legal",
     "termsLabel": "Terms of Service",
     "privacyLabel": "Privacy Policy",
@@ -91,17 +101,19 @@
     "coverStoryLabel": "Cover story",
     "industriesTitle": "Industries we cover",
     "industriesIntro": "The sectors our leaders come from.",
-    "industriesButton": "Explore articles",
+    "industriesButton": "Explore industries",
     "newsTitle": "Latest news",
     "updatesTitle": "Vital updates",
     "readMore": "Read more",
     "featuredArticlesTitle": "Featured articles",
     "wallTitle": "Wall of fame",
-    "wallIntro": "Women leaders featured on the cover of CIO Mogul India.",
+    "wallIntro": "Business women featured on the cover of CIO Mogul India.",
     "wallReadFeature": "Read feature →",
-    "wallButton": "See all women leaders",
+    "wallButton": "See all business women",
     "podcastsTitle": "Podcasts",
     "testimonialsTitle": "What leaders say",
+    "brandsKicker": "Enterprise proven",
+    "brandsTitle": "Trusted by India's top enterprises",
     "getFeaturedKicker": "For leaders & companies",
     "getFeaturedTitle": "Get featured in CIO Mogul India",
     "getFeaturedText": "Share your story with India's technology and business leaders — as a cover story, a profile or an interview.",
@@ -253,10 +265,21 @@
     "themesLabel": "Leadership themes",
     "honoursTitle": "Honours",
     "sourcesTitle": "Sources",
-    "backLink": "Back to Women Spotlight",
+    "backLink": "Back to Business Women",
     "pagerBrowse": "Browse",
     "pagerAll": "All Honorees",
     "pagerPrev": "← Previous",
     "pagerNext": "Next →"
+  },
+  "industries": {
+    "storiesTitle": "Stories",
+    "emptyTitle": "Stories coming soon.",
+    "emptyText": "New stories for this industry will appear here as soon as they are published.",
+    "emptyButton": "Browse all articles",
+    "backLink": "All industries",
+    "otherTitle": "Other industries",
+    "viewIndustry": "View industry",
+    "countWord": "stories",
+    "countWordOne": "story"
   }
 }
