@@ -655,10 +655,11 @@
 }
 .brands .brands__title {
   margin: 0;
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: clamp(22px, 2.4vw, 30px);
-  line-height: 1.2;
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: clamp(20px, 2vw, 26px);
+  line-height: 1.3;
+  letter-spacing: -.01em;
   color: var(--color-ink);
 }
 
@@ -698,9 +699,9 @@
 .brands .brands__item > a,
 .brands .brands__item > .brands__name,
 .brands .brands__item > .brands__logo {
-  width: 180px;
-  height: 96px;
-  padding: 16px 20px;
+  width: 200px;
+  height: 100px;
+  padding: 18px 16px;
   background: var(--color-paper);
   border: 1px solid var(--color-rule-soft);
   transition: border-color .2s ease, box-shadow .25s ease;
@@ -711,13 +712,7 @@
 .brands .brands__item:hover > .brands__name,
 .brands .brands__item:hover > .brands__logo { border-color: var(--color-navy); box-shadow: 0 10px 24px -18px rgba(11, 31, 58, .45); }
 
-.brands .brands__logo {
-  object-fit: contain;
-  filter: grayscale(1);
-  opacity: .75;
-  transition: filter .25s ease, opacity .25s ease, border-color .2s ease, box-shadow .25s ease;
-}
-.brands .brands__item:hover .brands__logo { filter: none; opacity: 1; }
+.brands .brands__logo { object-fit: contain; }
 
 .brands .brands__name {
   font-family: var(--font-display);

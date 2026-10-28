@@ -607,7 +607,9 @@ export async function getBrands(): Promise<Brand[]> {
       slug: r.slug || r.name,
       name: r.name,
       // No uploaded logo means the name is shown instead.
-      logo: r.logo ? mapImage(r.logo, "") || null : null,
+      logo: r.logo
+        ? mapImage(r.logo, "") || null
+        : (BRANDS.find((b) => b.slug === r.slug)?.logo ?? null),
       website: r.website ? safeHref(r.website, "") || null : null,
     }));
   }, BRANDS);
