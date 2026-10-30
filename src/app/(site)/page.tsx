@@ -7,7 +7,6 @@ import CoverStories from "@/components/home/CoverStories";
 import LatestNews from "@/components/home/LatestNews";
 import FeaturedArticles from "@/components/home/FeaturedArticles";
 import WallOfFame from "@/components/home/WallOfFame";
-import Podcasts from "@/components/home/Podcasts";
 import Testimonials from "@/components/home/Testimonials";
 import TrustedBrands from "@/components/home/TrustedBrands";
 import GetFeatured from "@/components/home/GetFeatured";
@@ -38,7 +37,6 @@ export default async function Home() {
       <LatestNews />
       <FeaturedArticles />
       <WallOfFame />
-      <Podcasts />
       <Testimonials />
       <TrustedBrands />
       <GetFeatured />

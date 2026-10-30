@@ -54,7 +54,7 @@ export const FIELD_HELP: Record<string, string> = {
   "hallOfFame.seo": SEO,
 
   // ── Podcasts
-  "podcast.title": "Episode title on the Podcasts page, the home page and the player pop-up.",
+  "podcast.title": "Episode title on the Podcasts page and in the player pop-up.",
   "podcast.slug": SLUG,
   "podcast.date": "Shown on the episode card. For example: 12 March 2026.",
   "podcast.publishedYear": "Used by the year filter on the Podcasts page.",

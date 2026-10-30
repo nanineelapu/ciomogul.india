@@ -79,17 +79,16 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
           ["wallButton", "Button"],
         ],
       },
-      { title: "8. Podcasts", fields: [["podcastsTitle", "Heading"]] },
-      { title: "9. Testimonials", fields: [["testimonialsTitle", "Heading"]] },
+      { title: "8. Testimonials", fields: [["testimonialsTitle", "Heading"]] },
       {
-        title: "10. Trusted brands (the logos are in Home page → Trusted brands)",
+        title: "9. Trusted brands (the logos are in Home page → Trusted brands)",
         fields: [
           ["brandsKicker", "Small label above the heading"],
           ["brandsTitle", "Heading"],
         ],
       },
       {
-        title: "11. Get featured",
+        title: "10. Get featured",
         fields: [
           ["getFeaturedKicker", "Small label above the heading"],
           ["getFeaturedTitle", "Heading"],
@@ -98,7 +97,7 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
         ],
       },
       {
-        title: "12. Newsletter",
+        title: "11. Newsletter",
         fields: [
           ["newsletterTitle", "Heading"],
           ["newsletterText", "Text"],
@@ -458,4 +457,5 @@ export const HIDDEN_TEXT_KEYS: Record<string, string[]> = {
   magazines: ["scrollToInside", "insideLabel"],
   womenSpotlight: ["themesLabel"],
   footer: ["legalHeading"],
+  home: ["podcastsTitle"],
 };

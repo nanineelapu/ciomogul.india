@@ -33,6 +33,7 @@ export default function Header({
   const [date, setDate] = useState("");
   const [compact, setCompact] = useState(false);
   const barRef = useRef<HTMLSpanElement>(null);
+  const navRef = useRef<HTMLDivElement>(null);
   const lenis = useLenis();
   const [open, setOpen] = useState(false);
 
@@ -55,7 +56,14 @@ export default function Header({
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
+    // Lock the page at the root. Locking <body> as well would turn it into its own
+    // scroll box, which breaks the sticky bar and moves the page behind the menu.
+    document.documentElement.style.overflow = open ? "hidden" : "";
+    // The open menu fills exactly the space from the bar to the bottom of the screen.
+    if (open && navRef.current?.parentElement) {
+      const top = navRef.current.parentElement.getBoundingClientRect().bottom;
+      navRef.current.style.setProperty("--nav-top", `${Math.max(0, Math.round(top))}px`);
+    }
     if (open) lenis?.stop();
     else lenis?.start();
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") { setOpen(false); setDropOpen(false); } };
@@ -92,7 +100,7 @@ export default function Header({
         <div className="wrap">
           <div className="masthead__inner">
             <Link href="/" className="masthead__brand">CIO Mogul India</Link>
-            <div className={`nav${open ? " is-open" : ""}`}>
+            <div ref={navRef} data-lenis-prevent className={`nav${open ? " is-open" : ""}`}>
               {text.nav.map((item) => {
                 const active = isActive(pathname, item.href);
                 if (item.href === INDUSTRIES_HREF && industries.length > 0) {

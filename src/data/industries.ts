@@ -17,15 +17,15 @@ export const INDUSTRIES: Industry[] = [
       "Stories from the leaders who keep India's goods moving: procurement, logistics, manufacturing and the technology that makes supply chains resilient.",
   },
   {
-    slug: "hr",
-    name: "HR",
+    slug: "human-resources",
+    name: "Human Resources",
     description: "People, talent and the future of work.",
     intro:
       "How India's people leaders hire, grow and keep talent, and how technology is changing the way teams work.",
   },
   {
-    slug: "it",
-    name: "IT",
+    slug: "information-technology",
+    name: "Information Technology",
     description: "Cloud, data, AI and enterprise technology.",
     intro:
       "CIOs and CTOs on cloud, data, AI, software and the infrastructure that runs India's businesses.",

@@ -733,3 +733,28 @@
   .brands .brands__item > .brands__logo { width: 140px; height: 76px; padding: 12px 14px; }
   .brands .brands__name { font-size: 15px; }
 }
+
+/* Phones: section headings stay smaller than the page title */
+@media (max-width: 720px) {
+  .section-head__title { font-size: 24px; line-height: 1.2; }
+  .page-lead + .section .mag-empty { padding-top: 32px; padding-bottom: 32px; }
+}
+
+/* Open mobile menu: a fixed panel from the bar to the bottom of the screen,
+   which scrolls by itself while the page behind stays still. */
+@media (max-width: 1080px) {
+  .nav,
+  .masthead .nav {
+    position: fixed;
+    top: var(--nav-top, 56px);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: auto;
+    max-height: none;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+  }
+}

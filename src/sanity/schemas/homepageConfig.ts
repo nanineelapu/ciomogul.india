@@ -28,7 +28,7 @@ export const homepageConfig = defineType({
     }),
     defineField({
       name: "getFeaturedCovers",
-      title: "11. Get featured: the covers behind the box",
+      title: "10. Get featured: the covers behind the box",
       type: "array",
       of: [{ type: "reference", to: [{ type: "magazineEdition" }] }],
       description: "Any 2-3 covers used as the decorative stack behind the CTA.",
