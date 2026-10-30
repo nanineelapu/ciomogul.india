@@ -843,3 +843,6 @@
 /* Industries button: no browser focus box on click or tap; a quiet outline for keyboard users */
 .nav__drop-btn:focus { outline: none; }
 .nav__drop-btn:focus-visible { outline: 2px solid rgba(255, 255, 255, .6); outline-offset: 2px; }
+
+/* The keyboard hint above the magazine reader means nothing on a phone */
+@media (max-width: 720px) { .mag-pdf__hint { display: none; } }

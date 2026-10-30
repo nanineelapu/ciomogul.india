@@ -116,7 +116,7 @@ async function MagazineDetailPageContent({
                   {t.magazines.readButton} <span aria-hidden>↓</span>
                 </a>
                 {edition.pdfUrl ? (
-                  <a href={edition.pdfUrl} download className="btn btn-line">
+                  <a href={edition.pdfUrl.includes("cdn.sanity.io") ? `${edition.pdfUrl}?dl=` : edition.pdfUrl} className="btn btn-line">
                     {t.magazines.downloadButton}
                   </a>
                 ) : (

@@ -1,0 +1,166 @@
+/* Magazine reader. Animations only use opacity and transform, which the browser
+   handles without redrawing the pages, so turning stays smooth. */
+
+.pdfv {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-paper-2);
+  border: 1px solid var(--color-rule-soft);
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .6s ease, transform .6s cubic-bezier(.2, .7, .2, 1);
+}
+.pdfv.is-visible { opacity: 1; transform: none; }
+
+.pdfv.is-fullscreen { height: 100vh; background: var(--color-navy); border: 0; }
+.pdfv.is-fullscreen .pdfv__stage { flex: 1; min-height: 0; background: var(--color-navy); }
+
+.pdfv__stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--color-paper-2);
+  touch-action: pan-y pinch-zoom;
+}
+.pdfv__stage.is-zoomed {
+  display: block;
+  overflow: auto;
+  overscroll-behavior: contain;
+  touch-action: auto;
+}
+.pdfv__stage .react-pdf__Document { flex: none; }
+.pdfv__stage.is-zoomed .react-pdf__Document { width: max-content; margin: 0 auto; }
+
+/* Pages are stacked in one place, so turning never changes the layout. */
+.pdfv__book { position: relative; }
+
+.pdfv__view {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .32s ease, transform .42s cubic-bezier(.2, .7, .2, 1), visibility 0s linear .42s;
+}
+.pdfv__view.is-before { transform: translate3d(-28px, 0, 0); }
+.pdfv__view.is-after { transform: translate3d(28px, 0, 0); }
+.pdfv__view.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: none;
+  transition: opacity .32s ease, transform .42s cubic-bezier(.2, .7, .2, 1), visibility 0s;
+}
+
+.pdfv__page {
+  position: relative;
+  flex: none;
+  background: #fff;
+  box-shadow: 0 14px 34px -18px rgba(11, 31, 58, .45);
+}
+/* A soft crease down the middle of a two-page spread. */
+.pdfv__view.is-spread .pdfv__page:first-child::after,
+.pdfv__view.is-spread .pdfv__page:last-child::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 26px;
+  pointer-events: none;
+}
+.pdfv__view.is-spread .pdfv__page:first-child::after { right: 0; background: linear-gradient(to left, rgba(11, 31, 58, .14), transparent); }
+.pdfv__view.is-spread .pdfv__page:last-child::after { left: 0; background: linear-gradient(to right, rgba(11, 31, 58, .14), transparent); }
+
+.pdfv__page canvas { display: block; }
+
+.pdfv__message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 48px 24px;
+  text-align: center;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  color: var(--color-muted);
+}
+.pdfv__message b { font-weight: 600; color: var(--color-ink); }
+
+/* Controls */
+.pdfv__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 12px;
+  padding: 12px 18px;
+  background: var(--color-navy);
+  color: #fff;
+}
+.pdfv.is-fullscreen .pdfv__controls { border-top: 1px solid rgba(255, 255, 255, .14); }
+
+.pdfv__group { display: inline-flex; align-items: center; gap: 6px; }
+
+.pdfv__btn {
+  display: inline-grid;
+  place-items: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 10px;
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, .25);
+  font-family: var(--font-ui);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color .18s ease, border-color .18s ease, opacity .18s ease;
+}
+.pdfv__btn:hover:not(:disabled) { background: rgba(255, 255, 255, .12); border-color: #fff; }
+.pdfv__btn:disabled { opacity: .35; cursor: not-allowed; }
+.pdfv__btn--text {
+  padding: 0 14px;
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.pdfv__pageinfo {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 5px;
+  min-width: 84px;
+  font-family: var(--font-ui);
+  font-variant-numeric: tabular-nums;
+}
+.pdfv__pageinfo b { font-size: 14px; font-weight: 700; }
+.pdfv__pageinfo span { font-size: 12px; opacity: .65; }
+
+.pdfv__zoom {
+  min-width: 46px;
+  text-align: center;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 720px) {
+  .pdfv__controls { justify-content: center; padding: 10px; }
+  .pdfv__group { gap: 4px; }
+  .pdfv__btn { min-width: 40px; height: 40px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pdfv,
+  .pdfv__view,
+  .pdfv__view.is-active { transition: none; }
+  .pdfv { transform: none; }
+  .pdfv__view.is-before,
+  .pdfv__view.is-after { transform: none; }
+}

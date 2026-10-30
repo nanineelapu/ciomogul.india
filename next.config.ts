@@ -9,7 +9,7 @@ const isDev = process.env.NODE_ENV === "development";
 // image CDN (images, PDFs), the YouTube no-cookie player, and this site.
 const SITE_CSP = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
+  `script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'${isDev ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https://cdn.sanity.io",
   "font-src 'self' data:",

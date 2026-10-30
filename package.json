@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit",
     "sanity": "sanity",
     "seed": "node scripts/seed-sanity.mjs",
+    "sync:pdfjs": "node scripts/sync-pdfjs.mjs",
     "seed:about": "node scripts/seed-sanity.mjs --only=aboutPage --force"
   },
   "dependencies": {
