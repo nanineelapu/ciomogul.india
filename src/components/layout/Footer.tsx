@@ -3,8 +3,8 @@ import Link from "next/link";
 import { getSiteSettings, getSiteText } from "@/lib/data";
 import SocialIcon from "./SocialIcon";
 
-// Classic magazine footer: a double rule, the masthead (logo, line, social
-// icons), two link columns and a contact column, then a quiet bottom strip.
+// White footer in three rows: logo and social icons; description, two link
+// columns and contact details in equal columns; then the legal line.
 export default async function Footer() {
   const [settings, t] = await Promise.all([getSiteSettings(), getSiteText()]);
   const f = t.footer;
@@ -18,22 +18,24 @@ export default async function Footer() {
   return (
     <footer className="footer">
       <div className="wrap">
-        <div className="footer__rule" aria-hidden />
+        <div className="footer__head-row">
+          <Link href="/" aria-label="CIO Mogul India home">
+            <Image src="/assets/cio-mogul-india-logo.png" alt="CIO Mogul India — Magazine" width={1200} height={374} sizes="260px" />
+          </Link>
+          {social.length > 0 && (
+            <div className="footer__social" aria-label={f.followHeading}>
+              {social.map((s) => (
+                <a key={s.key} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label}>
+                  <SocialIcon name={s.key} />
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
+
         <div className="footer__top">
           <div className="footer__brand">
-            <Link href="/" aria-label="CIO Mogul India home">
-              <Image src="/assets/cio-mogul-india-logo.png" alt="CIO Mogul India — Magazine" width={1200} height={374} sizes="260px" />
-            </Link>
             <p>{f.tagline}</p>
-            {social.length > 0 && (
-              <div className="footer__social" aria-label={f.followHeading}>
-                {social.map((s) => (
-                  <a key={s.key} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label}>
-                    <SocialIcon name={s.key} />
-                  </a>
-                ))}
-              </div>
-            )}
           </div>
 
           {cols.map((col) => (
