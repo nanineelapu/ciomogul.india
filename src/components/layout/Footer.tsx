@@ -22,7 +22,7 @@ export default async function Footer() {
         <div className="footer__top">
           <div className="footer__brand">
             <Link href="/" aria-label="CIO Mogul India home">
-              <Image src="/assets/logo-cio-mogul.png" alt="CIO Mogul India — Magazine" width={1200} height={374} sizes="260px" />
+              <Image src="/assets/cio-mogul-india-logo.png" alt="CIO Mogul India — Magazine" width={1200} height={374} sizes="260px" />
             </Link>
             <p>{f.tagline}</p>
             {social.length > 0 && (

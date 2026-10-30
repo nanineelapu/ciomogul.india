@@ -6,7 +6,7 @@ export const SITE_NAME = "CIO Mogul India";
 export const DEFAULT_TITLE = "CIO Mogul India | Digital Magazine for India's Technology Leaders";
 export const DEFAULT_DESCRIPTION =
   "CIO Mogul India is a digital magazine and media platform featuring cover stories, interviews, podcasts and news from India's CIOs, CTOs, CISOs, founders and business leaders.";
-export const LOGO_PATH = "/assets/logo-cio-mogul.png";
+export const LOGO_PATH = "/assets/cio-mogul-india-logo.png";
 
 // A focused list of terms people really search for in this field. Search
 // engines ignore long keyword lists, so quality matters more than quantity.

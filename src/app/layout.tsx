@@ -30,6 +30,15 @@ export const metadata: Metadata = {
   title: { default: DEFAULT_TITLE, template: `%s | ${SITE_NAME}` },
   description: DEFAULT_DESCRIPTION,
   keywords: BASE_KEYWORDS,
+  // favicon.ico sits in src/app, so Next.js adds it (with a cache-busting address).
+  icons: {
+    icon: [
+      { url: "/icons/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/icons/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: [{ url: "/icons/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+  },
+  manifest: "/icons/site.webmanifest",
   applicationName: SITE_NAME,
   publisher: SITE_NAME,
   creator: SITE_NAME,
