@@ -108,7 +108,9 @@ export default function Header({
                     <div
                       key={item.href}
                       className={`nav__drop${dropOpen ? " is-open" : ""}`}
-                      onMouseLeave={() => setDropOpen(false)}
+                      // Desktop panel only. In the phone and iPad menu, opening the list moves the
+                      // layout, so the pointer "leaves" and the list would close straight away.
+                      onMouseLeave={() => { if (window.matchMedia("(min-width: 1081px)").matches) setDropOpen(false); }}
                     >
                       <button
                         type="button"

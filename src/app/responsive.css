@@ -479,7 +479,7 @@
 }
 .ind-card:hover { border-color: var(--color-navy); transform: translateY(-3px); box-shadow: 0 14px 30px -20px rgba(11, 31, 58, .4); }
 .ind-card__num { font-family: var(--font-ui); font-size: 12px; font-weight: 700; letter-spacing: .2em; color: var(--color-navy-light); }
-.ind-card__name { font-family: var(--font-display); font-weight: 800; font-size: 26px; line-height: 1.15; color: var(--color-ink); }
+.ind-card__name { font-family: var(--font-ui); font-weight: 600; font-size: 21px; line-height: 1.25; color: var(--color-ink); }
 .ind-card__text { font-size: 14px; line-height: 1.6; color: var(--color-ink-2); }
 .ind-card__foot {
   display: flex;
@@ -498,7 +498,7 @@
 @media (max-width: 600px) {
   .ind-list { grid-template-columns: 1fr; gap: 12px; }
   .ind-card { padding: 18px; }
-  .ind-card__name { font-size: 22px; }
+  .ind-card__name { font-size: 19px; }
 }
 
 /* /industries/[slug]: other industries as chips */
@@ -839,3 +839,7 @@
   .footer .footer__top { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 16px; padding: 24px 0 26px; }
   .footer .footer__contact { grid-column: 1 / -1; }
 }
+
+/* Industries button: no browser focus box on click or tap; a quiet outline for keyboard users */
+.nav__drop-btn:focus { outline: none; }
+.nav__drop-btn:focus-visible { outline: 2px solid rgba(255, 255, 255, .6); outline-offset: 2px; }
