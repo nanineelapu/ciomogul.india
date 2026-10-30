@@ -19,8 +19,12 @@ const PDF_OPTIONS = {
 
 const ZOOM_LEVELS = [1, 1.25, 1.5, 2];
 const BOOK_MIN_WIDTH = 900; // narrower than this shows one page at a time
-const SWIPE_DISTANCE = 50;
+const DRAG_START = 8; // pointer travel that makes a press a drag rather than a click
+const DRAG_COMMIT = 0.25; // how far a page must be dragged to complete the turn when let go
+const WHEEL_THRESHOLD = 30; // wheel travel that counts as one page turn
+const FLIP_MS = 720;
 const MAX_PIXEL_RATIO = 2; // sharper than this costs memory and looks the same
+const DRAW_AHEAD = 2; // spreads kept drawn either side, so a turn never shows a blank page
 
 // Which pages show together: book mode keeps the cover and a last even page alone.
 function buildViews(numPages: number, book: boolean): number[][] {
@@ -35,10 +39,19 @@ function downloadUrl(file: string) {
   return file.includes("cdn.sanity.io") ? `${file}${file.includes("?") ? "&" : "?"}dl=` : file;
 }
 
+type Flip = { from: number[]; to: number[]; forward: boolean; held?: boolean };
+type Drag = { x: number; y: number; active: boolean; forward: boolean; progress: number };
+
 export default function PdfViewer({ file, title }: { file: string; title: string }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
-  const swipeRef = useRef<{ x: number; y: number } | null>(null);
+  const bookRef = useRef<HTMLDivElement>(null);
+  const dragRef = useRef<Drag | null>(null);
+  const animsRef = useRef<Animation[]>([]);
+  const commitRef = useRef(true); // whether the running turn lands on the new page
+  const turningRef = useRef(false);
+  const queuedRef = useRef<1 | -1 | 0>(0);
+  const wheelRef = useRef({ sum: 0, until: 0 });
 
   const [near, setNear] = useState(false); // load nothing until the reader is close
   const [visible, setVisible] = useState(false); // entrance animation
@@ -49,7 +62,7 @@ export default function PdfViewer({ file, title }: { file: string; title: string
   const [size, setSize] = useState({ width: 0, height: 0 });
   const [fullscreen, setFullscreen] = useState(false);
   const [failed, setFailed] = useState(false);
-  const [direction, setDirection] = useState<1 | -1>(1);
+  const [flip, setFlip] = useState<Flip | null>(null);
 
   const zoom = ZOOM_LEVELS[zoomIdx];
   const zoomed = zoomIdx > 0;
@@ -63,9 +76,7 @@ export default function PdfViewer({ file, title }: { file: string; title: string
   // until someone zooms in.
   const pad = size.width < 600 ? 12 : 28;
   const maxHeight = fullscreen ? size.height - pad * 2 : Math.max(320, Math.min(size.height, 900));
-  const fitWidth = Math.floor(
-    Math.min((size.width - pad * 2) / (book ? 2 : 1), maxHeight / ratio)
-  );
+  const fitWidth = Math.floor(Math.min((size.width - pad * 2) / (book ? 2 : 1), maxHeight / ratio));
   const pageWidth = Math.max(160, Math.round(fitWidth * zoom));
   const pageHeight = Math.round(pageWidth * ratio);
   const stageHeight = fullscreen ? undefined : Math.round(fitWidth * ratio) + pad * 2;
@@ -100,7 +111,8 @@ export default function PdfViewer({ file, title }: { file: string; title: string
     };
   }, []);
 
-  // Measure the stage. Height is the screen minus room for the bar and controls.
+  // Measure the stage. Redrawing every page is expensive, so small height changes
+  // (a phone's address bar sliding away while scrolling) are ignored.
   useEffect(() => {
     const el = stageRef.current;
     if (!el) return;
@@ -109,10 +121,13 @@ export default function PdfViewer({ file, title }: { file: string; title: string
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
         const full = Boolean(document.fullscreenElement);
-        setSize({
-          width: el.clientWidth,
-          height: full ? el.clientHeight : Math.round(window.innerHeight * 0.76),
-        });
+        const width = el.clientWidth;
+        const height = full ? el.clientHeight : Math.round(window.innerHeight * 0.76);
+        setSize((prev) =>
+          prev.width === width && (full ? prev.height === height : Math.abs(prev.height - height) < 120)
+            ? prev
+            : { width, height }
+        );
       });
     };
     measure();
@@ -136,16 +151,145 @@ export default function PdfViewer({ file, title }: { file: string; title: string
   }, []);
 
   const goTo = useCallback(
-    (idx: number) => {
+    (idx: number, held = false) => {
       const target = views[idx];
-      if (!target) return;
-      setDirection(idx >= viewIdx ? 1 : -1);
-      setPage(target[0]);
+      if (!target || idx === viewIdx) return;
+      // A turn is already running: remember one more, so fast clicks aren't lost.
+      if (turningRef.current) {
+        queuedRef.current = idx > viewIdx ? 1 : -1;
+        return;
+      }
       setZoomIdx(0);
       stageRef.current?.scrollTo({ top: 0, left: 0 });
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (reduced || Math.abs(idx - viewIdx) > 1) {
+        setPage(target[0]);
+        return;
+      }
+      turningRef.current = true;
+      setFlip({ from: views[viewIdx], to: target, forward: idx > viewIdx, held });
     },
     [views, viewIdx]
   );
+
+  // Runs the page turn. It animates only transform and opacity, directly on the
+  // pages, so React and the page drawing aren't involved while it plays.
+  useEffect(() => {
+    if (!flip) return;
+    const el = bookRef.current;
+    commitRef.current = true;
+    const finish = () => {
+      if (commitRef.current) setPage(flip.to[0]);
+      setFlip(null);
+      turningRef.current = false;
+    };
+    if (!el) {
+      finish();
+      return;
+    }
+    const pageEl = (n?: number) => (n ? el.querySelector<HTMLElement>(`[data-page="${n}"]`) : null);
+    const half = FLIP_MS / 2;
+    const anims: Animation[] = [];
+    const play = (node: HTMLElement | null, origin: string, from: number, to: number, delay: number, easing: string) => {
+      if (!node) return;
+      node.style.transformOrigin = origin;
+      anims.push(
+        node.animate([{ transform: `rotateY(${from}deg)` }, { transform: `rotateY(${to}deg)` }], {
+          duration: half,
+          delay,
+          easing,
+          fill: "both",
+        })
+      );
+      const shade = node.querySelector(".pdfv__shade");
+      if (shade) {
+        anims.push(
+          shade.animate(
+            delay ? [{ opacity: 0.32 }, { opacity: 0 }] : [{ opacity: 0 }, { opacity: 0.32 }],
+            { duration: half, delay, easing: "linear", fill: "both" }
+          )
+        );
+      }
+    };
+
+    if (book) {
+      // The leaf is the page lifting off one side and the page landing on the other.
+      if (flip.forward) {
+        play(pageEl(flip.from.find((n) => n % 2 === 1)), "left center", 0, -90, 0, "ease-in");
+        play(pageEl(flip.to.find((n) => n % 2 === 0)), "right center", 90, 0, half, "ease-out");
+      } else {
+        play(pageEl(flip.from.find((n) => n % 2 === 0)), "right center", 0, 90, 0, "ease-in");
+        play(pageEl(flip.to.find((n) => n % 2 === 1)), "left center", -90, 0, half, "ease-out");
+      }
+    } else if (flip.forward) {
+      play(pageEl(flip.from[0]), "left center", 0, -90, 0, "ease-in");
+    } else {
+      play(pageEl(flip.to[0]), "left center", -90, 0, 0, "ease-out");
+    }
+
+    // A dragged page holds still and follows the pointer until it is let go.
+    animsRef.current = anims;
+    const drag = dragRef.current;
+    if (flip.held && drag?.active) {
+      const total = book ? FLIP_MS : half;
+      anims.forEach((a) => {
+        a.pause();
+        a.currentTime = drag.progress * total;
+      });
+    }
+
+    let cancelled = false;
+    Promise.all(anims.map((a) => a.finished))
+      .catch(() => {})
+      .then(() => {
+        if (cancelled) return;
+        finish();
+        anims.forEach((a) => a.cancel());
+      });
+    return () => {
+      cancelled = true;
+      animsRef.current = [];
+      anims.forEach((a) => a.cancel());
+      turningRef.current = false;
+    };
+  }, [flip, book]);
+
+  // Play a turn that was asked for while the last one was running.
+  useEffect(() => {
+    if (flip || !queuedRef.current) return;
+    const step = queuedRef.current;
+    queuedRef.current = 0;
+    goTo(viewIdx + step);
+  }, [flip, viewIdx, goTo]);
+
+  // Mouse wheel turns the pages once the reader is on screen. At the first and
+  // last page, or while the reader is only partly visible, the page scrolls as usual.
+  useEffect(() => {
+    const el = stageRef.current;
+    if (!el || !numPages) return;
+    const onWheel = (e: WheelEvent) => {
+      if (zoomed || e.ctrlKey || Math.abs(e.deltaY) < Math.abs(e.deltaX)) return;
+      const forward = e.deltaY > 0;
+      if (forward ? !canNext : !canPrev) return;
+      const box = (rootRef.current ?? el).getBoundingClientRect();
+      const tolerance = 90;
+      if (box.top < -tolerance || box.bottom > window.innerHeight + tolerance) return;
+
+      // Handled here: the browser and the smooth-scroll library must not scroll too.
+      e.preventDefault();
+      e.stopPropagation();
+      const w = wheelRef.current;
+      const now = performance.now();
+      if (now < w.until) return; // still settling after the last turn
+      w.sum += e.deltaY;
+      if (Math.abs(w.sum) < WHEEL_THRESHOLD) return;
+      w.sum = 0;
+      w.until = now + FLIP_MS + 140;
+      goTo(viewIdx + (forward ? 1 : -1));
+    };
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
+  }, [numPages, zoomed, canNext, canPrev, viewIdx, goTo]);
 
   // Arrow keys and +/-, only while the reader is on screen and nothing is being typed.
   useEffect(() => {
@@ -184,30 +328,67 @@ export default function PdfViewer({ file, title }: { file: string; title: string
     else el.requestFullscreen().catch(() => {});
   }, []);
 
-  // Swipe to turn on touch screens (when not zoomed in, where a drag should pan).
-  const onTouchStart = (e: React.TouchEvent) => {
-    const t = e.touches[0];
-    swipeRef.current = e.touches.length === 1 ? { x: t.clientX, y: t.clientY } : null;
+  // Like a magazine in the hand: click the right or left side to turn that way, or
+  // hold a page and drag it. Works the same for mouse and touch; a zoomed page pans instead.
+  const onPointerDown = (e: React.PointerEvent) => {
+    if (zoomed || !numPages || e.button !== 0 || !e.isPrimary) return;
+    dragRef.current = { x: e.clientX, y: e.clientY, active: false, forward: true, progress: 0 };
   };
-  const onTouchEnd = (e: React.TouchEvent) => {
-    const s = swipeRef.current;
-    swipeRef.current = null;
-    if (!s || zoomed) return;
-    const t = e.changedTouches[0];
-    const dx = t.clientX - s.x;
-    const dy = t.clientY - s.y;
-    if (Math.abs(dx) > SWIPE_DISTANCE && Math.abs(dx) > Math.abs(dy) * 1.5) goTo(viewIdx + (dx < 0 ? 1 : -1));
+  const onPointerMove = (e: React.PointerEvent) => {
+    const d = dragRef.current;
+    if (!d || !e.isPrimary) return;
+    const dx = e.clientX - d.x;
+    const dy = e.clientY - d.y;
+    if (!d.active) {
+      if (Math.hypot(dx, dy) < DRAG_START) return;
+      const forward = dx < 0;
+      // Mostly vertical, or nowhere to turn to: not a page drag.
+      if (Math.abs(dx) < Math.abs(dy) * 1.2 || turningRef.current || (forward ? !canNext : !canPrev)) {
+        dragRef.current = null;
+        return;
+      }
+      d.active = true;
+      d.forward = forward;
+      e.currentTarget.setPointerCapture(e.pointerId);
+      goTo(viewIdx + (forward ? 1 : -1), true);
+    }
+    // Kept just inside both ends: a paused animation sitting exactly on an end restarts when played.
+    d.progress = Math.min(0.99, Math.max(0.01, (d.forward ? -dx : dx) / pageWidth));
+    const total = book ? FLIP_MS : FLIP_MS / 2;
+    animsRef.current.forEach((a) => {
+      a.currentTime = d.progress * total;
+    });
+  };
+  const endDrag = (commit: boolean) => {
+    commitRef.current = commit;
+    animsRef.current.forEach((a) => (commit ? a.play() : a.reverse()));
+  };
+  const onPointerUp = (e: React.PointerEvent) => {
+    const d = dragRef.current;
+    dragRef.current = null;
+    if (!d) return;
+    if (d.active) {
+      endDrag(d.progress >= DRAG_COMMIT);
+      return;
+    }
+    const box = bookRef.current?.getBoundingClientRect();
+    if (!box || e.clientX < box.left || e.clientX > box.right || e.clientY < box.top || e.clientY > box.bottom) return;
+    goTo(viewIdx + (e.clientX >= box.left + box.width / 2 ? 1 : -1));
+  };
+  const onPointerCancel = () => {
+    const d = dragRef.current;
+    dragRef.current = null;
+    if (d?.active) endDrag(false);
   };
 
-  // Only the current spread and its neighbours are drawn; the neighbours are
-  // ready before they are needed, which is what makes turning instant.
-  const mounted = views
-    .map((pages, i) => ({ pages, i }))
-    .filter(({ i }) => Math.abs(i - viewIdx) <= 1);
+  // Pages kept drawn: the current spread and its neighbours, ready before they're needed.
+  const mountedPages = useMemo(
+    () => views.filter((_, i) => Math.abs(i - viewIdx) <= DRAW_AHEAD).flat(),
+    [views, viewIdx]
+  );
 
-  const firstShown = views[viewIdx]?.[0] ?? 1;
-  const lastShown = views[viewIdx]?.[views[viewIdx].length - 1] ?? 1;
-  const pageLabel = firstShown === lastShown ? String(firstShown) : `${firstShown}-${lastShown}`;
+  const current = views[viewIdx] ?? [1];
+  const pageLabel = current.length > 1 ? `${current[0]}-${current[current.length - 1]}` : String(current[0]);
 
   return (
     <div
@@ -220,10 +401,13 @@ export default function PdfViewer({ file, title }: { file: string; title: string
         ref={stageRef}
         className={`pdfv__stage${zoomed ? " is-zoomed" : ""}`}
         style={{ height: stageHeight, padding: pad }}
-        // Only a zoomed page scrolls inside; otherwise the wheel keeps moving the page.
+        // Only a zoomed page scrolls inside. Marking it otherwise would stop the site
+        // scrolling while the pointer is over the reader.
         {...(zoomed ? { "data-lenis-prevent": true } : {})}
-        onTouchStart={onTouchStart}
-        onTouchEnd={onTouchEnd}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerCancel}
       >
         {failed ? (
           <div className="pdfv__message">
@@ -242,32 +426,41 @@ export default function PdfViewer({ file, title }: { file: string; title: string
             error={null}
           >
             {numPages > 0 && (
-              <div
-                className="pdfv__book"
-                style={{ width: pageWidth * (book ? 2 : 1), height: pageHeight }}
-                data-direction={direction}
-              >
-                {mounted.map(({ pages, i }) => (
-                  <div
-                    key={pages[0]}
-                    className={`pdfv__view ${i === viewIdx ? "is-active" : i < viewIdx ? "is-before" : "is-after"}${pages.length === 2 ? " is-spread" : ""}`}
-                    aria-hidden={i !== viewIdx}
-                  >
-                    {pages.map((n) => (
-                      <div key={n} className="pdfv__page" style={{ width: pageWidth, height: pageHeight }}>
-                        <Page
-                          pageNumber={n}
-                          width={pageWidth}
-                          devicePixelRatio={pixelRatio}
-                          renderAnnotationLayer={false}
-                          renderTextLayer={false}
-                          loading={null}
-                          onRenderError={() => {}}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                ))}
+              <div ref={bookRef} className="pdfv__book" style={{ width: pageWidth * (book ? 2 : 1), height: pageHeight }}>
+                {mountedPages.map((n) => {
+                  const onLeft = book && n % 2 === 0;
+                  const showing = flip ? flip.from.includes(n) || flip.to.includes(n) : current.includes(n);
+                  // The page that lifts or lands sits on top of the pages staying still.
+                  const leaf = flip
+                    ? book
+                      ? flip.forward
+                        ? (flip.from.includes(n) && !onLeft) || (flip.to.includes(n) && onLeft)
+                        : (flip.from.includes(n) && onLeft) || (flip.to.includes(n) && !onLeft)
+                      : flip.forward
+                        ? flip.from.includes(n)
+                        : flip.to.includes(n)
+                    : false;
+                  return (
+                    <div
+                      key={n}
+                      data-page={n}
+                      className={`pdfv__page${book ? (onLeft ? " is-left" : " is-right") : ""}${showing ? " is-showing" : ""}${leaf ? " is-leaf" : ""}`}
+                      style={{ width: pageWidth, height: pageHeight, left: book && !onLeft ? pageWidth : 0 }}
+                      aria-hidden={!showing}
+                    >
+                      <Page
+                        pageNumber={n}
+                        width={pageWidth}
+                        devicePixelRatio={pixelRatio}
+                        renderAnnotationLayer={false}
+                        renderTextLayer={false}
+                        loading={null}
+                        onRenderError={() => {}}
+                      />
+                      <span className="pdfv__shade" aria-hidden />
+                    </div>
+                  );
+                })}
               </div>
             )}
           </Document>

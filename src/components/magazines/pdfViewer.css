@@ -33,38 +33,38 @@
 .pdfv__stage .react-pdf__Document { flex: none; }
 .pdfv__stage.is-zoomed .react-pdf__Document { width: max-content; margin: 0 auto; }
 
-/* Pages are stacked in one place, so turning never changes the layout. */
-.pdfv__book { position: relative; }
-
-.pdfv__view {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  justify-content: center;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: opacity .32s ease, transform .42s cubic-bezier(.2, .7, .2, 1), visibility 0s linear .42s;
-}
-.pdfv__view.is-before { transform: translate3d(-28px, 0, 0); }
-.pdfv__view.is-after { transform: translate3d(28px, 0, 0); }
-.pdfv__view.is-active {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  transform: none;
-  transition: opacity .32s ease, transform .42s cubic-bezier(.2, .7, .2, 1), visibility 0s;
-}
+/* Pages sit in fixed places, so turning never changes the layout. The perspective
+   is what makes a turning page look like a real sheet. */
+.pdfv__book { position: relative; perspective: 2600px; cursor: pointer; user-select: none; }
+.pdfv__stage.is-zoomed .pdfv__book { cursor: auto; }
 
 .pdfv__page {
-  position: relative;
-  flex: none;
+  position: absolute;
+  top: 0;
   background: #fff;
-  box-shadow: 0 14px 34px -18px rgba(11, 31, 58, .45);
+  visibility: hidden;
+  /* Kept on its own layer, so scrolling the site doesn't repaint the magazine. */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  contain: layout paint;
 }
-/* A soft crease down the middle of a two-page spread. */
-.pdfv__view.is-spread .pdfv__page:first-child::after,
-.pdfv__view.is-spread .pdfv__page:last-child::after {
+.pdfv__page.is-showing { visibility: visible; box-shadow: 0 14px 34px -18px rgba(11, 31, 58, .45); }
+.pdfv__page.is-leaf { z-index: 3; will-change: transform; }
+
+.pdfv__page canvas { display: block; }
+
+/* Darkens a page as it lifts, like a sheet catching less light. */
+.pdfv__shade {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* A soft crease at the spine of the book. */
+.pdfv__page.is-left::after,
+.pdfv__page.is-right::after {
   content: "";
   position: absolute;
   top: 0;
@@ -72,10 +72,8 @@
   width: 26px;
   pointer-events: none;
 }
-.pdfv__view.is-spread .pdfv__page:first-child::after { right: 0; background: linear-gradient(to left, rgba(11, 31, 58, .14), transparent); }
-.pdfv__view.is-spread .pdfv__page:last-child::after { left: 0; background: linear-gradient(to right, rgba(11, 31, 58, .14), transparent); }
-
-.pdfv__page canvas { display: block; }
+.pdfv__page.is-left::after { right: 0; background: linear-gradient(to left, rgba(11, 31, 58, .14), transparent); }
+.pdfv__page.is-right::after { left: 0; background: linear-gradient(to right, rgba(11, 31, 58, .14), transparent); }
 
 .pdfv__message {
   display: flex;
@@ -157,10 +155,5 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pdfv,
-  .pdfv__view,
-  .pdfv__view.is-active { transition: none; }
-  .pdfv { transform: none; }
-  .pdfv__view.is-before,
-  .pdfv__view.is-after { transform: none; }
+  .pdfv { transition: none; transform: none; }
 }

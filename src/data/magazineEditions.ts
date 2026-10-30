@@ -19,7 +19,7 @@ export const MAGAZINE_EDITIONS: MagazineEdition[] = [
     pullQuote: "",
     pullQuoteAttribution: "",
     roleTags: ["Role Tag One", "Role Tag Two", "Role Tag Three"],
-    pdfUrl: "/assets/pdfs/sample.pdf",
+    pdfUrl: null,
     publishedOn: "October 2026",
     publishedYear: 2026,
     body: [LOREM_PARAGRAPH, LOREM_PARAGRAPH_2, LOREM_PARAGRAPH_3],
