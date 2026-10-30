@@ -758,3 +758,45 @@
     touch-action: pan-y;
   }
 }
+
+/* ==========================================================================
+   Footer: simple alignment pass
+   One thin line on top, brand on the left, three evenly spaced columns whose
+   last edge lines up with the right edge of the bottom line.
+   ========================================================================== */
+.footer { border-top: 1px solid var(--color-rule-soft); }
+.footer .footer__rule { display: none; }
+
+.footer .footer__top {
+  grid-template-columns: minmax(0, 1fr) repeat(3, auto);
+  column-gap: 80px;
+  align-items: start;
+  padding: 44px 0 36px;
+}
+.footer .footer__brand { max-width: 340px; gap: 14px; }
+.footer .footer__brand img { height: 56px; }
+
+.footer .footer__head {
+  margin: 0 0 6px;
+  padding-bottom: 0;
+  font-size: 13px;
+  letter-spacing: .08em;
+}
+.footer .footer__head::after { display: none; }
+.footer .footer__col { gap: 8px; }
+.footer .footer__contact a:first-of-type { font-weight: 400; color: var(--color-ink-2); }
+.footer .footer__contact a:first-of-type:hover { color: var(--color-navy-2); }
+
+.footer .footer__social a { width: 32px; height: 32px; }
+.footer .footer__social svg { width: 15px; height: 15px; }
+
+.footer .footer__bottom { background: transparent; }
+.footer .footer__bottom-inner { padding-top: 14px; padding-bottom: 14px; }
+
+@media (max-width: 1080px) {
+  .footer .footer__top { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 24px; row-gap: 28px; padding: 36px 0 28px; }
+}
+@media (max-width: 720px) {
+  .footer .footer__top { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 16px; padding: 28px 0 24px; }
+  .footer .footer__brand img { height: 48px; }
+}
