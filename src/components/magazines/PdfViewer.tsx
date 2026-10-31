@@ -52,6 +52,7 @@ async function openPdf(url: string, onFail: () => void) {
 
 const ZOOM_LEVELS = [1, 1.25, 1.5, 2];
 const BOOK_MIN_WIDTH = 900; // narrower than this shows one page at a time
+const READER_CHROME = 138; // site navbar, reader controls and padding: the magazine fills the rest of the window
 const WIDE_SHEET = 1.1; // a PDF page this much wider than tall holds two magazine pages
 const DRAG_START = 8; // pointer travel that makes a press a drag rather than a click
 const DRAG_COMMIT = 0.25; // how far a page must be dragged to complete the turn when let go
@@ -175,8 +176,8 @@ export default function PdfViewer({ file, title, poster }: { file: string; title
 
   // Page size: fits the room available, so a page never needs inner scrolling
   // until someone zooms in.
-  const pad = size.width < 600 ? 12 : 28;
-  const maxHeight = fullscreen ? size.height - pad * 2 : Math.max(320, Math.min(size.height, 900));
+  const pad = 12;
+  const maxHeight = fullscreen ? size.height - pad * 2 : Math.max(320, Math.min(size.height, 1300));
   const fitWidth = Math.floor(Math.min((size.width - pad * 2) / (book ? 2 : 1), maxHeight / ratio));
   const pageWidth = Math.max(160, Math.round(fitWidth * zoom));
   const pageHeight = Math.round(pageWidth * ratio);
@@ -224,7 +225,7 @@ export default function PdfViewer({ file, title, poster }: { file: string; title
         const full = Boolean(document.fullscreenElement);
         const width = el.clientWidth;
         if (!width) return; // hidden for a moment; keep the last size
-        const height = full ? el.clientHeight : Math.round(window.innerHeight * 0.76);
+        const height = full ? el.clientHeight : window.innerHeight - READER_CHROME;
         setSize((prev) =>
           prev.width === width && (full ? prev.height === height : Math.abs(prev.height - height) < 120)
             ? prev
