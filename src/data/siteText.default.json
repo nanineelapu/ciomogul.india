@@ -150,7 +150,7 @@
     "scrollToInside": "Scroll down to see what is inside this edition",
     "insideLabel": "Inside this edition",
     "readerTitle": "Read the magazine",
-    "readerHint": "Scroll or use the arrows to turn pages",
+    "readerHint": "Click or drag a page to turn it",
     "readerSoon": "Preview coming soon",
     "readerPlaceholderTitle": "PDF viewer",
     "readerPlaceholderText": "The embedded reader will appear here once the edition's PDF is uploaded in Sanity.",

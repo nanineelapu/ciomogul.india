@@ -17,6 +17,6 @@ const PdfViewer = dynamic(() => import("./PdfViewer"), {
   ),
 });
 
-export default function PdfViewerLoader(props: { file: string; title: string }) {
+export default function PdfViewerLoader(props: { file: string; title: string; poster?: string }) {
   return <PdfViewer {...props} />;
 }

@@ -150,6 +150,7 @@ async function MagazineDetailPageContent({
             {edition.pdfUrl ? (
               <PdfViewer
                 file={edition.pdfUrl}
+                poster={edition.coverImage}
                 title={`${edition.featuredPersonName} — ${edition.editionLabel}`}
               />
             ) : (

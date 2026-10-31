@@ -1,36 +1,114 @@
 "use client";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Document, Page, pdfjs, type DocumentProps } from "react-pdf";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { pdfjs } from "react-pdf";
 import "./pdfViewer.css";
 
 // The worker and the files below are copied from the pdf.js that react-pdf uses
 // (npm run sync:pdfjs). They must be the same version or the reader won't start.
 pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
 
-// A stable object, or react-pdf reloads the file on every render.
-// disableAutoFetch: only the pages being looked at are downloaded.
+// disableAutoFetch + disableStream: only the pages being looked at are downloaded.
 const PDF_OPTIONS = {
   cMapUrl: "/pdfjs/cmaps/",
   standardFontDataUrl: "/pdfjs/standard_fonts/",
   wasmUrl: "/pdfjs/wasm/",
   iccUrl: "/pdfjs/iccs/",
   disableAutoFetch: true,
+  disableStream: true,
+  rangeChunkSize: 1 << 20,
+  enableHWA: true,
 } as const;
+
+type PdfDocument = Awaited<ReturnType<typeof pdfjs.getDocument>["promise"]>;
+
+// Sanity's CDN serves parts of a file but hides the header pdf.js looks for, so left
+// alone pdf.js downloads the whole magazine first. Asking for the parts ourselves
+// means opening a magazine costs a few MB. Falls back to a plain download.
+class RangeLoader extends pdfjs.PDFDataRangeTransport {
+  constructor(length: number, private url: string, private onFail: () => void) {
+    super(length, null);
+  }
+  requestDataRange(begin: number, end: number) {
+    const get = () =>
+      fetch(this.url, { headers: { Range: `bytes=${begin}-${end - 1}` } }).then((r) => {
+        if (!r.ok) throw new Error(String(r.status));
+        return r.arrayBuffer().then((b) => (r.status === 206 ? new Uint8Array(b) : new Uint8Array(b).subarray(begin, end)));
+      });
+    get()
+      .catch(() => get())
+      .then((bytes) => this.onDataRange(begin, bytes))
+      .catch(this.onFail);
+  }
+}
+
+async function openPdf(url: string, onFail: () => void) {
+  const length = await fetch(url, { method: "HEAD" })
+    .then((r) => (r.ok ? Number(r.headers.get("content-length")) || 0 : 0))
+    .catch(() => 0);
+  return length
+    ? pdfjs.getDocument({ ...PDF_OPTIONS, range: new RangeLoader(length, url, onFail) })
+    : pdfjs.getDocument({ ...PDF_OPTIONS, url });
+}
 
 const ZOOM_LEVELS = [1, 1.25, 1.5, 2];
 const BOOK_MIN_WIDTH = 900; // narrower than this shows one page at a time
+const WIDE_SHEET = 1.1; // a PDF page this much wider than tall holds two magazine pages
 const DRAG_START = 8; // pointer travel that makes a press a drag rather than a click
 const DRAG_COMMIT = 0.25; // how far a page must be dragged to complete the turn when let go
 const WHEEL_THRESHOLD = 30; // wheel travel that counts as one page turn
 const FLIP_MS = 720;
 const MAX_PIXEL_RATIO = 2; // sharper than this costs memory and looks the same
 const DRAW_AHEAD = 2; // spreads kept drawn either side, so a turn never shows a blank page
+const KEEP_SHEETS = 12; // finished sheets kept in memory, so going back is instant
+const DRAW_GAP = 160; // pause between background drawing, so the page stays responsive
 
-// Which pages show together: book mode keeps the cover and a last even page alone.
-function buildViews(numPages: number, book: boolean): number[][] {
-  if (!book) return Array.from({ length: numPages }, (_, i) => [i + 1]);
-  const views: number[][] = [[1]];
-  for (let p = 2; p <= numPages; p += 2) views.push(p + 1 <= numPages ? [p, p + 1] : [p]);
+// One magazine page. A wide PDF page is a printed spread: two magazine pages on one
+// sheet, so it becomes two sides, each showing one half of the sheet.
+type Side = { n: number; pdfPage: number; part: "full" | "left" | "right" };
+type PdfSize = { w: number; h: number };
+
+const isWide = (p: PdfSize) => p.w > p.h * WIDE_SHEET;
+
+// A PDF whose first page is wide isn't a magazine with a cover (slides, say), so
+// its pages are shown whole, one at a time.
+function buildSides(sizes: PdfSize[]): Side[] {
+  const split = sizes.length > 0 && !isWide(sizes[0]);
+  const sides: Side[] = [];
+  sizes.forEach((p, i) => {
+    const pdfPage = i + 1;
+    if (split && isWide(p)) {
+      sides.push({ n: sides.length + 1, pdfPage, part: "left" });
+      sides.push({ n: sides.length + 1, pdfPage, part: "right" });
+    } else {
+      sides.push({ n: sides.length + 1, pdfPage, part: "full" });
+    }
+  });
+  return sides;
+}
+
+// Which sides show together: book mode keeps the cover alone, keeps each spread
+// together, and pairs up single pages. A single page left over stays alone.
+function buildViews(sides: Side[], book: boolean): number[][] {
+  if (!book) return sides.map((side) => [side.n]);
+  const views: number[][] = [];
+  let single = 0;
+  const flush = () => {
+    if (single) views.push([single]);
+    single = 0;
+  };
+  sides.forEach((side, i) => {
+    if (i === 0) views.push([side.n]);
+    else if (side.part === "left") {
+      flush();
+      views.push([side.n, side.n + 1]);
+    } else if (side.part === "full") {
+      if (single) {
+        views.push([single, side.n]);
+        single = 0;
+      } else single = side.n;
+    }
+  });
+  flush();
   return views;
 }
 
@@ -39,15 +117,24 @@ function downloadUrl(file: string) {
   return file.includes("cdn.sanity.io") ? `${file}${file.includes("?") ? "&" : "?"}dl=` : file;
 }
 
-type Flip = { from: number[]; to: number[]; forward: boolean; held?: boolean };
-type Drag = { x: number; y: number; active: boolean; forward: boolean; progress: number };
+// lift: the page leaving; land: the page arriving. Only these two move.
+type Flip = { from: number[]; to: number[]; forward: boolean; held?: boolean; lift?: number; land?: number };
+type Job = { key: string; pdfPage: number; width: number; visible: boolean };
+type Drag = { x: number; y: number; button: number; active: boolean; forward: boolean; progress: number };
 
-export default function PdfViewer({ file, title }: { file: string; title: string }) {
+const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+export default function PdfViewer({ file, title, poster }: { file: string; title: string; poster?: string }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const bookRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<Drag | null>(null);
   const animsRef = useRef<Animation[]>([]);
+  const docRef = useRef<PdfDocument | null>(null);
+  const sheetsRef = useRef(new Map<string, HTMLCanvasElement>()); // finished sheets
+  const jobsRef = useRef<Job[]>([]); // what should be drawn, most important first
+  const skipRef = useRef(new Set<string>()); // sheets that failed to draw
+  const drawingRef = useRef(false);
   const commitRef = useRef(true); // whether the running turn lands on the new page
   const turningRef = useRef(false);
   const queuedRef = useRef<1 | -1 | 0>(0);
@@ -55,19 +142,33 @@ export default function PdfViewer({ file, title }: { file: string; title: string
 
   const [near, setNear] = useState(false); // load nothing until the reader is close
   const [visible, setVisible] = useState(false); // entrance animation
-  const [numPages, setNumPages] = useState(0);
-  const [ratio, setRatio] = useState(1.414); // page height / width
+  const [sizes, setSizes] = useState<PdfSize[]>([]); // every PDF page, for its shape
   const [page, setPage] = useState(1); // first page on screen; survives layout changes
   const [zoomIdx, setZoomIdx] = useState(0);
   const [size, setSize] = useState({ width: 0, height: 0 });
   const [fullscreen, setFullscreen] = useState(false);
   const [failed, setFailed] = useState(false);
   const [flip, setFlip] = useState<Flip | null>(null);
+  const [drawn, setDrawn] = useState(0); // goes up each time a sheet finishes
 
   const zoom = ZOOM_LEVELS[zoomIdx];
   const zoomed = zoomIdx > 0;
-  const book = size.width >= BOOK_MIN_WIDTH && ratio >= 1;
-  const views = useMemo(() => buildViews(numPages, book), [numPages, book]);
+  const sides = useMemo(() => buildSides(sizes), [sizes]);
+  const numPages = sides.length;
+  // Tallest page shape, so no page is ever cropped; shorter ones sit centred.
+  const ratio = useMemo(
+    () =>
+      sides.reduce((max, side) => {
+        const p = sizes[side.pdfPage - 1];
+        return Math.max(max, p.h / (side.part === "full" ? p.w : p.w / 2));
+      }, 0) || 1.414,
+    [sides, sizes]
+  );
+  // Before the PDF opens, assume a magazine, so the cover doesn't jump when it does.
+  const book = size.width >= BOOK_MIN_WIDTH && (sizes.length === 0 || !isWide(sizes[0]));
+  const views = useMemo(() => buildViews(sides, book), [sides, book]);
+  // In book mode the first page of a view sits on the left, except the cover.
+  const leftSides = useMemo(() => new Set(book ? views.slice(1).map((v) => v[0]) : []), [views, book]);
   const viewIdx = Math.max(0, views.findIndex((v) => v.includes(page)));
   const canPrev = viewIdx > 0;
   const canNext = viewIdx < views.length - 1;
@@ -92,7 +193,7 @@ export default function PdfViewer({ file, title }: { file: string; title: string
           io.disconnect();
         }
       },
-      { rootMargin: "600px 0px" }
+      { rootMargin: "1500px 0px" }
     );
     const reveal = new IntersectionObserver(
       (entries) => {
@@ -122,6 +223,7 @@ export default function PdfViewer({ file, title }: { file: string; title: string
       frame = requestAnimationFrame(() => {
         const full = Boolean(document.fullscreenElement);
         const width = el.clientWidth;
+        if (!width) return; // hidden for a moment; keep the last size
         const height = full ? el.clientHeight : Math.round(window.innerHeight * 0.76);
         setSize((prev) =>
           prev.width === width && (full ? prev.height === height : Math.abs(prev.height - height) < 120)
@@ -150,6 +252,44 @@ export default function PdfViewer({ file, title }: { file: string; title: string
     return () => document.removeEventListener("fullscreenchange", onChange);
   }, []);
 
+  // Open the PDF. Page shapes are read first: they decide how the magazine is laid out.
+  useEffect(() => {
+    if (!near) return;
+    let cancelled = false;
+    let task: Awaited<ReturnType<typeof openPdf>> | null = null;
+    const sheets = sheetsRef.current;
+    const fail = () => {
+      if (!cancelled) setFailed(true);
+    };
+    openPdf(file, fail)
+      .then(async (opened) => {
+        task = opened;
+        if (cancelled) return;
+        const pdf = await opened.promise;
+        const all = await Promise.all(
+          Array.from({ length: pdf.numPages }, async (_, i) => {
+            try {
+              const vp = (await pdf.getPage(i + 1)).getViewport({ scale: 1 });
+              return { w: vp.width, h: vp.height };
+            } catch {
+              return { w: 1, h: 1.414 }; // keep the default shape
+            }
+          })
+        );
+        if (cancelled) return;
+        docRef.current = pdf;
+        setSizes(all);
+        setFailed(false);
+      })
+      .catch(fail);
+    return () => {
+      cancelled = true;
+      docRef.current = null;
+      sheets.clear();
+      task?.destroy();
+    };
+  }, [near, file]);
+
   const goTo = useCallback(
     (idx: number, held = false) => {
       const target = views[idx];
@@ -167,21 +307,30 @@ export default function PdfViewer({ file, title }: { file: string; title: string
         return;
       }
       turningRef.current = true;
-      setFlip({ from: views[viewIdx], to: target, forward: idx > viewIdx, held });
+      const forward = idx > viewIdx;
+      const from = views[viewIdx];
+      const leftOf = (v: number[]) => v.find((n) => leftSides.has(n));
+      const rightOf = (v: number[]) => v.find((n) => !leftSides.has(n));
+      setFlip(
+        book
+          ? { from, to: target, forward, held, lift: forward ? rightOf(from) : leftOf(from), land: forward ? leftOf(target) : rightOf(target) }
+          : { from, to: target, forward, held, lift: forward ? from[0] : undefined, land: forward ? undefined : target[0] }
+      );
     },
-    [views, viewIdx]
+    [views, viewIdx, leftSides, book]
   );
 
   // Runs the page turn. It animates only transform and opacity, directly on the
   // pages, so React and the page drawing aren't involved while it plays.
-  useEffect(() => {
+  // A layout effect: it must start before the browser paints, or the arriving page
+  // shows flat for one frame.
+  useLayoutEffect(() => {
     if (!flip) return;
     const el = bookRef.current;
     commitRef.current = true;
     const finish = () => {
       if (commitRef.current) setPage(flip.to[0]);
       setFlip(null);
-      turningRef.current = false;
     };
     if (!el) {
       finish();
@@ -215,16 +364,16 @@ export default function PdfViewer({ file, title }: { file: string; title: string
     if (book) {
       // The leaf is the page lifting off one side and the page landing on the other.
       if (flip.forward) {
-        play(pageEl(flip.from.find((n) => n % 2 === 1)), "left center", 0, -90, 0, "ease-in");
-        play(pageEl(flip.to.find((n) => n % 2 === 0)), "right center", 90, 0, half, "ease-out");
+        play(pageEl(flip.lift), "left center", 0, -90, 0, "ease-in");
+        play(pageEl(flip.land), "right center", 90, 0, half, "ease-out");
       } else {
-        play(pageEl(flip.from.find((n) => n % 2 === 0)), "right center", 0, 90, 0, "ease-in");
-        play(pageEl(flip.to.find((n) => n % 2 === 1)), "left center", -90, 0, half, "ease-out");
+        play(pageEl(flip.lift), "right center", 0, 90, 0, "ease-in");
+        play(pageEl(flip.land), "left center", -90, 0, half, "ease-out");
       }
     } else if (flip.forward) {
-      play(pageEl(flip.from[0]), "left center", 0, -90, 0, "ease-in");
+      play(pageEl(flip.lift), "left center", 0, -90, 0, "ease-in");
     } else {
-      play(pageEl(flip.to[0]), "left center", -90, 0, 0, "ease-out");
+      play(pageEl(flip.land), "left center", -90, 0, 0, "ease-out");
     }
 
     // A dragged page holds still and follows the pointer until it is let go.
@@ -242,9 +391,9 @@ export default function PdfViewer({ file, title }: { file: string; title: string
     Promise.all(anims.map((a) => a.finished))
       .catch(() => {})
       .then(() => {
-        if (cancelled) return;
-        finish();
-        anims.forEach((a) => a.cancel());
+        // The pages keep their final position until React has swapped them: the
+        // clean-up below removes the animations in that same update, so nothing snaps back.
+        if (!cancelled) finish();
       });
     return () => {
       cancelled = true;
@@ -262,22 +411,17 @@ export default function PdfViewer({ file, title }: { file: string; title: string
     goTo(viewIdx + step);
   }, [flip, viewIdx, goTo]);
 
-  // Mouse wheel turns the pages once the reader is on screen. At the first and
-  // last page, or while the reader is only partly visible, the page scrolls as usual.
+  // Mouse wheel turns the pages only in fullscreen. Otherwise it scrolls the site as usual.
   useEffect(() => {
     const el = stageRef.current;
-    if (!el || !numPages) return;
+    if (!el || !numPages || !fullscreen) return;
     const onWheel = (e: WheelEvent) => {
       if (zoomed || e.ctrlKey || Math.abs(e.deltaY) < Math.abs(e.deltaX)) return;
-      const forward = e.deltaY > 0;
-      if (forward ? !canNext : !canPrev) return;
-      const box = (rootRef.current ?? el).getBoundingClientRect();
-      const tolerance = 90;
-      if (box.top < -tolerance || box.bottom > window.innerHeight + tolerance) return;
-
       // Handled here: the browser and the smooth-scroll library must not scroll too.
       e.preventDefault();
       e.stopPropagation();
+      const forward = e.deltaY > 0;
+      if (forward ? !canNext : !canPrev) return;
       const w = wheelRef.current;
       const now = performance.now();
       if (now < w.until) return; // still settling after the last turn
@@ -289,7 +433,7 @@ export default function PdfViewer({ file, title }: { file: string; title: string
     };
     el.addEventListener("wheel", onWheel, { passive: false });
     return () => el.removeEventListener("wheel", onWheel);
-  }, [numPages, zoomed, canNext, canPrev, viewIdx, goTo]);
+  }, [numPages, fullscreen, zoomed, canNext, canPrev, viewIdx, goTo]);
 
   // Arrow keys and +/-, only while the reader is on screen and nothing is being typed.
   useEffect(() => {
@@ -309,18 +453,6 @@ export default function PdfViewer({ file, title }: { file: string; title: string
     return () => window.removeEventListener("keydown", onKey);
   }, [numPages, viewIdx, goTo]);
 
-  const onLoadSuccess = useCallback<NonNullable<DocumentProps["onLoadSuccess"]>>(async (pdf) => {
-    try {
-      const first = await pdf.getPage(1);
-      const vp = first.getViewport({ scale: 1 });
-      if (vp.width > 0) setRatio(vp.height / vp.width);
-    } catch {
-      // keep the default shape
-    }
-    setNumPages(pdf.numPages);
-    setFailed(false);
-  }, []);
-
   const toggleFullscreen = useCallback(() => {
     const el = rootRef.current;
     if (!el) return;
@@ -329,10 +461,11 @@ export default function PdfViewer({ file, title }: { file: string; title: string
   }, []);
 
   // Like a magazine in the hand: click the right or left side to turn that way, or
-  // hold a page and drag it. Works the same for mouse and touch; a zoomed page pans instead.
+  // hold a page and drag it, with either mouse button. Works the same for mouse and
+  // touch; a zoomed page pans instead.
   const onPointerDown = (e: React.PointerEvent) => {
-    if (zoomed || !numPages || e.button !== 0 || !e.isPrimary) return;
-    dragRef.current = { x: e.clientX, y: e.clientY, active: false, forward: true, progress: 0 };
+    if (zoomed || !numPages || (e.button !== 0 && e.button !== 2) || !e.isPrimary) return;
+    dragRef.current = { x: e.clientX, y: e.clientY, button: e.button, active: false, forward: true, progress: 0 };
   };
   const onPointerMove = (e: React.PointerEvent) => {
     const d = dragRef.current;
@@ -361,7 +494,13 @@ export default function PdfViewer({ file, title }: { file: string; title: string
   };
   const endDrag = (commit: boolean) => {
     commitRef.current = commit;
-    animsRef.current.forEach((a) => (commit ? a.play() : a.reverse()));
+    animsRef.current.forEach((a) => {
+      if (!commit) a.reverse();
+      // The lifting page is done halfway through the turn. Playing it again would
+      // restart it from flat, so one already past its end just finishes.
+      else if (Number(a.currentTime) >= Number(a.effect?.getComputedTiming().endTime)) a.finish();
+      else a.play();
+    });
   };
   const onPointerUp = (e: React.PointerEvent) => {
     const d = dragRef.current;
@@ -371,6 +510,7 @@ export default function PdfViewer({ file, title }: { file: string; title: string
       endDrag(d.progress >= DRAG_COMMIT);
       return;
     }
+    if (d.button !== 0) return; // only the left button turns on a plain click
     const box = bookRef.current?.getBoundingClientRect();
     if (!box || e.clientX < box.left || e.clientX > box.right || e.clientY < box.top || e.clientY > box.bottom) return;
     goTo(viewIdx + (e.clientX >= box.left + box.width / 2 ? 1 : -1));
@@ -381,11 +521,86 @@ export default function PdfViewer({ file, title }: { file: string; title: string
     if (d?.active) endDrag(false);
   };
 
-  // Pages kept drawn: the current spread and its neighbours, ready before they're needed.
+  // Pages kept ready: the current spread and its neighbours.
   const mountedPages = useMemo(
     () => views.filter((_, i) => Math.abs(i - viewIdx) <= DRAW_AHEAD).flat(),
     [views, viewIdx]
   );
+
+  // Drawing a page freezes the browser for a moment, however it's done. So each sheet
+  // is drawn once, one at a time, the page on screen first, and never during a turn.
+  const drawSheets = useCallback(async () => {
+    if (drawingRef.current) return;
+    drawingRef.current = true;
+    const sheets = sheetsRef.current;
+    const nextJob = () => jobsRef.current.find((j) => !sheets.has(j.key) && !skipRef.current.has(j.key));
+    for (let job = nextJob(); job && docRef.current; job = nextJob()) {
+      if (turningRef.current || !job.visible) {
+        await wait(DRAW_GAP);
+        if (turningRef.current || job !== nextJob()) continue;
+      }
+      try {
+        const pdfPage = await docRef.current.getPage(job.pdfPage);
+        const base = pdfPage.getViewport({ scale: 1 });
+        const viewport = pdfPage.getViewport({ scale: job.width / base.width });
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.round(viewport.width);
+        canvas.height = Math.round(viewport.height);
+        await pdfPage.render({ canvas, viewport, annotationMode: pdfjs.AnnotationMode.DISABLE }).promise;
+        pdfPage.cleanup();
+        sheets.set(job.key, canvas);
+        for (const key of sheets.keys()) {
+          if (sheets.size <= KEEP_SHEETS) break;
+          if (!jobsRef.current.some((j) => j.key === key)) sheets.delete(key);
+        }
+        setDrawn((d) => d + 1);
+      } catch {
+        if (docRef.current) skipRef.current.add(job.key);
+      }
+    }
+    drawingRef.current = false;
+  }, []);
+
+  // A half of a spread shows half of the sheet.
+  const sheetFor = useCallback(
+    (side: Side) => {
+      const width = Math.round((side.part === "full" ? pageWidth : pageWidth * 2) * pixelRatio);
+      return { key: `${side.pdfPage}@${width}`, pdfPage: side.pdfPage, width };
+    },
+    [pageWidth, pixelRatio]
+  );
+
+  useEffect(() => {
+    if (!sides.length) return;
+    const order = [0, 1, 2, -1, -2]; // people mostly read forward
+    const jobs = new Map<string, Job>();
+    order.forEach((step) => {
+      (views[viewIdx + step] ?? []).forEach((n) => {
+        const sheet = sheetFor(sides[n - 1]);
+        if (!jobs.has(sheet.key)) jobs.set(sheet.key, { ...sheet, visible: step === 0 });
+      });
+    });
+    jobsRef.current = [...jobs.values()];
+    queueMicrotask(drawSheets);
+  }, [sides, views, viewIdx, sheetFor, drawSheets, flip]);
+
+  // Copy finished sheets onto the pages. Quick: the slow drawing has already happened.
+  useEffect(() => {
+    const el = bookRef.current;
+    if (!el) return;
+    mountedPages.forEach((n) => {
+      const side = sides[n - 1];
+      const sheet = sheetFor(side);
+      const source = sheetsRef.current.get(sheet.key);
+      const canvas = el.querySelector<HTMLCanvasElement>(`[data-page="${n}"] canvas`);
+      if (!source || !canvas || canvas.dataset.key === sheet.key) return;
+      const half = side.part !== "full";
+      canvas.width = half ? Math.round(source.width / 2) : source.width;
+      canvas.height = source.height;
+      canvas.getContext("2d")?.drawImage(source, side.part === "right" ? -canvas.width : 0, 0);
+      canvas.dataset.key = sheet.key;
+    });
+  }, [drawn, mountedPages, sides, sheetFor]);
 
   const current = views[viewIdx] ?? [1];
   const pageLabel = current.length > 1 ? `${current[0]}-${current[current.length - 1]}` : String(current[0]);
@@ -408,62 +623,49 @@ export default function PdfViewer({ file, title }: { file: string; title: string
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerCancel}
+        // The browser's right-click menu would interrupt a right-button drag.
+        onContextMenu={(e) => e.preventDefault()}
       >
         {failed ? (
           <div className="pdfv__message">
             <b>This edition could not be opened here.</b>
             <a href={downloadUrl(file)} className="btn btn-line btn-sm">Download the PDF</a>
           </div>
-        ) : !near || size.width === 0 ? (
+        ) : size.width === 0 ? (
           <div className="pdfv__message" role="status">Loading edition…</div>
+        ) : numPages === 0 ? (
+          // The cover from the site shows straight away, while the PDF opens.
+          <div className="pdfv__book" style={{ width: pageWidth * (book ? 2 : 1), height: pageHeight }}>
+            <div className="pdfv__page is-showing" style={{ width: pageWidth, height: pageHeight, left: book ? pageWidth : 0 }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              {poster && <img className="pdfv__poster" src={poster} alt="" />}
+              <span className="pdfv__spin" role="status" aria-label="Loading edition" />
+            </div>
+          </div>
         ) : (
-          <Document
-            file={file}
-            options={PDF_OPTIONS}
-            onLoadSuccess={onLoadSuccess}
-            onLoadError={() => setFailed(true)}
-            loading={<div className="pdfv__message" role="status">Loading edition…</div>}
-            error={null}
-          >
-            {numPages > 0 && (
-              <div ref={bookRef} className="pdfv__book" style={{ width: pageWidth * (book ? 2 : 1), height: pageHeight }}>
-                {mountedPages.map((n) => {
-                  const onLeft = book && n % 2 === 0;
-                  const showing = flip ? flip.from.includes(n) || flip.to.includes(n) : current.includes(n);
-                  // The page that lifts or lands sits on top of the pages staying still.
-                  const leaf = flip
-                    ? book
-                      ? flip.forward
-                        ? (flip.from.includes(n) && !onLeft) || (flip.to.includes(n) && onLeft)
-                        : (flip.from.includes(n) && onLeft) || (flip.to.includes(n) && !onLeft)
-                      : flip.forward
-                        ? flip.from.includes(n)
-                        : flip.to.includes(n)
-                    : false;
-                  return (
-                    <div
-                      key={n}
-                      data-page={n}
-                      className={`pdfv__page${book ? (onLeft ? " is-left" : " is-right") : ""}${showing ? " is-showing" : ""}${leaf ? " is-leaf" : ""}`}
-                      style={{ width: pageWidth, height: pageHeight, left: book && !onLeft ? pageWidth : 0 }}
-                      aria-hidden={!showing}
-                    >
-                      <Page
-                        pageNumber={n}
-                        width={pageWidth}
-                        devicePixelRatio={pixelRatio}
-                        renderAnnotationLayer={false}
-                        renderTextLayer={false}
-                        loading={null}
-                        onRenderError={() => {}}
-                      />
-                      <span className="pdfv__shade" aria-hidden />
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </Document>
+          <div ref={bookRef} className="pdfv__book" style={{ width: pageWidth * (book ? 2 : 1), height: pageHeight }}>
+            {mountedPages.map((n) => {
+              const onLeft = leftSides.has(n);
+              const showing = flip ? flip.from.includes(n) || flip.to.includes(n) : current.includes(n);
+              // The page that lifts or lands sits on top of the pages staying still.
+              const leaf = flip ? n === flip.lift || n === flip.land : false;
+              return (
+                <div
+                  key={n}
+                  data-page={n}
+                  className={`pdfv__page${book ? (onLeft ? " is-left" : " is-right") : ""}${showing ? " is-showing" : ""}${leaf ? " is-leaf" : ""}`}
+                  style={{ width: pageWidth, height: pageHeight, left: book && !onLeft ? pageWidth : 0 }}
+                  aria-hidden={!showing}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  {n === 1 && poster && <img className="pdfv__poster" src={poster} alt="" />}
+                  <canvas />
+                  <span className="pdfv__spin" aria-hidden />
+                  <span className="pdfv__shade" aria-hidden />
+                </div>
+              );
+            })}
+          </div>
         )}
       </div>
 

@@ -317,7 +317,7 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
   display: flex;
   align-items: center;
   height: 56px;
-  padding: 0 8px;
+  padding: 0 8px 0 0;
   background: var(--color-paper-2);
 }
 

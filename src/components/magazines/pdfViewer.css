@@ -51,7 +51,26 @@
 .pdfv__page.is-showing { visibility: visible; box-shadow: 0 14px 34px -18px rgba(11, 31, 58, .45); }
 .pdfv__page.is-leaf { z-index: 3; will-change: transform; }
 
-.pdfv__page canvas { display: block; }
+.pdfv__page { display: flex; align-items: center; }
+.pdfv__page canvas { position: relative; display: block; flex: none; width: 100%; height: auto; }
+
+/* Shows only on a page still being drawn. */
+.pdfv__poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.pdfv__spin {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 28px;
+  height: 28px;
+  margin: -14px 0 0 -14px;
+  border: 2px solid rgba(11, 31, 58, .18);
+  border-top-color: var(--color-navy);
+  border-radius: 50%;
+  animation: pdfv-spin .8s linear infinite;
+}
+.pdfv__page canvas[data-key] ~ .pdfv__spin { display: none; }
+.pdfv__poster ~ .pdfv__spin { border-color: rgba(255, 255, 255, .35); border-top-color: #fff; }
+@keyframes pdfv-spin { to { transform: rotate(360deg); } }
 
 /* Darkens a page as it lifts, like a sheet catching less light. */
 .pdfv__shade {
