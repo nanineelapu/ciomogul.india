@@ -23,7 +23,6 @@ export const pageContent = defineType({
     pageFields("magazines", "Magazines"),
     pageFields("hallOfFame", "Hall of Fame"),
     pageFields("womenSpotlight", "Business Women"),
-    pageFields("podcasts", "Podcasts"),
     pageFields("articles", "Articles"),
     pageFields("industries", "Industries"),
     pageFields("contact", "Contact Us"),

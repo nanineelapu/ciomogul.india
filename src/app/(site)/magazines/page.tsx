@@ -100,10 +100,7 @@ export default async function MagazinesPage({
               gap: 10,
             }}
           >
-            <Link href="/podcasts" className="btn btn-ink btn-sm">
-              Listen on the podcast
-            </Link>
-            <Link href="/contact" className="btn btn-line btn-sm">
+            <Link href="/contact" className="btn btn-ink btn-sm">
               Nominate a leader
             </Link>
           </div>
@@ -161,12 +158,8 @@ async function ArchiveResults({
       ) : (
         <>
           <div className="mag-grid">
-            {result.items.map((edition, i) => (
-              <MagazineCard
-                key={edition.slug}
-                edition={edition}
-                index={(result.page - 1) * result.perPage + i}
-              />
+            {result.items.map((edition) => (
+              <MagazineCard key={edition.slug} edition={edition} />
             ))}
           </div>
           <Pagination

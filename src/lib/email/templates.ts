@@ -71,7 +71,7 @@ const steps = (items: string[]) =>
 function exploreRow() {
   const links = [
     ["Magazines", "/magazines"],
-    ["Podcasts", "/podcasts"],
+    ["Business Women", "/business-women"],
     ["Articles", "/articles"],
     ["Hall of Fame", "/hall-of-fame"],
   ];
@@ -207,13 +207,13 @@ export function notificationEmail(s: Submission) {
 // Sent to someone who has just joined the newsletter.
 export function welcomeEmail(unsubscribe: string | null) {
   const html = layout({
-    preheader: "You're on the list. New editions, news and podcasts, once a week.",
+    preheader: "You're on the list. New editions and news, once a week.",
     kicker: "Welcome",
     title: "You're on the list.",
     body:
       paragraph("Thank you for subscribing to CIO Mogul India. Once a week, we will send you the best of the magazine for India's technology and business leaders.") +
       sectionLabel("What you will receive") +
-      steps(["New magazine editions and cover stories", "News and articles worth your time", "The latest podcast episodes"]) +
+      steps(["New magazine editions and cover stories", "News and articles worth your time"]) +
       button("Read the latest edition", `${SITE_URL}/magazines`) +
       exploreRow(),
     footerNote: unsubscribe
@@ -221,7 +221,7 @@ export function welcomeEmail(unsubscribe: string | null) {
       : "You are receiving this because you subscribed on our website.",
   });
 
-  const text = `You're on the list.\n\nThank you for subscribing to CIO Mogul India. Once a week, we will send you the best of the magazine for India's technology and business leaders.\n\nWhat you will receive:\n1. New magazine editions and cover stories\n2. News and articles worth your time\n3. The latest podcast episodes\n\nRead the latest edition: ${SITE_URL}/magazines\n${unsubscribe ? `\nUnsubscribe: ${unsubscribe}\n` : ""}`;
+  const text = `You're on the list.\n\nThank you for subscribing to CIO Mogul India. Once a week, we will send you the best of the magazine for India's technology and business leaders.\n\nWhat you will receive:\n1. New magazine editions and cover stories\n2. News and articles worth your time\n\nRead the latest edition: ${SITE_URL}/magazines\n${unsubscribe ? `\nUnsubscribe: ${unsubscribe}\n` : ""}`;
 
   return { subject: "Welcome to the CIO Mogul India newsletter", html, text };
 }

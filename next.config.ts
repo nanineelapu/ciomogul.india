@@ -76,6 +76,9 @@ const nextConfig: NextConfig = {
       // Women Spotlight was renamed Business Women. Query strings (?profile=) are kept.
       { source: "/women-spotlight", destination: "/business-women", permanent: true },
       { source: "/women-spotlight/:path*", destination: "/business-women/:path*", permanent: true },
+      // The Podcasts section was removed; old links and search results land on the home page.
+      { source: "/podcasts", destination: "/", permanent: true },
+      { source: "/podcasts/:path*", destination: "/", permanent: true },
     ];
   },
   async headers() {

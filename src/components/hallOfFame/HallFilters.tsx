@@ -3,7 +3,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import type { SiteText } from "@/data/siteText";
 import { useEffect, useState, useTransition } from "react";
 
-// Same URL-driven pattern as MagazineFilters / PodcastFilters. The server
+// Same URL-driven pattern as MagazineFilters. The server
 // does the filtering; this component only mutates ?q=&year=&sort=.
 export default function HallFilters({
   years,

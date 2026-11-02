@@ -21,7 +21,6 @@ import { SOCIAL, WHATSAPP_URL, type SocialKey } from "@/data/social";
 import { DEFAULT_DESCRIPTION } from "@/lib/seo";
 import { SITE_TEXT, mergeSiteText, type SiteText } from "@/data/siteText";
 import { WOMEN_LEADERS } from "@/data/womenLeaders";
-import { PODCASTS } from "@/data/podcasts";
 import { TESTIMONIALS } from "@/data/testimonials";
 import { INDUSTRIES, type Industry } from "@/data/industries";
 import { BRANDS, type Brand } from "@/data/brands";
@@ -46,7 +45,6 @@ import {
   MAGAZINE_EDITIONS_QUERY,
   MAGAZINE_EDITION_BY_SLUG_QUERY,
   NEWS_CARDS_QUERY,
-  PODCASTS_QUERY,
   RELEASE_COVERS_QUERY,
   TESTIMONIALS_QUERY,
   VITAL_UPDATES_QUERY,
@@ -63,7 +61,6 @@ import type {
   Magazine,
   MagazineEdition,
   NewsCard,
-  Podcast,
   Testimonial,
   VitalUpdate,
   WomanLeader,
@@ -309,83 +306,10 @@ export async function searchWomenLeaders(query: WomenQuery = {}) {
   return { items, total, totalPages, page: safePage, perPage, years };
 }
 
-// ─── Podcasts ────────────────────────────────────────────────────────────
-
-type RawPodcast = {
-  slug: string;
-  title: string;
-  date?: string;
-  youtubeUrl: string;
-  thumbnail?: SanityImage;
-  publishedYear?: number;
-  description?: string;
-  duration?: string;
-};
-export async function getPodcasts(): Promise<Podcast[]> {
-  return withFallback<Podcast[]>(async () => {
-    const rows = await sanityFetch<RawPodcast[]>({ query: PODCASTS_QUERY });
-    return rows.map((r, i) => ({
-      slug: r.slug,
-      title: r.title,
-      date: r.date ?? "",
-      youtubeUrl: safeHref(r.youtubeUrl, ""),
-      thumbnail: mapImage(r.thumbnail, PODCASTS[i % PODCASTS.length].thumbnail),
-      publishedYear: r.publishedYear,
-      description: r.description ?? "",
-      duration: r.duration ?? "",
-    }));
-  }, PODCASTS);
-}
-
-// Archive search for /podcasts. Mirrors searchMagazineEditions so the page
-// component looks the same; move to GROQ-level filtering if the catalogue
-// ever grows past a few hundred rows.
-export type PodcastSort = "newest" | "oldest";
-
-export type PodcastQuery = {
-  q?: string;
-  year?: number;
-  sort?: PodcastSort;
-  page?: number;
-  perPage?: number;
-};
-
-export async function searchPodcasts(query: PodcastQuery = {}) {
-  const { q, year, sort = "newest", page = 1, perPage = 9 } = query;
-  const podcasts = await getPodcasts();
-
-  const normalised = q?.trim().toLowerCase() ?? "";
-  const matches = (p: Podcast) => {
-    if (year && p.publishedYear !== year) return false;
-    if (!normalised) return true;
-    return (
-      p.title.toLowerCase().includes(normalised) ||
-      (p.description ?? "").toLowerCase().includes(normalised)
-    );
-  };
-
-  const filtered = podcasts.filter(matches);
-  // Insertion order in the array is already newest-first; respect it rather
-  // than parse free-form `date` strings.
-  const sorted = sort === "oldest" ? [...filtered].reverse() : filtered;
-
-  const total = sorted.length;
-  const totalPages = Math.max(1, Math.ceil(total / perPage));
-  const safePage = Math.min(Math.max(1, page), totalPages);
-  const start = (safePage - 1) * perPage;
-  const items = sorted.slice(start, start + perPage);
-
-  const years = Array.from(
-    new Set(podcasts.map((p) => p.publishedYear).filter((y): y is number => typeof y === "number"))
-  ).sort((a, b) => b - a);
-
-  return { items, total, totalPages, page: safePage, perPage, years };
-}
-
 // ─── Hall of Fame ────────────────────────────────────────────────────────
 // Sanity schema will come when the client wants to edit the roll in the CMS.
 // For now the fetcher just returns the hard-coded array; the search layer
-// below keeps the component shape identical to magazines and podcasts.
+// below keeps the component shape identical to magazines.
 
 type RawHall = Omit<HallOfFameEntry, "portrait"> & { portrait?: SanityImage };
 
@@ -656,6 +580,12 @@ type RawEdition = {
   publishedOn: string;
   publishedYear: number;
   body: string[];
+  description?: string;
+  storyTitle?: string;
+  storyBanner?: SanityImage | null;
+  storyBannerAlt?: string;
+  storyIntro?: string;
+  storyBody?: string[];
   seo?: Seo | null;
 };
 function mapEdition(r: RawEdition, fallbackCover: string): MagazineEdition {
@@ -674,6 +604,12 @@ function mapEdition(r: RawEdition, fallbackCover: string): MagazineEdition {
     publishedOn: r.publishedOn,
     publishedYear: r.publishedYear,
     body: r.body ?? [],
+    description: r.description ?? "",
+    storyTitle: r.storyTitle ?? "",
+    storyBanner: r.storyBanner ? mapImage(r.storyBanner, "") || null : null,
+    storyBannerAlt: r.storyBannerAlt ?? "",
+    storyIntro: r.storyIntro ?? "",
+    storyBody: r.storyBody ?? [],
     seo: r.seo,
   };
 }
@@ -929,7 +865,6 @@ export async function getPageContent(): Promise<PageContent> {
     });
     return {
       magazines: pick("magazines"),
-      podcasts: pick("podcasts"),
       hallOfFame: pick("hallOfFame"),
       womenSpotlight: pick("womenSpotlight"),
       articles: pick("articles"),

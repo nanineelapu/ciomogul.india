@@ -17,6 +17,12 @@ export const MAGAZINE_FIELDS_PROJ = /* groq */ `
   "publishedOn": coalesce(publishedOn, ""),
   publishedYear,
   "body": coalesce(body, []),
+  "description": coalesce(description, ""),
+  "storyTitle": coalesce(storyTitle, ""),
+  "storyBanner": storyBanner,
+  "storyBannerAlt": coalesce(storyBanner.alt, ""),
+  "storyIntro": coalesce(storyIntro, ""),
+  "storyBody": coalesce(storyBody, []),
   "seo": seo{ "title": metaTitle, "description": metaDescription, keywords }
 `;
 
@@ -114,19 +120,6 @@ export const WOMEN_LEADERS_QUERY = /* groq */ `
   }
 `;
 
-export const PODCASTS_QUERY = /* groq */ `
-  *[_type == "podcast"] | order(order asc) {
-    "slug": slug.current,
-    title,
-    "date": coalesce(date, ""),
-    youtubeUrl,
-    "thumbnail": thumbnail,
-    publishedYear,
-    "description": coalesce(description, ""),
-    "duration": coalesce(duration, "")
-  }
-`;
-
 export const TESTIMONIALS_QUERY = /* groq */ `
   *[_type == "testimonial"] | order(order asc) {
     name,
@@ -167,6 +160,12 @@ export const ARTICLES_QUERY = /* groq */ `
     "isTopStory": coalesce(isTopStory, false),
     "industries": coalesce(industries[]->slug.current, []),
     "body": coalesce(body, []),
+  "description": coalesce(description, ""),
+  "storyTitle": coalesce(storyTitle, ""),
+  "storyBanner": storyBanner,
+  "storyBannerAlt": coalesce(storyBanner.alt, ""),
+  "storyIntro": coalesce(storyIntro, ""),
+  "storyBody": coalesce(storyBody, []),
     "seo": seo{ "title": metaTitle, "description": metaDescription, keywords }
   }
 `;
@@ -214,7 +213,7 @@ export const SITE_SETTINGS_QUERY = /* groq */ `
 
 export const PAGE_CONTENT_QUERY = /* groq */ `
   *[_type == "pageContent" && _id == "pageContent"][0] {
-    magazines, podcasts, hallOfFame, womenSpotlight, articles, industries, contact
+    magazines, hallOfFame, womenSpotlight, articles, industries, contact
   }
 `;
 

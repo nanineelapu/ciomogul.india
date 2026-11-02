@@ -23,10 +23,9 @@ export default async function Industries() {
           <p className="s-intro">{t.home.industriesIntro}</p>
         </header>
         <ol className="industries">
-          {industries.map((i, n) => (
+          {industries.map((i) => (
             <li key={i.slug}>
               <Link href={`/industries/${i.slug}`} className="industry">
-                <span className="industry__num" aria-hidden>{String(n + 1).padStart(2, "0")}</span>
                 <h3 className="industry__name">{i.name}</h3>
                 <p className="industry__text">{i.description}</p>
               </Link>

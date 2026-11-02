@@ -45,7 +45,7 @@ export const aboutPage = defineType({
 
     defineField({ name: "joinTitle", title: "Title", type: "string", group: "join" }),
     defineField({ name: "joinText", title: "Text", type: "text", rows: 3, group: "join" }),
-    defineField({ name: "joinPrimaryButton", title: "First button text", type: "string", group: "join", description: "Links to the Podcasts page." }),
+    defineField({ name: "joinPrimaryButton", title: "First button text", type: "string", group: "join", description: "Links to the Magazines page." }),
     { ...seoField, group: "seo" },
     defineField({ name: "joinSecondaryButton", title: "Second button text", type: "string", group: "join", description: "Links to the Articles page." }),
   ],

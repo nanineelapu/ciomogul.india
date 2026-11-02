@@ -27,7 +27,14 @@ export type MagazineEdition = {
   publishedOn: string;          // display string; no Date parsing needed
   publishedYear: number;        // used by the archive filter — kept separate so
                                 // the display string stays free-form
-  body: string[];               // paragraphs for the "Inside this edition" block
+  body: string[];               // old paragraphs, no longer shown
+  description?: string;         // shown next to the cover on the edition page
+  // Web Live: the cover story as a web page
+  storyTitle?: string;
+  storyBanner?: string | null;
+  storyBannerAlt?: string;
+  storyIntro?: string;
+  storyBody?: string[];
   seo?: Seo | null;
 };
 
@@ -77,20 +84,6 @@ export type WomanLeader = {
   featuredYear?: number;
   featuredOn?: string;      // free-form display, e.g. "October 2026"
   bio?: string[];           // paragraphs for the profile page
-};
-
-export type Podcast = {
-  slug: string;
-  title: string;
-  date: string;
-  youtubeUrl: string;
-  thumbnail: string;
-  // Optional on homepage, used by the /podcasts archive filter.
-  publishedYear?: number;
-  // Short editorial description for the archive card + for Sanity.
-  description?: string;
-  // Minutes:seconds display string (e.g. "42:16"). Optional.
-  duration?: string;
 };
 
 export type Testimonial = {

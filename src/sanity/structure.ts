@@ -51,12 +51,11 @@ export const structure: StructureResolver = (S) =>
       listOf(S, "magazineEdition", "2. Magazines", "📚"),
       listOf(S, "hallOfFame", "3. Hall of Fame", "🏆"),
       listOf(S, "spotlightProfile", "4. Business Women", "👩‍💼"),
-      listOf(S, "podcast", "5. Podcasts", "🎙️"),
-      listOf(S, "article", "6. Articles", "📝"),
-      listOf(S, "industry", "7. Industries", "🏭"),
-      single(S, "aboutPage", "8. About Us", "ℹ️"),
-      single(S, "siteSettings", "9. Contact Us: details and social links", "✉️"),
-      folder(S, "legal", "10. Terms and Privacy", "📄", [
+      listOf(S, "article", "5. Articles", "📝"),
+      listOf(S, "industry", "6. Industries", "🏭"),
+      single(S, "aboutPage", "7. About Us", "ℹ️"),
+      single(S, "siteSettings", "8. Contact Us: details and social links", "✉️"),
+      folder(S, "legal", "9. Terms and Privacy", "📄", [
         legalDoc(S, "legalPage-terms", "Terms of Service"),
         legalDoc(S, "legalPage-privacy", "Privacy Policy"),
       ]),

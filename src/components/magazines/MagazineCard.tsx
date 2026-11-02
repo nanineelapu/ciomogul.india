@@ -3,23 +3,11 @@ import Link from "next/link";
 import { getSiteText } from "@/lib/data";
 import type { MagazineEdition } from "@/types/content";
 
-export default async function MagazineCard({
-  edition,
-  index,
-}: {
-  edition: MagazineEdition;
-  // Index used only to render the "N°" chip in the corner — not stored data.
-  index?: number;
-}) {
+export default async function MagazineCard({ edition }: { edition: MagazineEdition }) {
   const t = await getSiteText();
   return (
     <Link href={`/magazines/${edition.slug}`} className="mag-card">
       <span className="mag-card__cover">
-        {typeof index === "number" && (
-          <span className="mag-card__num" aria-hidden>
-            N° {String(index + 1).padStart(2, "0")}
-          </span>
-        )}
         <Image
           src={edition.coverImage}
           alt={edition.coverAlt}

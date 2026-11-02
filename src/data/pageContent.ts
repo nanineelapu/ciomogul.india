@@ -6,7 +6,6 @@ export type PageText = { title: string; intro: string; seo?: Seo };
 
 export type PageContent = {
   magazines: PageText;
-  podcasts: PageText;
   hallOfFame: PageText;
   womenSpotlight: PageText;
   articles: PageText;
@@ -19,11 +18,6 @@ export const PAGE_CONTENT: PageContent = {
     title: "Magazines",
     intro:
       "Each issue of CIO Mogul India features the people shaping how India's technology, business and industry work. Browse the archive, read a cover story, or revisit an edition.",
-  },
-  podcasts: {
-    title: "Podcasts",
-    intro:
-      "Long-form interviews with CIOs, founders, operators and the thinkers whose work ends up in the magazine. Every episode is free, archived here, and lives on YouTube.",
   },
   hallOfFame: {
     title: "Hall of Fame",

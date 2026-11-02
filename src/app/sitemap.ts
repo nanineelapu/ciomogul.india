@@ -46,7 +46,6 @@ const STATIC: { path: string; priority: number; changeFrequency: "daily" | "week
   { path: "/", priority: 1, changeFrequency: "daily" },
   { path: "/articles", priority: 0.9, changeFrequency: "daily" },
   { path: "/magazines", priority: 0.9, changeFrequency: "weekly" },
-  { path: "/podcasts", priority: 0.8, changeFrequency: "weekly" },
   { path: "/hall-of-fame", priority: 0.8, changeFrequency: "weekly" },
   { path: "/business-women", priority: 0.8, changeFrequency: "weekly" },
   { path: "/industries", priority: 0.8, changeFrequency: "weekly" },

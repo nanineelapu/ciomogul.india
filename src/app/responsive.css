@@ -42,15 +42,6 @@
   .leader { grid-column: span 6; gap: 16px; padding: 18px; }
   .leader__img { width: 80px; height: 80px; }
 
-  /* Footer: brand on top, link columns in one row */
-  .footer__top {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 32px 24px;
-    padding-top: 40px;
-    padding-bottom: 28px;
-  }
-  .footer__brand { grid-column: 1 / -1; }
 }
 
 /* ---------- Phones (≤720px) ---------- */
@@ -113,11 +104,6 @@
   .newsletter .nl-form__row input { height: 50px; padding: 0 16px; font-size: 15px; }
   .newsletter .nl-form__row .btn { height: 50px; }
 
-  /* Footer: two link columns, compact bottom bar */
-  .footer { margin-top: 24px; }
-  .footer__top { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 16px; padding-top: 32px; }
-  .footer__brand p { font-size: 14px; }
-  .footer__bottom { gap: 8px; font-size: 13px; text-align: center; align-items: center; }
 }
 
 /* ==========================================================================
@@ -338,14 +324,12 @@
    Logo (new emblem logo, about 3.2 : 1, taller than the old wordmark)
    ========================================================================== */
 .site-head__logo img { height: 72px; }
-.footer__brand img { height: 64px; }
 @media (max-width: 1080px) {
   .site-head__logo img { height: 60px; }
 }
 @media (max-width: 720px) {
   .site-head__top { height: 64px; }
   .site-head__logo img { height: 44px; }
-  .footer__brand img { height: 52px; }
 }
 
 /* ==========================================================================
@@ -478,7 +462,6 @@
   transition: border-color .2s ease, transform .25s ease, box-shadow .25s ease;
 }
 .ind-card:hover { border-color: var(--color-navy); transform: translateY(-3px); box-shadow: 0 14px 30px -20px rgba(11, 31, 58, .4); }
-.ind-card__num { font-family: var(--font-ui); font-size: 12px; font-weight: 700; letter-spacing: .2em; color: var(--color-navy-light); }
 .ind-card__name { font-family: var(--font-ui); font-weight: 600; font-size: 21px; line-height: 1.25; color: var(--color-ink); }
 .ind-card__text { font-size: 14px; line-height: 1.6; color: var(--color-ink-2); }
 .ind-card__foot {
@@ -516,122 +499,6 @@
   transition: border-color .2s ease, background-color .2s ease, color .2s ease;
 }
 .ind-chip:hover { background: var(--color-navy); border-color: var(--color-navy); color: #fff; }
-
-/* ==========================================================================
-   Footer: classic magazine style
-   Double rule on top, masthead + three columns, quiet grey bottom strip.
-   (Written as .footer .x so it replaces the older footer rules above.)
-   ========================================================================== */
-.footer { margin-top: 48px; border-top: 0; background: var(--color-paper); }
-
-.footer .footer__rule {
-  height: 5px;
-  border-top: 2px solid var(--color-navy);
-  border-bottom: 1px solid var(--color-navy);
-}
-
-.footer .footer__top {
-  display: grid;
-  grid-template-columns: minmax(0, 1.6fr) repeat(3, minmax(0, 1fr));
-  gap: 48px;
-  padding: 48px 0 44px;
-}
-
-.footer .footer__brand { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; max-width: 380px; }
-.footer .footer__brand img { height: 64px; width: auto; }
-.footer .footer__brand p {
-  margin: 0;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1.7;
-  color: var(--color-ink-2);
-}
-
-.footer .footer__social { display: flex; flex-wrap: wrap; gap: 8px; }
-.footer .footer__social a {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border: 1px solid var(--color-rule-soft);
-  color: var(--color-navy);
-  transition: background-color .2s ease, border-color .2s ease, color .2s ease;
-}
-.footer .footer__social a:hover { background: var(--color-navy); border-color: var(--color-navy); color: #fff; }
-.footer .footer__social svg { width: 16px; height: 16px; }
-
-.footer .footer__col { display: flex; flex-direction: column; gap: 10px; }
-.footer .footer__head {
-  margin: 0 0 6px;
-  padding-bottom: 10px;
-  font-family: var(--font-ui);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  color: var(--color-navy);
-  text-decoration: none;
-  position: relative;
-}
-.footer .footer__head::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 28px;
-  height: 2px;
-  background: var(--color-navy);
-}
-.footer .footer__col a,
-.footer .footer__col span {
-  font-family: var(--font-ui);
-  font-size: 14px;
-  line-height: 1.5;
-  color: var(--color-ink-2);
-  text-decoration: none;
-  transition: color .2s ease;
-}
-.footer .footer__col a:hover { color: var(--color-navy-2); }
-.footer .footer__contact a:first-of-type { color: var(--color-navy); font-weight: 600; word-break: break-word; }
-
-.footer .footer__bottom {
-  display: block;
-  padding: 0;
-  border-top: 1px solid var(--color-rule-soft);
-  background: var(--color-paper-2);
-}
-.footer .footer__bottom-inner {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  padding-top: 16px;
-  padding-bottom: 16px;
-  font-family: var(--font-ui);
-  font-size: 13px;
-  color: var(--color-muted);
-}
-.footer .footer__bottom-inner > span:first-child { font-weight: 400; color: var(--color-muted); }
-.footer .footer__legal { display: inline-flex; gap: 10px; align-items: center; }
-.footer .footer__legal a { font-weight: 500; color: var(--color-ink-2); }
-.footer .footer__legal a:hover { color: var(--color-navy); }
-.footer .footer__legal span { color: var(--color-muted); }
-
-/* iPad: masthead on top, three columns below */
-@media (max-width: 1080px) {
-  .footer .footer__top { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px 24px; padding: 40px 0 36px; }
-  .footer .footer__brand { grid-column: 1 / -1; max-width: 520px; }
-}
-
-/* Phone: masthead, two link columns side by side, contact full width */
-@media (max-width: 720px) {
-  .footer { margin-top: 32px; }
-  .footer .footer__top { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 16px; padding: 32px 0 28px; }
-  .footer .footer__brand img { height: 52px; }
-  .footer .footer__contact { grid-column: 1 / -1; }
-  .footer .footer__bottom-inner { flex-direction: column; text-align: center; gap: 8px; }
-}
 
 /* ==========================================================================
    Home: Trusted brands ("Trusted by India's top enterprises")
@@ -757,87 +624,6 @@
     -webkit-overflow-scrolling: touch;
     touch-action: pan-y;
   }
-}
-
-/* ==========================================================================
-   Footer: simple alignment pass
-   One thin line on top, brand on the left, three evenly spaced columns whose
-   last edge lines up with the right edge of the bottom line.
-   ========================================================================== */
-.footer { border-top: 1px solid var(--color-rule-soft); }
-.footer .footer__rule { display: none; }
-
-.footer .footer__top {
-  grid-template-columns: minmax(0, 1fr) repeat(3, auto);
-  column-gap: 80px;
-  align-items: start;
-  padding: 44px 0 36px;
-}
-.footer .footer__brand { max-width: 340px; gap: 14px; }
-.footer .footer__brand img { height: 56px; }
-
-.footer .footer__head {
-  margin: 0 0 6px;
-  padding-bottom: 0;
-  font-size: 13px;
-  letter-spacing: .08em;
-}
-.footer .footer__head::after { display: none; }
-.footer .footer__col { gap: 8px; }
-.footer .footer__contact a:first-of-type { font-weight: 400; color: var(--color-ink-2); }
-.footer .footer__contact a:first-of-type:hover { color: var(--color-navy-2); }
-
-.footer .footer__social a { width: 32px; height: 32px; }
-.footer .footer__social svg { width: 15px; height: 15px; }
-
-.footer .footer__bottom { background: transparent; }
-.footer .footer__bottom-inner { padding-top: 14px; padding-bottom: 14px; }
-
-@media (max-width: 1080px) {
-  .footer .footer__top { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 24px; row-gap: 28px; padding: 36px 0 28px; }
-}
-@media (max-width: 720px) {
-  .footer .footer__top { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 16px; padding: 28px 0 24px; }
-  .footer .footer__brand img { height: 48px; }
-}
-
-/* ==========================================================================
-   Footer: white, three rows
-   1. logo left, social icons right   2. four equal columns   3. legal line
-   ========================================================================== */
-.footer { border-top: 3px solid var(--color-navy); background: var(--color-paper); }
-
-.footer .footer__head-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 24px;
-  padding: 26px 0;
-  border-bottom: 1px solid var(--color-rule-soft);
-}
-.footer .footer__head-row img { display: block; height: 60px; width: auto; }
-.footer .footer__social { flex-shrink: 0; }
-
-.footer .footer__top {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  column-gap: 40px;
-  row-gap: 28px;
-  padding: 32px 0 36px;
-}
-.footer .footer__brand { max-width: 300px; }
-.footer .footer__brand p { font-size: 14px; line-height: 1.7; }
-
-.footer .footer__bottom { border-top: 1px solid var(--color-rule-soft); background: var(--color-paper-2); }
-
-@media (max-width: 1080px) {
-  .footer .footer__top { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 24px; padding: 28px 0 30px; }
-  .footer .footer__brand { grid-column: 1 / -1; max-width: 560px; }
-}
-@media (max-width: 720px) {
-  .footer .footer__head-row { flex-direction: column; align-items: flex-start; gap: 16px; padding: 22px 0; }
-  .footer .footer__head-row img { height: 52px; }
-  .footer .footer__top { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 16px; padding: 24px 0 26px; }
-  .footer .footer__contact { grid-column: 1 / -1; }
 }
 
 /* Industries button: no browser focus box on click or tap; a quiet outline for keyboard users */

@@ -5,6 +5,9 @@ export const magazineEdition = defineType({
   name: "magazineEdition",
   title: "Magazine Edition",
   type: "document",
+  fieldsets: [
+    { name: "webLive", title: "Web Live: the cover story as a web page", options: { collapsible: true, collapsed: false } },
+  ],
   fields: [
     defineField({
       name: "editionLabel",
@@ -51,6 +54,45 @@ export const magazineEdition = defineType({
       validation: (r) => r.required(),
     }),
     defineField({
+      name: "description",
+      title: "Description",
+      type: "text",
+      rows: 5,
+      description: "A few lines about this edition, shown next to the cover on the edition page. Put **two stars** around words to make them bold.",
+    }),
+    defineField({
+      name: "storyTitle",
+      title: "Story title",
+      type: "string",
+      fieldset: "webLive",
+      description: "The title at the top of the Web Live page. Leave empty to use the Headline.",
+    }),
+    defineField({
+      name: "storyBanner",
+      title: "Banner image",
+      type: "image",
+      fieldset: "webLive",
+      options: { hotspot: true },
+      fields: [defineField({ name: "alt", title: "Alt text", type: "string" })],
+      description: "The wide picture under the story title. Leave empty to show no picture.",
+    }),
+    defineField({
+      name: "storyIntro",
+      title: "Short intro",
+      type: "text",
+      rows: 2,
+      fieldset: "webLive",
+      description: "One or two lines shown in italics above the story.",
+    }),
+    defineField({
+      name: "storyBody",
+      title: "Story",
+      type: "array",
+      of: [{ type: "text", rows: 5 }],
+      fieldset: "webLive",
+      description: "Each box is one paragraph. Put **two stars** around words to make them bold. Start a box with ## to make it a small heading. The Web Live button appears once this has text.",
+    }),
+    defineField({
       name: "pullQuote",
       title: "Pull quote",
       type: "text",
@@ -71,7 +113,7 @@ export const magazineEdition = defineType({
     }),
     defineField({
       name: "pdfFile",
-      title: "PDF file",
+      title: "PDF file (Digital Live)",
       type: "file",
       options: { accept: "application/pdf" },
     }),
@@ -90,10 +132,11 @@ export const magazineEdition = defineType({
     }),
     defineField({
       name: "body",
-      title: "Body paragraphs",
+      title: "Old paragraphs (not shown)",
       type: "array",
       of: [{ type: "text", rows: 4 }],
-      description: 'Paragraphs for the "Inside this edition" block.',
+      description: "No longer shown on the site.",
+      hidden: ({ value }) => !value || value.length === 0,
     }),
     defineField({
       name: "order",

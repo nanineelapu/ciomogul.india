@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const LINKS = [
   { title: "Magazines", text: "Every edition, in one place.", href: "/magazines" },
-  { title: "Podcasts", text: "Conversations with leaders.", href: "/podcasts" },
+  { title: "Articles", text: "News and stories from leaders.", href: "/articles" },
   { title: "Hall of Fame", text: "The permanent record.", href: "/hall-of-fame" },
   { title: "Business Women", text: "Leaders shaping the next decade.", href: "/business-women" },
 ];

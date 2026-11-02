@@ -7,7 +7,6 @@ import { vitalUpdate } from "./vitalUpdate";
 import { featuredArticle } from "./featuredArticle";
 import { womanLeader } from "./womanLeader";
 import { spotlightProfile } from "./spotlightProfile";
-import { podcast } from "./podcast";
 import { testimonial } from "./testimonial";
 import { industry } from "./industry";
 import { trustedBrand } from "./trustedBrand";
@@ -26,7 +25,6 @@ export const schemaTypes: SchemaTypeDefinition[] = withHelp([
   hallOfFame,
   womanLeader,
   spotlightProfile,
-  podcast,
   article,
   homepageConfig,
   headline,

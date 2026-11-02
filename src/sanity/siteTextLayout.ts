@@ -54,7 +54,7 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
         ],
       },
       {
-        title: "4. Industries we cover (the industries themselves are in 7. Industries)",
+        title: "4. Industries we cover (the industries themselves are in 6. Industries)",
         fields: [
           ["industriesTitle", "Heading"],
           ["industriesIntro", "Line under the heading"],
@@ -136,25 +136,28 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
         title: "3. Edition page: top",
         fields: [
           ["backLink", "Back link"],
-          ["readButton", "Read the edition button"],
-          ["downloadButton", "Download PDF button"],
-          ["exploreMore", "Button shown when there is no PDF yet"],
-          ["scrollToRead", "Hint under the buttons"],
-          ["pdfSoon", "Hint when there is no PDF yet"],
+          ["webLive", "Web Live button (opens the story)"],
+          ["digitalLive", "Digital Live button (opens the magazine in a new tab)"],
+          ["liveSoon", "Shown when neither is ready yet"],
         ],
       },
       {
-        title: "4. Edition page: magazine reader",
+        title: "4. Web Live page",
+        fields: [
+          ["storyBack", "Back link"],
+          ["storyDigital", "Button at the end of the story"],
+        ],
+      },
+      {
+        title: "5. Digital Live page",
         fields: [
           ["readerTitle", "Heading"],
           ["readerHint", "Tip next to the heading"],
-          ["readerSoon", "Tip when there is no PDF yet"],
-          ["readerPlaceholderTitle", "Empty reader: heading"],
-          ["readerPlaceholderText", "Empty reader: text"],
+          ["downloadButton", "Download link"],
         ],
       },
       {
-        title: "5. Edition page: more editions",
+        title: "6. Edition page: more editions",
         fields: [
           ["moreTitle", "Heading"],
           ["viewArchive", "View the archive link"],
@@ -258,194 +261,33 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
     ],
   },
   {
-    key: "podcasts",
-    title: "Podcasts",
-    sections: [
-      {
-        title: "1. Search and filters",
-        fields: [
-          ["searchPlaceholder", "Hint inside the search box"],
-          ["searchLabel", "Search box name (read out by screen readers)"],
-          ["yearLabel", "Year filter label"],
-          ["allYears", "All years option"],
-          ["sortLabel", "Sort label"],
-          ["sortNewest", "Newest first option"],
-          ["sortOldest", "Oldest first option"],
-          ["countWord", "Word after the number, as in 4 episodes"],
-          ["clearFilters", "Clear filters button"],
-          ["noResultsTitle", "No results: heading"],
-          ["noResultsText", "No results: text"],
-        ],
-      },
-      { title: "2. Episode cards", fields: [["watchEpisode", "Link on each card"]] },
-      {
-        title: "3. Video pop-up",
-        fields: [
-          ["openOnYoutube", "Open on YouTube link"],
-          ["close", "Close button"],
-          ["closePlayer", "Close button name (read out by screen readers)"],
-          ["embedError", "Message if the video cannot load"],
-        ],
-      },
-    ],
-  },
-  {
-    key: "articles",
-    title: "Articles",
-    sections: [
-      {
-        title: "1. Section headings",
-        fields: [
-          ["topTitle", "Top stories"],
-          ["latestTitle", "Latest news"],
-          ["exploreTitle", "Explore by category"],
-        ],
-      },
-      {
-        title: "2. Search",
-        fields: [
-          ["searchPlaceholder", "Hint inside the search box"],
-          ["searchLabel", "Search box name (read out by screen readers)"],
-          ["noResultsTitle", "No results: heading"],
-          ["noResultsText", "No results: text"],
-        ],
-      },
-      {
-        title: "3. Article page",
-        fields: [
-          ["backLink", "Back link"],
-          ["moreTitle", "More articles heading"],
-          ["viewAll", "View all link"],
-        ],
-      },
-    ],
-  },
-  {
-    key: "industries",
-    title: "Industries",
-    sections: [
-      {
-        title: "1. Industries page",
-        fields: [
-          ["countWord", "Word after the number, as in 4 stories"],
-          ["countWordOne", "Same word for just one, as in 1 story"],
-          ["viewIndustry", "Link on each industry card"],
-        ],
-      },
-      {
-        title: "2. Industry page",
-        fields: [
-          ["backLink", "Back link"],
-          ["storiesTitle", "Stories heading"],
-          ["emptyTitle", "No stories yet: heading"],
-          ["emptyText", "No stories yet: text"],
-          ["emptyButton", "No stories yet: button"],
-          ["otherTitle", "Other industries heading"],
-        ],
-      },
-    ],
-  },
-  {
-    key: "contact",
-    title: "Contact",
-    sections: [
-      {
-        title: "1. Contact details",
-        fields: [
-          ["emailLabel", "Email label"],
-          ["phoneLabel", "Phone label"],
-          ["whatsappLabel", "WhatsApp label"],
-          ["whatsappCta", "WhatsApp link text"],
-          ["officeLabel", "Office label"],
-        ],
-      },
-      {
-        title: "2. Form",
-        fields: [
-          ["nameLabel", "Name box label"],
-          ["formEmailLabel", "Email box label"],
-          ["subjectLabel", "Subject box label"],
-          ["messageLabel", "Message box label"],
-          ["sendButton", "Send button"],
-          ["sendingButton", "Button while sending"],
-        ],
-      },
-      {
-        title: "3. After the message is sent",
-        fields: [
-          ["successTitle", "Thank-you heading"],
-          ["successText", "Thank-you text"],
-          ["sendAnother", "Send another message link"],
-        ],
-      },
-      {
-        title: "4. Error messages",
-        fields: [
-          ["nameRequired", "When the name is missing"],
-          ["emailInvalid", "When the email is wrong"],
-          ["subjectRequired", "When the subject is missing"],
-          ["messageShort", "When the message is too short"],
-          ["genericError", "When something else fails"],
-        ],
-      },
-    ],
-  },
-  {
     key: "footer",
     title: "Footer",
     sections: [
       {
-        title: "1. Under the logo",
+        title: "1. Left side",
         fields: [
-          ["tagline", "Short description"],
-          ["followHeading", "Name of the social icons (read out by screen readers)", "The social links themselves are in 9. Contact Us."],
+          ["ctaTitle", "Large line (an orange full stop is added after it)"],
+          ["ctaButton", "Button (opens Contact Us)"],
         ],
       },
       {
-        title: "2. Link columns",
+        title: "2. Right side",
         fields: [
-          ["platformHeading", "First column: heading"],
-          ["platformLinks", "First column: links"],
-          ["exploreHeading", "Second column: heading"],
-          ["exploreLinks", "Second column: links"],
-          ["contactHeading", "Third column: heading", "This column shows the email, phone and office from 9. Contact Us."],
+          ["locationHeading", "Location heading", "The address comes from 8. Contact Us."],
+          ["contactHeading", "Contact heading", "Phone and email come from 8. Contact Us."],
+          ["followHeading", "Social heading", "The social links come from 8. Contact Us."],
+          ["linksHeading", "Links heading"],
+          ["platformLinks", "Links (first part)"],
+          ["exploreLinks", "Links (second part)"],
         ],
       },
       {
-        title: "3. Bottom line",
+        title: "3. Bottom row",
         fields: [
           ["copyright", "Copyright line"],
-          ["termsLabel", "Terms of Service link"],
-          ["privacyLabel", "Privacy Policy link"],
-        ],
-      },
-    ],
-  },
-  {
-    key: "general",
-    title: "Other pages",
-    sections: [
-      {
-        title: "1. Page not found",
-        fields: [
-          ["notFoundTitle", "Heading"],
-          ["notFoundText", "Text"],
-          ["notFoundHome", "First button"],
-          ["notFoundMagazines", "Second button"],
-        ],
-      },
-      {
-        title: "2. Page numbers",
-        fields: [
-          ["paginationPrev", "Previous button"],
-          ["paginationNext", "Next button"],
-        ],
-      },
-      {
-        title: "3. Terms and Privacy pages",
-        fields: [
-          ["alsoRead", "Also read label"],
-          ["contactUs", "Contact us link"],
+          ["termsLabel", "Terms link"],
+          ["privacyLabel", "Privacy link"],
         ],
       },
     ],
@@ -454,8 +296,7 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
 
 // Kept in the data for older pages but no longer shown on the site.
 export const HIDDEN_TEXT_KEYS: Record<string, string[]> = {
-  magazines: ["scrollToInside", "insideLabel"],
+  magazines: ["scrollToInside", "insideLabel", "readButton", "exploreMore", "scrollToRead", "pdfSoon", "readerSoon", "readerPlaceholderTitle", "readerPlaceholderText"],
   womenSpotlight: ["themesLabel"],
-  footer: ["legalHeading"],
-  home: ["podcastsTitle"],
+  footer: ["legalHeading", "tagline", "platformHeading", "exploreHeading"],
 };

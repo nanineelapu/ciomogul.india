@@ -28,7 +28,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 // Two bands, styled like pages of the magazine: an opening (labels, watermark,
 // one-line word-by-word headline, then intro, who we are, actions and who we
-// feature) and a navy join band.
+// feature) and a white join band.
 export default async function AboutPage() {
   const about = await getAboutContent();
   const words = about.headline.split(" ");
@@ -84,8 +84,8 @@ export default async function AboutPage() {
           <h2 className="abt-join__title" id="abt-join-title">{about.join.title}</h2>
           <p className="abt-join__text">{about.join.text}</p>
           <div className="abt-actions abt-actions--light">
-            <Link href="/podcasts" className="btn btn-paper">{about.join.primaryButton} <span aria-hidden>→</span></Link>
-            <Link href="/articles" className="btn abt-btn-ghost">{about.join.secondaryButton}</Link>
+            <Link href="/magazines" className="btn btn-ink">{about.join.primaryButton} <span aria-hidden>→</span></Link>
+            <Link href="/articles" className="btn btn-line">{about.join.secondaryButton}</Link>
           </div>
         </div>
       </section>

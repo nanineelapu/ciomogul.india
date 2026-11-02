@@ -11,7 +11,13 @@
     "Our aim is simple: build a strong community of leaders, decision-makers and change-makers, and give a voice to the people and organisations shaping what comes next."
   ],
   "featureLabel": "Who we feature",
-  "featured": ["CIOs", "Entrepreneurs", "Startup founders", "Healthcare leaders", "Industry pioneers"],
+  "featured": [
+    "CIOs",
+    "Entrepreneurs",
+    "Startup founders",
+    "Healthcare leaders",
+    "Industry pioneers"
+  ],
   "coverTitle": "What we cover",
   "coverIntro": "Three formats, one purpose: telling the stories of the people shaping India's business and technology.",
   "whatWeCover": [
@@ -29,7 +35,7 @@
     }
   ],
   "joinTitle": "Join our community",
-  "joinText": "Follow us for exclusive leadership stories, industry insights and broadcast publications featuring India's most influential leaders.",
-  "joinPrimaryButton": "Watch the Broadcasts",
+  "joinText": "Follow us for exclusive leadership stories, industry insights and magazine editions featuring India's most influential leaders.",
+  "joinPrimaryButton": "Read the Magazines",
   "joinSecondaryButton": "Explore Articles"
 }

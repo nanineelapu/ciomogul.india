@@ -48,7 +48,6 @@ export default async function IndustriesPage() {
             {industries.map((ind, n) => (
               <li key={ind.slug}>
                 <Link href={`/industries/${ind.slug}`} className="ind-card">
-                  <span className="ind-card__num" aria-hidden>{String(n + 1).padStart(2, "0")}</span>
                   <span className="ind-card__name">{ind.name}</span>
                   <span className="ind-card__text">{ind.description}</span>
                   <span className="ind-card__foot">

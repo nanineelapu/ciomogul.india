@@ -1,5 +1,5 @@
 // Copies everything the site shows today into Sanity, so the Studio opens already
-// filled in: magazine editions, Hall of Fame, podcasts, articles, the home page
+// filled in: magazine editions, Hall of Fame, articles, the home page
 // lists, legal pages, settings, page headings, About page and all the fixed
 // site text. Images and the sample PDF are uploaded too.
 //
@@ -88,7 +88,6 @@ const { COVER_STORIES } = data("coverStories.ts");
 const { NEWS_CARDS, VITAL_UPDATES, FEATURED_ARTICLES } = data("news.ts");
 const { WOMEN_LEADERS } = data("womenLeaders.ts");
 const { WOMEN_SPOTLIGHT_DATA } = data("womenSpotlightData.ts");
-const { PODCASTS } = data("podcasts.ts");
 const { TESTIMONIALS } = data("testimonials.ts");
 const { INDUSTRIES } = data("industries.ts");
 const { BRANDS } = data("brands.ts");
@@ -269,7 +268,7 @@ for (const [i, b] of BRANDS.entries()) {
   add({ _id: `trustedBrand-${b.slug}`, _type: "trustedBrand", name: b.name, slug: slugOf(b.slug), order: i + 1 });
 }
 
-// ── 5. women leaders (home page "Wall of fame") and podcasts ────────────────
+// ── 5. women leaders (home page "Wall of fame") ────────────────
 for (const [i, w] of WOMEN_LEADERS.entries()) {
   add({
     _id: `womanLeader-${w.slug}`,
@@ -318,22 +317,6 @@ for (const [i, w] of WOMEN_SPOTLIGHT_DATA.entries()) {
     sources: withKeys(w.sources),
     ...(w.quote ? { quote: { text: w.quote.text, sourceLabel: w.quote.source.label, sourceHref: w.quote.source.href } } : {}),
     ...(w.edition ? { edition: w.edition } : {}),
-  });
-}
-console.log("Preparing podcasts…");
-for (const [i, p] of PODCASTS.entries()) {
-  add({
-    _id: `podcast-${p.slug}`,
-    _type: "podcast",
-    title: p.title,
-    slug: slugOf(p.slug),
-    date: p.date,
-    publishedYear: p.publishedYear,
-    duration: p.duration,
-    description: p.description,
-    youtubeUrl: p.youtubeUrl,
-    thumbnail: await image(p.thumbnail, p.title),
-    order: i + 1,
   });
 }
 

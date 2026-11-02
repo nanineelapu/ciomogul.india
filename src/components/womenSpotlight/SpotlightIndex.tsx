@@ -19,8 +19,7 @@ export default function SpotlightIndex() {
         </header>
 
         <ol className="spot-index__list">
-          {profiles.map((p, i) => {
-            const num = <span className="spot-row__num" aria-hidden>{String(i + 1).padStart(2, "0")}</span>;
+          {profiles.map((p) => {
             const img = (
               <span className="spot-row__img">
                 <Image src={p.image} alt="" width={80} height={80} />
@@ -31,7 +30,6 @@ export default function SpotlightIndex() {
               return (
                 <li key={p.id}>
                   <div className="spot-row is-pending">
-                    {num}
                     {img}
                     <span className="spot-row__who">
                       <span className="spot-row__name">{p.name}</span>
@@ -48,7 +46,6 @@ export default function SpotlightIndex() {
             return (
               <li key={p.id}>
                 <Link href={profileHref(p.id)} className="spot-row">
-                  {num}
                   {img}
                   <span className="spot-row__who">
                     <span className="spot-row__name">{p.name}</span>

@@ -7,7 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import MagazineCard from "@/components/magazines/MagazineCard";
-import PdfViewer from "@/components/magazines/PdfViewerLoader";
+import RichParagraphs from "@/components/magazines/RichParagraphs";
 import {
   getMagazineEditionBySlug,
   getMagazineEditions,
@@ -31,7 +31,7 @@ export async function generateMetadata({
   if (!edition) return { title: "Edition not found | CIO Mogul India", robots: { index: false } };
   return buildMetadata({
     title: edition.seo?.title || `${edition.featuredPersonName} | ${edition.editionLabel}`,
-    description: edition.seo?.description || edition.subtitle || edition.title,
+    description: edition.seo?.description || edition.description?.replace(/\*\*/g, "").slice(0, 300) || edition.subtitle || edition.title,
     path: `/magazines/${edition.slug}`,
     image: edition.coverImage,
     imageAlt: edition.coverAlt || edition.title,
@@ -57,6 +57,9 @@ async function MagazineDetailPageContent({
   const t = await getSiteText();
 
   const others = await getOtherMagazineEditions(slug, 4);
+  const hasStory = (edition.storyBody ?? []).some((p) => p.trim());
+  // The description next to the cover; older editions fall back to their subtitle.
+  const description = edition.description?.trim() || edition.subtitle;
 
   return (
     <main>
@@ -84,87 +87,49 @@ async function MagazineDetailPageContent({
 
       <section className="section">
         <div className="wrap">
-          <div className="mag-hero">
-            <div className="mag-hero__cover">
+          <div className="ed-hero">
+            <div className="ed-hero__cover">
               <Image
                 src={edition.coverImage}
                 alt={edition.coverAlt}
                 width={713}
                 height={1009}
                 priority
-                sizes="(max-width: 820px) 100vw, (max-width: 1080px) 300px, 360px"
+                sizes="(max-width: 900px) 80vw, 360px"
               />
             </div>
 
-            <div className="mag-hero__side">
-              <p className="mag-hero__eyebrow">{edition.editionLabel}</p>
-              <h1 className="mag-hero__name">{edition.featuredPersonName}</h1>
-              <div className="mag-hero__rule" aria-hidden />
-              {edition.title && <p className="mag-hero__title">{edition.title}</p>}
-              {edition.subtitle && <p className="mag-hero__sub">{edition.subtitle}</p>}
-
-              {edition.roleTags.length > 0 && (
-                <ul className="mag-hero__meta" aria-label="About the featured leader">
-                  {edition.roleTags.slice(0, 3).map((tag) => (
-                    <li key={tag} className="mag-hero__meta-item">{tag}</li>
-                  ))}
-                </ul>
+            <div>
+              <p className="ed-hero__label">{edition.editionLabel}</p>
+              <h1 className="ed-hero__title">{edition.title || edition.featuredPersonName}</h1>
+              {description && (
+                <div className="ed-hero__text">
+                  <RichParagraphs paragraphs={description.split(/\n\s*\n/)} />
+                </div>
               )}
 
-              <div className="mag-hero__actions">
-                <a href="#read" className="btn btn-ink">
-                  {t.magazines.readButton} <span aria-hidden>↓</span>
-                </a>
-                {edition.pdfUrl ? (
-                  <a href={edition.pdfUrl.includes("cdn.sanity.io") ? `${edition.pdfUrl}?dl=` : edition.pdfUrl} className="btn btn-line">
-                    {t.magazines.downloadButton}
-                  </a>
-                ) : (
-                  <Link href="/magazines" className="btn btn-line">
-                    {t.magazines.exploreMore}
-                  </Link>
-                )}
-              </div>
-
-              <p className="mag-hero__hint">
-                <span aria-hidden>↓</span>
-                {edition.pdfUrl ? t.magazines.scrollToRead : t.magazines.pdfSoon}
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* "Inside this edition" removed per client request — the PDF reader
-          below is the content. */}
-
-      <section id="read">
-        <div className="wrap">
-          <div className="mag-pdf">
-            <header className="mag-pdf__head">
-              <h2 className="mag-pdf__title">{t.magazines.readerTitle}</h2>
-              <span className="mag-pdf__hint">
-                {edition.pdfUrl ? t.magazines.readerHint : t.magazines.readerSoon}
-              </span>
-            </header>
-            {edition.pdfUrl ? (
-              <PdfViewer
-                file={edition.pdfUrl}
-                poster={edition.coverImage}
-                title={`${edition.featuredPersonName} — ${edition.editionLabel}`}
-              />
-            ) : (
-              <div className="mag-pdf__frame">
-                <div className="mag-pdf__placeholder" role="status">
-                  <div className="mag-pdf__placeholder-inner">
-                    <b>{t.magazines.readerPlaceholderTitle}</b>
-                    <p>
-                      {t.magazines.readerPlaceholderText}
-                    </p>
-                  </div>
+              {hasStory || edition.pdfUrl ? (
+                <div className="ed-hero__actions">
+                  {hasStory && (
+                    <Link href={`/magazines/${edition.slug}/web`} className="ed-btn ed-btn--solid">
+                      {t.magazines.webLive}
+                    </Link>
+                  )}
+                  {edition.pdfUrl && (
+                    <a
+                      href={`/magazines/${edition.slug}/digital`}
+                      target="_blank"
+                      rel="noopener"
+                      className={`ed-btn ${hasStory ? "ed-btn--line" : "ed-btn--solid"}`}
+                    >
+                      {t.magazines.digitalLive} <span aria-hidden>↗</span>
+                    </a>
+                  )}
                 </div>
-              </div>
-            )}
+              ) : (
+                <p className="ed-hero__soon">{t.magazines.liveSoon}</p>
+              )}
+            </div>
           </div>
         </div>
       </section>

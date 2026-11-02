@@ -18,10 +18,6 @@
         "href": "/business-women"
       },
       {
-        "label": "Podcasts",
-        "href": "/podcasts"
-      },
-      {
         "label": "Articles",
         "href": "/articles"
       },
@@ -43,8 +39,12 @@
     "subscribe": "Subscribe"
   },
   "footer": {
-    "tagline": "A digital magazine and media platform exploring leadership, business, technology and innovation in India.",
-    "platformHeading": "Platform",
+    "ctaTitle": "Share your story with India's leaders",
+    "ctaButton": "Get in touch",
+    "locationHeading": "Location",
+    "contactHeading": "Contact",
+    "followHeading": "Social",
+    "linksHeading": "Helpful links",
     "platformLinks": [
       {
         "label": "Home",
@@ -55,15 +55,10 @@
         "href": "/magazines"
       },
       {
-        "label": "Podcasts",
-        "href": "/podcasts"
-      },
-      {
         "label": "About Us",
         "href": "/about"
       }
     ],
-    "exploreHeading": "Explore",
     "exploreLinks": [
       {
         "label": "Hall of Fame",
@@ -86,12 +81,13 @@
         "href": "/industries"
       }
     ],
-    "contactHeading": "Get in touch",
-    "legalHeading": "Legal",
+    "copyright": "© 2026 CIO Mogul India. All rights reserved.",
     "termsLabel": "Terms of Service",
     "privacyLabel": "Privacy Policy",
-    "followHeading": "Follow",
-    "copyright": "© 2026 CIO Mogul India. All rights reserved."
+    "tagline": "A digital magazine and media platform exploring leadership, business, technology and innovation in India.",
+    "platformHeading": "Platform",
+    "exploreHeading": "Explore",
+    "legalHeading": "Legal"
   },
   "home": {
     "releaseTitle": "Magazine release",
@@ -110,7 +106,6 @@
     "wallIntro": "Business women featured on the cover of CIO Mogul India.",
     "wallReadFeature": "Read feature →",
     "wallButton": "See all business women",
-    "podcastsTitle": "Podcasts",
     "testimonialsTitle": "What leaders say",
     "brandsKicker": "Enterprise proven",
     "brandsTitle": "Trusted by India's top enterprises",
@@ -119,7 +114,7 @@
     "getFeaturedText": "Share your story with India's technology and business leaders — as a cover story, a profile or an interview.",
     "getFeaturedButton": "Get featured",
     "newsletterTitle": "Subscribe to our newsletter",
-    "newsletterText": "New editions, news and podcasts. Once a week.",
+    "newsletterText": "New editions and news. Once a week.",
     "newsletterPlaceholder": "Your email address",
     "newsletterButton": "Subscribe",
     "newsletterSending": "Subscribing…",
@@ -155,25 +150,12 @@
     "readerPlaceholderTitle": "PDF viewer",
     "readerPlaceholderText": "The embedded reader will appear here once the edition's PDF is uploaded in Sanity.",
     "moreTitle": "More editions",
-    "viewArchive": "View the archive"
-  },
-  "podcasts": {
-    "watchEpisode": "Watch episode",
-    "searchLabel": "Search episodes",
-    "searchPlaceholder": "Search by episode title or guest…",
-    "yearLabel": "Year",
-    "allYears": "All years",
-    "sortLabel": "Sort",
-    "sortNewest": "Newest first",
-    "sortOldest": "Oldest first",
-    "countWord": "episodes",
-    "clearFilters": "Clear filters",
-    "noResultsTitle": "No episodes match those filters.",
-    "noResultsText": "Try a different year or clear the search.",
-    "openOnYoutube": "Open on YouTube ↗",
-    "close": "Close",
-    "closePlayer": "Close player",
-    "embedError": "Couldn't load the embedded player."
+    "viewArchive": "View the archive",
+    "webLive": "Web Live",
+    "digitalLive": "Digital Live",
+    "liveSoon": "The online edition is coming soon.",
+    "storyBack": "Back to the edition",
+    "storyDigital": "Read the digital edition"
   },
   "hallOfFame": {
     "searchLabel": "Search inductees",
