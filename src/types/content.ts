@@ -29,7 +29,7 @@ export type MagazineEdition = {
                                 // the display string stays free-form
   body: string[];               // old paragraphs, no longer shown
   description?: string;         // shown next to the cover on the edition page
-  // Web Live: the cover story as a web page
+  // Web View: the cover story as a web page
   storyTitle?: string;
   storyBanner?: string | null;
   storyBannerAlt?: string;

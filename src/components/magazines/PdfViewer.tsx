@@ -1,6 +1,7 @@
 "use client";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { pdfjs } from "react-pdf";
+import ShareMenu from "./ShareMenu";
 import "./pdfViewer.css";
 
 // The worker and the files below are copied from the pdf.js that react-pdf uses
@@ -687,6 +688,7 @@ export default function PdfViewer({ file, title, poster }: { file: string; title
         </div>
 
         <div className="pdfv__group">
+          <ShareMenu title={title} />
           <button type="button" className="pdfv__btn pdfv__btn--text" onClick={toggleFullscreen}>{fullscreen ? "Exit" : "Fullscreen"}</button>
           <a href={downloadUrl(file)} className="pdfv__btn pdfv__btn--text">Download</a>
         </div>

@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   });
 }
 
-// Web Live: the cover story of an edition, written out as a web page.
+// Web View: the cover story of an edition, written out as a web page.
 async function WebLiveContent({ params }: { params: Promise<Params> }) {
   const { slug } = await params;
   const edition = await getMagazineEditionBySlug(slug);
@@ -71,11 +71,28 @@ async function WebLiveContent({ params }: { params: Promise<Params> }) {
       </div>
 
       <article className="section">
-        <div className="wrap story">
-          <h1 className="story__title">{title}</h1>
+        <div className="wrap wv">
+          {/* The magazine cover beside the title, so readers see which edition this is. */}
+          <header className="wv__head">
+            <div className="wv__cover">
+              <Image
+                src={edition.coverImage}
+                alt={edition.coverAlt || title}
+                width={713}
+                height={1009}
+                priority
+                sizes="(max-width: 720px) 60vw, 260px"
+              />
+            </div>
+            <div>
+              <p className="wv__label">{edition.editionLabel}</p>
+              <h1 className="wv__title">{title}</h1>
+              {edition.storyIntro && <p className="wv__intro">{edition.storyIntro}</p>}
+            </div>
+          </header>
 
           {edition.storyBanner && (
-            <div className="story__banner">
+            <div className="wv__banner">
               <Image
                 src={edition.storyBanner}
                 alt={edition.storyBannerAlt || title}
@@ -87,11 +104,10 @@ async function WebLiveContent({ params }: { params: Promise<Params> }) {
             </div>
           )}
 
-          <div className="story__body">
-            {edition.storyIntro && <p className="story__intro">{edition.storyIntro}</p>}
+          <div className="wv__body">
             <RichParagraphs paragraphs={story} />
 
-            <div className="story__end">
+            <div className="wv__end">
               {edition.pdfUrl && (
                 <a href={`/magazines/${edition.slug}/digital`} target="_blank" rel="noopener" className="ed-btn ed-btn--solid">
                   {t.magazines.storyDigital} <span aria-hidden>↗</span>

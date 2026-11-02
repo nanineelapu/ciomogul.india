@@ -5539,7 +5539,7 @@ section.mag-end { padding: 48px 0 64px; }
 }
 
 /* ==========================================================================
-   Magazine edition: cover, description, Web Live and Digital Live
+   Magazine edition: cover, description, Web View and Digital Live
    ========================================================================== */
 .ed-hero {
   display: grid;
@@ -5597,24 +5597,46 @@ section.mag-end { padding: 48px 0 64px; }
   .ed-btn { flex: 1; justify-content: center; height: 48px; padding: 0 18px; }
 }
 
-/* Web Live: the cover story */
-.story { max-width: 1000px; margin: 0 auto; }
-.story__title {
+/* Web View: the cover story */
+.wv { max-width: 1000px; margin: 0 auto; }
+.wv__head {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 40px;
+  align-items: center;
+  padding-bottom: 36px;
+  border-bottom: 1px solid var(--color-rule-soft);
+}
+.wv__cover img {
+  display: block;
+  width: 100%;
+  height: auto;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .06), 0 14px 30px -14px rgba(0, 0, 0, .35);
+}
+.wv__label {
+  margin-bottom: 12px;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--color-navy);
+}
+.wv__title {
   font-family: var(--font-display);
-  font-size: clamp(28px, 3.4vw, 44px);
+  font-size: clamp(28px, 3.2vw, 42px);
   font-weight: 800;
   line-height: 1.2;
-  text-align: center;
   color: var(--color-ink);
 }
-.story__banner { margin-top: 36px; }
-.story__banner img { display: block; width: 100%; height: auto; }
-.story__body { max-width: 860px; margin: 40px auto 0; }
-.story__intro { font-size: 20px; line-height: 1.7; font-style: italic; color: var(--color-ink); }
-.story__body p { font-size: 18px; line-height: 1.85; color: var(--color-ink-2); }
-.story__body p + p, .story__intro + p { margin-top: 22px; }
-.story__body strong { color: var(--color-ink); font-weight: 600; }
-.story__body h2 {
+.wv__intro { margin-top: 18px; font-size: 18px; line-height: 1.7; font-style: italic; color: var(--color-ink-2); }
+.wv__banner { margin-top: 36px; }
+.wv__banner img { display: block; width: 100%; height: auto; }
+.wv__body { max-width: 860px; margin-top: 40px; }
+.wv__body p { font-size: 18px; line-height: 1.85; color: var(--color-ink-2); }
+.wv__body p + p { margin-top: 22px; }
+.wv__body strong { color: var(--color-ink); font-weight: 600; }
+.wv__body h2 {
   margin: 40px 0 14px;
   font-family: var(--font-display);
   font-size: 26px;
@@ -5622,7 +5644,7 @@ section.mag-end { padding: 48px 0 64px; }
   line-height: 1.25;
   color: var(--color-ink);
 }
-.story__end {
+.wv__end {
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
@@ -5632,9 +5654,11 @@ section.mag-end { padding: 48px 0 64px; }
   border-top: 1px solid var(--color-rule-soft);
 }
 @media (max-width: 720px) {
-  .story__intro { font-size: 18px; }
-  .story__body p { font-size: 16px; line-height: 1.8; }
-  .story__body h2 { font-size: 22px; }
+  .wv__head { grid-template-columns: 1fr; gap: 24px; justify-items: center; text-align: center; }
+  .wv__cover { width: min(220px, 60vw); }
+  .wv__intro { font-size: 17px; text-align: left; }
+  .wv__body p { font-size: 16px; line-height: 1.8; }
+  .wv__body h2 { font-size: 22px; }
 }
 
 /* Digital Live: the reader on its own page */

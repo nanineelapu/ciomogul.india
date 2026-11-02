@@ -136,13 +136,13 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
         title: "3. Edition page: top",
         fields: [
           ["backLink", "Back link"],
-          ["webLive", "Web Live button (opens the story)"],
+          ["webLive", "Web View button (opens the story)"],
           ["digitalLive", "Digital Live button (opens the magazine in a new tab)"],
           ["liveSoon", "Shown when neither is ready yet"],
         ],
       },
       {
-        title: "4. Web Live page",
+        title: "4. Web View page",
         fields: [
           ["storyBack", "Back link"],
           ["storyDigital", "Button at the end of the story"],
@@ -150,11 +150,7 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
       },
       {
         title: "5. Digital Live page",
-        fields: [
-          ["readerTitle", "Heading"],
-          ["readerHint", "Tip next to the heading"],
-          ["downloadButton", "Download link"],
-        ],
+        fields: [["readerHint", "Tip next to the heading", "The heading is the person's name and the edition."]],
       },
       {
         title: "6. Edition page: more editions",
@@ -261,21 +257,112 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
     ],
   },
   {
+    key: "articles",
+    title: "Articles",
+    sections: [
+      {
+        title: "1. Articles page",
+        fields: [
+          ["topTitle", "Top stories heading"],
+          ["latestTitle", "Latest news heading"],
+          ["exploreTitle", "Categories heading"],
+          ["searchPlaceholder", "Hint inside the search box"],
+          ["searchLabel", "Search box name (read out by screen readers)"],
+          ["noResultsTitle", "No results: heading"],
+          ["noResultsText", "No results: text"],
+        ],
+      },
+      {
+        title: "2. Article page",
+        fields: [
+          ["backLink", "Back link"],
+          ["moreTitle", "More articles heading"],
+          ["viewAll", "View all link"],
+        ],
+      },
+    ],
+  },
+  {
+    key: "industries",
+    title: "Industries",
+    sections: [
+      {
+        title: "1. Industries page",
+        fields: [
+          ["viewIndustry", "Link on each industry"],
+          ["countWord", "Word after the number, as in 7 stories"],
+          ["countWordOne", "Same word for just one, as in 1 story"],
+        ],
+      },
+      {
+        title: "2. One industry's page",
+        fields: [
+          ["backLink", "Back link"],
+          ["storiesTitle", "Stories heading"],
+          ["emptyTitle", "No stories yet: heading"],
+          ["emptyText", "No stories yet: text"],
+          ["emptyButton", "No stories yet: button"],
+          ["otherTitle", "Other industries heading"],
+        ],
+      },
+    ],
+  },
+  {
+    key: "contact",
+    title: "Contact Us",
+    sections: [
+      {
+        title: "1. Contact details",
+        fields: [
+          ["emailLabel", "Email label"],
+          ["phoneLabel", "Phone label"],
+          ["whatsappLabel", "WhatsApp label"],
+          ["whatsappCta", "WhatsApp link text"],
+          ["officeLabel", "Office label"],
+        ],
+      },
+      {
+        title: "2. Form",
+        fields: [
+          ["nameLabel", "Name box label"],
+          ["formEmailLabel", "Email box label"],
+          ["subjectLabel", "Subject box label"],
+          ["messageLabel", "Message box label"],
+          ["sendButton", "Send button"],
+          ["sendingButton", "Send button while sending"],
+        ],
+      },
+      {
+        title: "3. Messages",
+        fields: [
+          ["successTitle", "After sending: heading"],
+          ["successText", "After sending: text"],
+          ["sendAnother", "Send another message link"],
+          ["nameRequired", "When the name is missing"],
+          ["emailInvalid", "When the email is wrong"],
+          ["subjectRequired", "When the subject is missing"],
+          ["messageShort", "When the message is too short"],
+          ["genericError", "If something fails"],
+        ],
+      },
+    ],
+  },
+  {
     key: "footer",
     title: "Footer",
     sections: [
       {
         title: "1. Left side",
         fields: [
-          ["ctaTitle", "Large line (an orange full stop is added after it)"],
-          ["ctaButton", "Button (opens Contact Us)"],
+          ["ctaTitle", "Large line under the logo (an orange full stop is added after it)"],
+          ["ctaButton", "Button (opens Contact Us)", "The email under the button comes from 8. Contact Us."],
         ],
       },
       {
         title: "2. Right side",
         fields: [
           ["locationHeading", "Location heading", "The address comes from 8. Contact Us."],
-          ["contactHeading", "Contact heading", "Phone and email come from 8. Contact Us."],
+          ["contactHeading", "Contact heading", "The phone number comes from 8. Contact Us. Hidden when there is no phone number."],
           ["followHeading", "Social heading", "The social links come from 8. Contact Us."],
           ["linksHeading", "Links heading"],
           ["platformLinks", "Links (first part)"],
@@ -292,11 +379,35 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
       },
     ],
   },
+  {
+    key: "general",
+    title: "Whole site",
+    sections: [
+      {
+        title: "1. Page not found",
+        fields: [
+          ["notFoundTitle", "Heading"],
+          ["notFoundText", "Text"],
+          ["notFoundHome", "Home page button"],
+          ["notFoundMagazines", "Magazines button"],
+        ],
+      },
+      {
+        title: "2. Used on several pages",
+        fields: [
+          ["paginationPrev", "Previous page button"],
+          ["paginationNext", "Next page button"],
+          ["alsoRead", "Also read label"],
+          ["contactUs", "Contact us link"],
+        ],
+      },
+    ],
+  },
 ];
 
 // Kept in the data for older pages but no longer shown on the site.
 export const HIDDEN_TEXT_KEYS: Record<string, string[]> = {
-  magazines: ["scrollToInside", "insideLabel", "readButton", "exploreMore", "scrollToRead", "pdfSoon", "readerSoon", "readerPlaceholderTitle", "readerPlaceholderText"],
+  magazines: ["scrollToInside", "insideLabel", "readButton", "exploreMore", "scrollToRead", "pdfSoon", "readerSoon", "readerPlaceholderTitle", "readerPlaceholderText", "readerTitle", "downloadButton"],
   womenSpotlight: ["themesLabel"],
   footer: ["legalHeading", "tagline", "platformHeading", "exploreHeading"],
 };
