@@ -207,6 +207,7 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
         title: "4. Inductee page",
         fields: [
           ["backLink", "Back link"],
+          ["inducteeNo", "Inductee number beside the Hall of Fame label", FILL],
           ["inducted", "Inducted label"],
           ["openProfile", "Open profile link"],
           ["moreTitle", "More inductees heading"],

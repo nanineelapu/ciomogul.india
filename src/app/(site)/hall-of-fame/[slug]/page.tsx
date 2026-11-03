@@ -74,48 +74,58 @@ async function HallProfileContent({ params }: { params: Promise<Params> }) {
           ]),
         ]}
       />
-      <div className="wrap">
-        <Link href="/hall-of-fame" className="back-link">
-          {t.hallOfFame.backLink}
-        </Link>
-      </div>
+      <article className="hof">
+        <div className="hof__band">
+          <div className="wrap">
+            <Link href="/hall-of-fame" className="back-link">
+              {t.hallOfFame.backLink}
+            </Link>
 
-      <article className="ws-profile">
-        <div className="wrap">
-          <header className="ws-profile__head">
-            <h1 className="ws-profile__name">{entry.name}</h1>
-            <p className="ws-profile__role">
-              {entry.role}
-              {entry.organization && <> · <span>{entry.organization}</span></>}
-            </p>
-            <p className="ws-profile__meta">{t.hallOfFame.inducted} · {entry.inductedOn}</p>
-          </header>
+            <div className="hof__hero">
+              <div className="hof__cover">
+                <Image
+                  src={entry.portrait}
+                  alt={entry.name}
+                  width={713}
+                  height={1009}
+                  priority
+                  sizes="(max-width: 720px) 60vw, 340px"
+                />
+              </div>
 
-          <div className="ws-profile__body">
-            <div className="ws-profile__portrait ws-profile__portrait--cover">
-              <Image
-                src={entry.portrait}
-                alt={entry.name}
-                width={713}
-                height={1009}
-                priority
-                sizes="(max-width: 900px) 100vw, 420px"
-              />
-            </div>
-
-            <div className="ws-profile__text">
-              {entry.pullQuote && <p className="ws-profile__quote">{entry.pullQuote}</p>}
-              {entry.profileBody.map((p, i) => (
-                <p key={i}>{p}</p>
-              ))}
-              {entry.editionSlug && (
-                <Link href={`/magazines/${entry.editionSlug}`} className="hall-entry__cta">
-                  {t.hallOfFame.readEdition}
-                </Link>
-              )}
+              <header className="hof__head">
+                <p className="hof__eyebrow">
+                  {t.hallOfFame.carouselEyebrow}
+                  <span>{t.hallOfFame.inducteeNo.replace("{n}", String(entry.serial).padStart(3, "0"))}</span>
+                </p>
+                <h1 className="hof__name">{entry.name}</h1>
+                <p className="hof__role">
+                  {entry.role}
+                  {entry.organization && <> · <span>{entry.organization}</span></>}
+                </p>
+                {entry.pullQuote && <blockquote className="hof__quote">{entry.pullQuote}</blockquote>}
+                <p className="hof__meta">{t.hallOfFame.inducted} · {entry.inductedOn}</p>
+                {entry.editionSlug && (
+                  <div className="hof__actions">
+                    <Link href={`/magazines/${entry.editionSlug}`} className="btn btn-ink">
+                      {t.hallOfFame.readEdition}
+                    </Link>
+                  </div>
+                )}
+              </header>
             </div>
           </div>
         </div>
+
+        {entry.profileBody.length > 0 && (
+          <div className="wrap">
+            <div className="hof__body">
+              {entry.profileBody.map((p, i) => (
+                <p key={i}>{p}</p>
+              ))}
+            </div>
+          </div>
+        )}
       </article>
 
       {others.length > 0 && (

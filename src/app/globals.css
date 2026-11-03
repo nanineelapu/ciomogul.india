@@ -4035,6 +4035,113 @@ a.contact-details__value:hover { color: var(--color-navy-2); }
 
 .ws-profile__text .hall-entry__cta { margin-top: 12px; }
 
+/* Hall of Fame inductee page: tinted band with the cover beside the name, story below */
+.hof__band {
+  background: var(--color-paper-2);
+  border-bottom: 1px solid var(--color-rule-soft);
+  padding-bottom: 56px;
+}
+
+.hof__hero {
+  display: grid;
+  grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+  gap: 64px;
+  align-items: center;
+  margin-top: 24px;
+}
+
+.hof__cover img {
+  display: block;
+  width: 100%;
+  height: auto;
+  box-shadow: 0 18px 40px rgba(10, 22, 48, .22);
+}
+
+.hof__eyebrow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 16px;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--color-navy);
+}
+
+.hof__eyebrow span {
+  padding: 4px 10px;
+  background: var(--color-navy);
+  color: #fff;
+  letter-spacing: .14em;
+}
+
+.hof__name {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(36px, 4.6vw, 60px);
+  line-height: 1.04;
+  letter-spacing: -.015em;
+  color: var(--color-ink);
+  margin: 0 0 12px;
+}
+
+.hof__role {
+  margin: 0 0 28px;
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--color-ink-2);
+}
+
+.hof__role span { color: var(--color-ink); font-weight: 600; }
+
+.hof__quote {
+  max-width: 56ch;
+  margin: 0 0 28px;
+  padding-left: 20px;
+  border-left: 3px solid var(--color-navy);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 21px;
+  line-height: 1.45;
+  color: var(--color-ink);
+}
+
+.hof__meta {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.hof__actions { margin-top: 28px; }
+
+.hof__body {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 56px 0 72px;
+}
+
+.hof__body p {
+  margin: 0 0 22px;
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--color-ink-2);
+}
+
+.hof__body p:first-child {
+  font-size: 19px;
+  color: var(--color-ink);
+}
+
+.hof__body p:last-child { margin-bottom: 0; }
+
 .more-block {
   padding: 24px 0 72px;
   border-top: 1px solid var(--color-rule-soft);
