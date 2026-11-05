@@ -6051,14 +6051,21 @@ section.mag-end { padding: 48px 0 64px; }
 .hero__stage {
   position: relative;
   height: clamp(380px, 33vw, 460px);
+  touch-action: pan-y; /* sideways swipes slide the covers; up/down still scrolls the page */
 }
 
+/* the ring itself lets clicks through: the side covers sit behind it in 3D */
 .hero__ring {
   position: absolute;
   inset: 0;
   perspective: 1400px;
   transform-style: preserve-3d;
+  pointer-events: none;
+  touch-action: pan-y;
 }
+
+.hero__ring .hero__cover { pointer-events: auto; user-select: none; -webkit-user-drag: none; }
+.hero__ring .hero__cover img { -webkit-user-drag: none; }
 
 /* each cover is placed by how far it is from the front one (--o, and --a without the sign) */
 .hero__cover {

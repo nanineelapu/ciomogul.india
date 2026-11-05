@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { Fragment, useEffect, useState, type CSSProperties } from "react";
+import { Fragment, useEffect, useRef, useState, type CSSProperties } from "react";
 
 export type HeroCover = { slug: string; href: string; image: string; alt: string; name: string; label: string };
 type Text = { title: string; text: string; readMore: string; viewAll: string };
@@ -21,6 +21,10 @@ export default function HeroCarousel({ covers, text, map }: { covers: HeroCover[
     const id = window.setInterval(() => setActive((a) => (a + 1) % n), EVERY_MS);
     return () => window.clearInterval(id);
   }, [paused, n]);
+
+  // swipe / drag sideways on the covers to slide to the next or previous one
+  const swipe = useRef<{ x: number; moved: boolean } | null>(null);
+  const go = (step: number) => setActive((a) => (a + step + n) % n);
 
   if (!n) return null;
   const current = covers[active];
@@ -67,7 +71,18 @@ export default function HeroCarousel({ covers, text, map }: { covers: HeroCover[
         </div>
       </div>
 
-      <div className="hero__stage">
+      <div
+        className="hero__stage"
+        onPointerDown={(e) => { swipe.current = { x: e.clientX, moved: false }; }}
+        onDragStart={(e) => e.preventDefault()}
+        onPointerMove={(e) => {
+          if (swipe.current && Math.abs(e.clientX - swipe.current.x) > 10) swipe.current.moved = true;
+        }}
+        onPointerUp={(e) => {
+          const s = swipe.current;
+          if (s && Math.abs(e.clientX - s.x) > 40) go(e.clientX < s.x ? 1 : -1);
+        }}
+      >
         {map}
         <div className="hero__ring">
           {covers.map((c, i) => {
@@ -84,11 +99,12 @@ export default function HeroCarousel({ covers, text, map }: { covers: HeroCover[
                 style={{ "--o": o, "--a": Math.abs(o) } as CSSProperties}
                 tabIndex={front ? 0 : -1}
                 aria-hidden={!front}
+                draggable={false}
                 onClick={(e) => {
-                  if (!front) {
-                    e.preventDefault();
-                    setActive(i);
-                  }
+                  // a drag is a swipe, not a click; a side cover slides to the front
+                  if (swipe.current?.moved || !front) e.preventDefault();
+                  if (!swipe.current?.moved && !front) setActive(i);
+                  swipe.current = null;
                 }}
               >
                 <Image src={c.image} alt={c.alt} width={713} height={1009} sizes="(max-width: 720px) 46vw, 240px" priority={Math.abs(o) < 2} />
