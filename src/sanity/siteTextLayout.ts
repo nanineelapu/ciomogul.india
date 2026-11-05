@@ -37,13 +37,13 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
     key: "home",
     title: "Home",
     sections: [
-      { title: "1. Headline ticker", fields: [["tickerLabel", "Label before the headlines"]] },
+      { title: "1. Headline ticker", fields: [["tickerLabel", "Tab under the headlines, above the magazine covers"]] },
       {
-        title: "2. Magazine release",
+        title: "2. Top of the page: covers and India map",
         fields: [
-          ["releaseTitle", "Heading"],
-          ["releaseText", "Text"],
-          ["releaseButton", "Button"],
+          ["releaseTitle", "Big title on the left"],
+          ["releaseText", "Text beside the title"],
+          ["releaseButton", "Button under the covers"],
         ],
       },
       {
@@ -62,10 +62,9 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
         ],
       },
       {
-        title: "5. Latest news and Vital updates",
+        title: "5. Latest news",
         fields: [
           ["newsTitle", "Latest news heading"],
-          ["updatesTitle", "Vital updates heading"],
           ["readMore", "Read more link"],
         ],
       },
@@ -131,13 +130,13 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
           ["noResultsText", "No results: text"],
         ],
       },
-      { title: "2. Edition cards", fields: [["readEdition", "Link under each cover"]] },
+      { title: "2. Edition cards", fields: [["readEdition", "Button under each cover"]] },
       {
         title: "3. Edition page: top",
         fields: [
           ["backLink", "Back link"],
           ["webLive", "Web View button (opens the story)"],
-          ["digitalLive", "Digital Live button (opens the magazine in a new tab)"],
+          ["digitalLive", "Digital View button (opens the magazine in a new tab)"],
           ["liveSoon", "Shown when neither is ready yet"],
         ],
       },
@@ -149,7 +148,7 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
         ],
       },
       {
-        title: "5. Digital Live page",
+        title: "5. Digital View page",
         fields: [["readerHint", "Tip next to the heading", "The heading is the person's name and the edition."]],
       },
       {
@@ -207,7 +206,6 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
         title: "4. Inductee page",
         fields: [
           ["backLink", "Back link"],
-          ["inducteeNo", "Inductee number beside the Hall of Fame label", FILL],
           ["inducted", "Inducted label"],
           ["openProfile", "Open profile link"],
           ["moreTitle", "More inductees heading"],
@@ -238,9 +236,7 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
           ["exploreProfile", "Link on each name tab"],
           ["coverHonoree", "Label when she has been on a cover"],
           ["featuredProfile", "Label for other profiles"],
-          ["readStory", "Read her story button"],
-          ["readEdition", "Read the edition button"],
-          ["viewSources", "View sources button"],
+          ["readStory", "Read her story button (the Digital View button uses the Magazines label)"],
         ],
       },
       {
@@ -408,7 +404,8 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
 
 // Kept in the data for older pages but no longer shown on the site.
 export const HIDDEN_TEXT_KEYS: Record<string, string[]> = {
+  home: ["updatesTitle"],
   magazines: ["scrollToInside", "insideLabel", "readButton", "exploreMore", "scrollToRead", "pdfSoon", "readerSoon", "readerPlaceholderTitle", "readerPlaceholderText", "readerTitle", "downloadButton"],
-  womenSpotlight: ["themesLabel"],
+  womenSpotlight: ["themesLabel", "readEdition", "viewSources"],
   footer: ["legalHeading", "tagline", "platformHeading", "exploreHeading"],
 };

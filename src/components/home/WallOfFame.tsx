@@ -28,7 +28,7 @@ export default async function WallOfFame() {
             </Link>
           ))}
         </div>
-        <p className="center-link wall-more"><Link href="/business-women" className="btn btn-line">{t.home.wallButton}</Link></p>
+        <p className="center-link wall-more"><Link href="/business-women" className="btn btn-ink">{t.home.wallButton}</Link></p>
       </div>
     </section>
   );

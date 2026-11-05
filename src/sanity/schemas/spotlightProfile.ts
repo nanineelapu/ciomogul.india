@@ -180,12 +180,29 @@ export const spotlightProfile = defineType({
       title: "Magazine edition (only if she is on a real cover)",
       type: "object",
       group: "facts",
-      description: "Fill this only once the real CIO Mogul India issue is confirmed. It adds a 'Cover honoree' label and a 'Read the edition' button.",
+      description: "Fill this only once the real CIO Mogul India issue is confirmed. It adds a 'Cover honoree' label and the edition name on the cover.",
       fields: [
         defineField({ name: "label", title: "Label", type: "string", description: "For example: Edition 03" }),
         defineField({ name: "month", title: "Month", type: "string", description: "For example: October 2026" }),
         defineField({ name: "href", title: "Edition link", type: "string", description: "For example: /magazines/the-healthcare-issue" }),
       ],
+    }),
+
+    defineField({
+      name: "pdfFile",
+      title: "Magazine PDF (Digital View)",
+      type: "file",
+      options: { accept: "application/pdf" },
+      group: "facts",
+      description: "Upload her magazine as a PDF. A Digital View button then appears next to Read her story and opens it in the page-turning reader.",
+    }),
+    defineField({
+      name: "digitalEdition",
+      title: "Or: a magazine edition for the Digital View button",
+      type: "reference",
+      to: [{ type: "magazineEdition" }],
+      group: "facts",
+      description: "Only if there is no PDF above: pick an edition from the Magazines list and the button opens that edition's digital magazine.",
     }),
 
     { ...seoField, group: "seo" },

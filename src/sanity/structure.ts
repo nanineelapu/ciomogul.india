@@ -42,7 +42,7 @@ export const structure: StructureResolver = (S) =>
         listOf(S, "headline", "1. Headline ticker", "📰"),
         single(S, "homepageConfig", "2. Magazine covers on the home page", "📚"),
         listOf(S, "newsCard", "3. Latest news", "🗞️"),
-        listOf(S, "vitalUpdate", "4. Vital updates", "⚡"),
+        listOf(S, "vitalUpdate", "4. Vital updates (not shown on the site)", "⚡"),
         listOf(S, "featuredArticle", "5. Featured articles", "⭐"),
         listOf(S, "womanLeader", "6. Business women", "👩‍💼"),
         listOf(S, "testimonial", "7. Testimonials", "💬"),

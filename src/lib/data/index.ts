@@ -796,7 +796,7 @@ const SETTINGS_FALLBACK: SiteSettings = {
   email: "info@ciomogulindia.com",
   phone: "+91 95292 03836",
   phoneHref: "tel:+919529203836",
-  office: "Mumbai, Maharashtra, India",
+  office: "Pune, Maharashtra, India",
   whatsappUrl: WHATSAPP_URL,
   social: SOCIAL.map((x) => ({ key: x.key, label: x.label, href: x.href })),
 };

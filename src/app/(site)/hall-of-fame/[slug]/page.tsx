@@ -94,10 +94,7 @@ async function HallProfileContent({ params }: { params: Promise<Params> }) {
               </div>
 
               <header className="hof__head">
-                <p className="hof__eyebrow">
-                  {t.hallOfFame.carouselEyebrow}
-                  <span>{t.hallOfFame.inducteeNo.replace("{n}", String(entry.serial).padStart(3, "0"))}</span>
-                </p>
+                <p className="hof__eyebrow">{t.hallOfFame.carouselEyebrow}</p>
                 <h1 className="hof__name">{entry.name}</h1>
                 <p className="hof__role">
                   {entry.role}
@@ -107,8 +104,8 @@ async function HallProfileContent({ params }: { params: Promise<Params> }) {
                 <p className="hof__meta">{t.hallOfFame.inducted} · {entry.inductedOn}</p>
                 {entry.editionSlug && (
                   <div className="hof__actions">
-                    <Link href={`/magazines/${entry.editionSlug}`} className="btn btn-ink">
-                      {t.hallOfFame.readEdition}
+                    <Link href={`/magazines/${entry.editionSlug}/digital`} target="_blank" rel="noopener" className="btn btn-ink">
+                      {t.magazines.digitalLive}
                     </Link>
                   </div>
                 )}

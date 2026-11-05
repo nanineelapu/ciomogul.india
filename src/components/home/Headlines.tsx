@@ -12,7 +12,6 @@ export default function Headlines({ headlines, label }: { headlines: Headline[];
   return (
     <div className="wrap">
       <div className="headlines">
-        <span className="headlines__tab">{label}</span>
         <div className="headlines__bar">
           <span className="headlines__date">{date}</span>
           <div className="headlines__viewport">
@@ -22,6 +21,10 @@ export default function Headlines({ headlines, label }: { headlines: Headline[];
               ))}
             </div>
           </div>
+        </div>
+        {/* sits under the ticker as the heading for the magazine covers below */}
+        <div className="headlines__label">
+          <span className="headlines__tab">{label}</span>
         </div>
       </div>
     </div>

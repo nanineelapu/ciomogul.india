@@ -36,6 +36,8 @@ type Raw = {
   sources?: { label?: string; href?: string }[];
   quote?: { text?: string; sourceLabel?: string; sourceHref?: string };
   edition?: { label?: string; month?: string; href?: string };
+  digitalSlug?: string;
+  pdfUrl?: string;
   seo?: { title?: string; description?: string; keywords?: string[] } | null;
   statusLabel?: string;
   note?: string;
@@ -83,6 +85,13 @@ function fromRaw(r: Raw, fallbackImage: string): SpotlightProfile {
     text(r.edition?.label) && text(r.edition?.href)
       ? { label: text(r.edition?.label), month: text(r.edition?.month), href: safeHref(r.edition?.href, "/magazines") }
       : b?.edition;
+  // Digital View: her own PDF, else a picked edition, else the edition link if it points at a magazine
+  const pdfUrl = text(r.pdfUrl) || undefined;
+  const digitalHref = pdfUrl
+    ? `/business-women/${r.id}/digital`
+    : text(r.digitalSlug)
+      ? `/magazines/${text(r.digitalSlug)}/digital`
+      : edition?.href.startsWith("/magazines/") ? `${edition.href.replace(/\/$/, "")}/digital` : undefined;
 
   return {
     status: "published",
@@ -106,6 +115,8 @@ function fromRaw(r: Raw, fallbackImage: string): SpotlightProfile {
     sources: sources.length ? sources : (b?.sources ?? []),
     ...(quote ? { quote } : {}),
     ...(edition ? { edition } : {}),
+    ...(digitalHref ? { digitalHref } : {}),
+    ...(pdfUrl ? { pdfUrl } : {}),
   } satisfies PublishedProfile;
 }
 

@@ -17,7 +17,7 @@ export const PAGE_CONTENT: PageContent = {
   magazines: {
     title: "Magazines",
     intro:
-      "Each issue of CIO Mogul India features the people shaping how India's technology, business and industry work. Browse the archive, read a cover story, or revisit an edition.",
+      "Every edition features the leaders shaping India's business and technology. Browse the archive and read their stories.",
   },
   hallOfFame: {
     title: "Hall of Fame",

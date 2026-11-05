@@ -23,17 +23,19 @@ export default async function Industries() {
           <p className="s-intro">{t.home.industriesIntro}</p>
         </header>
         <ol className="industries">
-          {industries.map((i) => (
+          {industries.map((i, n) => (
             <li key={i.slug}>
               <Link href={`/industries/${i.slug}`} className="industry">
+                <span className="industry__num" aria-hidden>{String(n + 1).padStart(2, "0")}</span>
                 <h3 className="industry__name">{i.name}</h3>
                 <p className="industry__text">{i.description}</p>
+                <span className="industry__arrow" aria-hidden>→</span>
               </Link>
             </li>
           ))}
         </ol>
         <p className="center-link industries__more">
-          <Link href="/industries" className="btn btn-line">{t.home.industriesButton}</Link>
+          <Link href="/industries" className="btn btn-ink">{t.home.industriesButton}</Link>
         </p>
       </div>
     </section>

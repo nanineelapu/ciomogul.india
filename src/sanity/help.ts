@@ -36,7 +36,7 @@ export const FIELD_HELP: Record<string, string> = {
   "magazineEdition.cover": "The cover picture. Shown on the Magazines page, the edition page and wherever the home page uses this edition.",
   "magazineEdition.pullQuote": "A short quotation shown on the edition page. Leave empty to hide it.",
   "magazineEdition.pullQuoteAttribution": "Who said the quotation above.",
-  "magazineEdition.pdfFile": "Upload the magazine PDF. The Digital Live button opens it in the flip-page reader, in a new tab. The button appears once a PDF is uploaded.",
+  "magazineEdition.pdfFile": "Upload the magazine PDF. The Digital View button opens it in the flip-page reader, in a new tab. The button appears once a PDF is uploaded.",
   "magazineEdition.seo": SEO,
 
   // ── Hall of Fame

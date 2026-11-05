@@ -18,8 +18,6 @@ export default async function CoverStories() {
               <span className="story__text">
                 <span className="story__label">{t.home.coverStoryLabel}</span>
                 <span className="story__name">{s.name}</span>
-                <span className="story__role">{s.role}</span>
-                <span className="story__tag">{s.tag}</span>
               </span>
             </Link>
           ))}

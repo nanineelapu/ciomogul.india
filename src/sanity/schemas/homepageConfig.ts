@@ -15,8 +15,8 @@ export const homepageConfig = defineType({
       title: "2. Magazine release: the large covers",
       type: "array",
       of: [{ type: "reference", to: [{ type: "magazineEdition" }] }],
-      description: "Pick 2-3 editions to feature in the big release block.",
-      validation: (r) => r.min(1).max(4),
+      description: "Pick up to 7 editions for the fan of covers at the top of the home page. The first one sits in the middle and is the biggest. Empty spots are filled with the newest editions.",
+      validation: (r) => r.max(7),
     }),
     defineField({
       name: "coverStories",

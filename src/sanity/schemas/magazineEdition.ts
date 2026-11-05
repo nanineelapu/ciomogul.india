@@ -34,7 +34,7 @@ export const magazineEdition = defineType({
       title: "Subtitle",
       type: "text",
       rows: 2,
-      description: "One-line summary. Shown on the edition's card in the archive, and next to the cover when Description is empty.",
+      description: "One-line summary. Shown next to the cover on the edition page when Description is empty, and used for Google.",
     }),
     defineField({
       name: "slug",
@@ -108,23 +108,24 @@ export const magazineEdition = defineType({
     }),
     defineField({
       name: "roleTags",
-      title: "Role tags",
+      title: "Role tags (not shown)",
       type: "array",
       of: [{ type: "string" }],
-      description: "The first tag is shown under the name in the home page Cover stories.",
+      description: "No longer shown on the site.",
+      hidden: ({ value }) => !value || value.length === 0,
       options: { layout: "tags" },
     }),
     defineField({
       name: "pdfFile",
-      title: "PDF file (Digital Live)",
+      title: "PDF file (Digital View)",
       type: "file",
       options: { accept: "application/pdf" },
     }),
     defineField({
       name: "publishedOn",
-      title: "Published on (display)",
+      title: "Published on (not shown)",
       type: "string",
-      description: 'Free-form display string. e.g. "October 2026"',
+      description: 'e.g. "October 2026". No longer shown on the site; the Edition label carries the month.',
     }),
     defineField({
       name: "publishedYear",

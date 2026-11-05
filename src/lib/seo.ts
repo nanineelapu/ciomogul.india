@@ -153,7 +153,7 @@ export function organizationLd(opts: {
     telephone: opts.phone,
     address: {
       "@type": "PostalAddress",
-      addressLocality: "Mumbai",
+      addressLocality: "Pune",
       addressRegion: "Maharashtra",
       addressCountry: "IN",
     },

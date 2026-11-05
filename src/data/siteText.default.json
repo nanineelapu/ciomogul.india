@@ -90,8 +90,8 @@
     "legalHeading": "Legal"
   },
   "home": {
-    "releaseTitle": "Magazine release",
-    "releaseText": "Stories and lessons from India's technology and business leaders. Each edition features the people shaping how India works.",
+    "releaseTitle": "India Editions",
+    "releaseText": "India is home to some of the most driven business and technology leaders. Every edition of CIO Mogul India tells the story of the people shaping how the country works.",
     "releaseButton": "View all editions",
     "coverStoriesTitle": "Cover stories",
     "coverStoryLabel": "Cover story",
@@ -101,8 +101,8 @@
     "newsTitle": "Latest news",
     "updatesTitle": "Vital updates",
     "readMore": "Read more",
-    "featuredArticlesTitle": "Featured articles",
-    "wallTitle": "Wall of fame",
+    "featuredArticlesTitle": "Articles",
+    "wallTitle": "Women of Fame",
     "wallIntro": "Business women featured on the cover of CIO Mogul India.",
     "wallReadFeature": "Read feature →",
     "wallButton": "See all business women",
@@ -121,10 +121,10 @@
     "newsletterSuccess": "Thank you. You are subscribed. Please check your inbox.",
     "newsletterInvalid": "Please enter a valid email address.",
     "newsletterError": "Something went wrong. Please try again.",
-    "tickerLabel": "Latest"
+    "tickerLabel": "Latest Magazines"
   },
   "magazines": {
-    "readEdition": "Read edition",
+    "readEdition": "Read more",
     "searchLabel": "Search editions",
     "searchPlaceholder": "Search by name, title or edition…",
     "yearLabel": "Year",
@@ -152,7 +152,7 @@
     "moreTitle": "More editions",
     "viewArchive": "View the archive",
     "webLive": "Web View",
-    "digitalLive": "Digital Live",
+    "digitalLive": "Digital View",
     "liveSoon": "The online edition is coming soon.",
     "storyBack": "Back to the edition",
     "storyDigital": "Read the digital edition"
@@ -173,7 +173,6 @@
     "openProfile": "Open profile",
     "viewProfile": "View profile",
     "backLink": "Back to Hall of Fame",
-    "inducteeNo": "Inductee No. {n}",
     "readEdition": "Read the edition",
     "carouselHint": "Swipe or use the arrows",
     "carouselEyebrow": "Hall of Fame",

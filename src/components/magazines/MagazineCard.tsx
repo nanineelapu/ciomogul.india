@@ -17,10 +17,8 @@ export default async function MagazineCard({ edition }: { edition: MagazineEditi
         />
       </span>
       <span className="mag-card__name">{edition.featuredPersonName}</span>
-      <span className="mag-card__role">{edition.subtitle}</span>
       <span className="mag-card__foot">
         <span className="mag-card__cta">{t.magazines.readEdition}</span>
-        <span className="mag-card__date">{edition.publishedOn}</span>
       </span>
     </Link>
   );

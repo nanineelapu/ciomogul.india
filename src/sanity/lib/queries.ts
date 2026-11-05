@@ -244,6 +244,8 @@ export const SPOTLIGHT_QUERY = /* groq */ `
     sources,
     quote,
     edition,
+    "digitalSlug": digitalEdition->slug.current,
+    "pdfUrl": pdfFile.asset->url,
     statusLabel,
     note,
     teaser

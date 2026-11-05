@@ -299,18 +299,34 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
   margin-top: 24px;
 }
 
+/* "Latest Magazines": arrow-shaped label with an orange stripe, then a thin line to the edge */
+.headlines__label {
+  display: flex;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.headlines__label::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--color-rule-soft);
+}
+
 .headlines__tab {
-  position: relative;
+  flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   height: 40px;
-  padding: 0 48px 0 16px;
-  background: var(--color-navy-2);
+  padding: 0 34px 0 16px;
+  border-left: 5px solid #F26A21;
+  background: var(--color-navy);
   color: #fff;
   font-family: var(--font-ui);
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
-  clip-path: polygon(0 0, calc(100% - 26px) 0, 100% 100%, 0 100%);
+  letter-spacing: .02em;
+  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 50%, calc(100% - 18px) 100%, 0 100%);
 }
 
 .headlines__bar {
@@ -703,17 +719,19 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
   align-items: center;
   gap: 24px;
   padding: 24px;
-  background: var(--color-paper);
-  border: 1px solid var(--color-rule-soft);
-  border-left: 3px solid var(--color-navy-2);
+  /* faint blue-grey tint and a resting shadow so the cards stand off the white page */
+  background: linear-gradient(135deg, #fff 0%, var(--color-paper-2) 100%);
+  border: 1px solid #D5DDEA;
+  border-left: 4px solid var(--color-navy-2);
+  box-shadow: 0 1px 2px rgba(11, 31, 58, .05), 0 10px 24px -16px rgba(11, 31, 58, .35);
   transition: border-color .2s ease, box-shadow .3s ease, transform .3s ease;
 }
 
 .leader:hover {
-  border-color: var(--color-navy);
-  border-left-color: var(--color-navy-2);
-  box-shadow: 0 14px 30px -18px rgba(0, 0, 0, .3);
-  transform: translateY(-2px);
+  border-color: var(--color-navy-light);
+  border-left-color: #F26A21;
+  box-shadow: 0 1px 2px rgba(11, 31, 58, .06), 0 20px 36px -18px rgba(11, 31, 58, .45);
+  transform: translateY(-3px);
 }
 
 .leader__img {
@@ -1381,11 +1399,17 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
   row-gap: 24px;
 }
 
+/* four release covers in one row, button centred below */
 .release__covers {
-  grid-column: span 9;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 24px;
+}
+
+.release__more {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
 }
 
 .release__text {
@@ -1396,13 +1420,23 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
   align-items: stretch;
 }
 
+/* Latest news takes the full width (Vital updates was removed) */
 .news__main {
-  grid-column: span 8;
+  grid-column: 1 / -1;
   padding: 24px 32px;
 }
 
 .news__grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 24px 24px;
+}
+
+@media (max-width: 1080px) {
+  .news__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 720px) {
+  .news__grid { grid-template-columns: 1fr; }
 }
 
 .updates {
@@ -1801,25 +1835,22 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
   transform: translateY(-6px);
 }
 
+/* white frame round the cover, the same as the home page magazines */
 .mag-card__cover {
   position: relative;
   display: block;
-  aspect-ratio: 713 / 1009;
+  padding: 10px;
   margin-bottom: 20px;
-  overflow: hidden;
-  background: var(--color-paper-2);
+  background: #fff;
 }
 
 .mag-card__cover img {
   width: 100%;
-  height: 100%;
+  height: auto;
+  aspect-ratio: 713 / 1009;
   object-fit: cover;
-  transition: transform .5s cubic-bezier(.19, 1, .22, 1);
 }
 
-.mag-card:hover .mag-card__cover img {
-  transform: scale(1.04);
-}
 
 .mag-card__cover::before {
   content: "";
@@ -1848,6 +1879,7 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
   line-height: 1.35;
   color: var(--color-ink);
   margin-bottom: 6px;
+  transition: color .25s ease;
 }
 
 .mag-card__role {
@@ -1873,21 +1905,30 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
   white-space: nowrap;
 }
 
+/* "Read more": an outline button that fills navy when the card is hovered */
 .mag-card__cta {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  height: 38px;
+  padding: 0 16px;
+  border: 1px solid var(--color-navy);
   font-family: var(--font-ui);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: .14em;
-  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 600;
   color: var(--color-navy);
+  white-space: nowrap;
+  transition: background-color .25s ease, color .25s ease;
 }
 
 .mag-card__cta::after {
   content: "→";
   transition: transform .25s ease;
+}
+
+.mag-card:hover .mag-card__cta {
+  background: var(--color-navy);
+  color: #fff;
 }
 
 .mag-card:hover .mag-card__cta::after {
@@ -4079,11 +4120,11 @@ a.contact-details__value:hover { color: var(--color-navy-2); }
 }
 
 .hof__name {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: clamp(36px, 4.6vw, 60px);
-  line-height: 1.04;
-  letter-spacing: -.015em;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: clamp(30px, 3.4vw, 46px);
+  line-height: 1.15;
+  letter-spacing: -.01em;
   color: var(--color-ink);
   margin: 0 0 12px;
 }
@@ -4102,12 +4143,11 @@ a.contact-details__value:hover { color: var(--color-navy-2); }
   margin: 0 0 28px;
   padding-left: 20px;
   border-left: 3px solid var(--color-navy);
-  font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 600;
-  font-size: 21px;
-  line-height: 1.45;
-  color: var(--color-ink);
+  font-family: var(--font-ui);
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--color-ink-2);
 }
 
 .hof__meta {
@@ -5585,64 +5625,116 @@ section.mag-end { padding: 48px 0 64px; }
   .mag-end .mag-end__title { font-size: 18px; }
 }
 
-/* ---------- Home: Industries we cover ---------- */
-/* Compact: smaller padding, smaller type, shorter numbers. The whole
-   section fits in a glance so it does not dominate the home page. */
-#industries.section { padding: 20px 0 24px; }
-#industries .s-head { margin-bottom: 16px; }
-#industries .s-intro { margin-top: 8px; font-size: 15px; max-width: 56ch; }
+/* ---------- Home: Industries we cover ----------
+   White cards: a big faint number, the name, a line of
+   text and an arrow. On hover a tile lifts, an orange line grows along its top
+   and the arrow slides. */
+#industries.section {
+  position: relative;
+  padding: 56px 0 52px;
+  background: var(--color-paper);
+}
+#industries .s-head { margin-bottom: 28px; }
+#industries .s-intro { margin-top: 10px; font-size: 16px; max-width: 56ch; color: var(--color-ink-2); }
 
 .industries {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  margin-top: 4px;
-  border-top: 1px solid var(--color-rule-soft);
-  border-left: 1px solid var(--color-rule-soft);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
+.industries > li { display: flex; }
 
 .industry {
+  position: relative;
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding: 16px 18px 18px;
-  background: var(--color-paper);
-  border-right: 1px solid var(--color-rule-soft);
-  border-bottom: 1px solid var(--color-rule-soft);
-  transition: background-color .3s ease;
+  gap: 8px;
+  min-height: 210px;
+  padding: 22px 20px 20px;
+  color: var(--color-ink);
+  background: linear-gradient(180deg, #fff, var(--color-paper-2));
+  border: 1px solid var(--color-rule-soft);
+  box-shadow: 0 1px 2px rgba(11, 31, 58, .04);
+  overflow: hidden;
+  transition: transform .35s cubic-bezier(.2, .8, .2, 1), background-color .3s ease, border-color .3s ease, box-shadow .35s ease;
 }
-.industry:hover { background: var(--color-paper-2); }
 
+/* orange line along the top, grows on hover */
+.industry::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: #F26A21;
+  transform: scaleX(.18);
+  transform-origin: left;
+  transition: transform .45s cubic-bezier(.2, .8, .2, 1);
+}
+
+.industry:hover {
+  transform: translateY(-6px);
+  border-color: var(--color-navy-light);
+  box-shadow: 0 24px 40px -22px rgba(11, 31, 58, .35);
+}
+.industry:hover::before { transform: scaleX(1); }
+
+.industry__num {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 1;
+  letter-spacing: -.02em;
+  font-variant-numeric: lining-nums tabular-nums;
+  color: rgba(11, 31, 58, .12);
+  transition: color .3s ease;
+}
+.industry:hover .industry__num { color: rgba(242, 106, 33, .6); }
 
 .industry__name {
-  margin-top: 6px;
+  margin: 10px 0 0;
   font-family: var(--font-ui);
   font-weight: 600;
-  font-size: 15px;
+  font-size: 17px;
   line-height: 1.3;
   color: var(--color-ink);
 }
 
 .industry__text {
-  max-width: 36ch;
-  font-size: 13px;
-  line-height: 1.55;
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.6;
   color: var(--color-ink-2);
 }
+
+.industry__arrow {
+  margin-top: auto;
+  padding-top: 14px;
+  font-size: 18px;
+  color: var(--color-navy);
+  transition: transform .3s ease, color .3s ease;
+}
+.industry:hover .industry__arrow { transform: translateX(6px); color: #F26A21; }
 
 .center-link.industries__more {
   display: flex;
   justify-content: center;
   width: 100%;
-  margin-top: 20px;
+  margin-top: 32px;
 }
-.center-link.industries__more .btn { height: 40px; padding: 0 20px; font-size: 13px; }
+.center-link.industries__more .btn { height: 44px; padding: 0 24px; font-size: 14px; }
 
-@media (max-width: 960px) {
-  .industries { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-@media (max-width: 600px) {
-  .industries { grid-template-columns: 1fr; }
-  .industry { padding: 14px 16px 16px; }
+@media (max-width: 720px) {
+  #industries.section { padding: 40px 0 36px; }
+  .industries { gap: 12px; }
+  .industry { min-height: 0; padding: 18px 16px 16px; }
+  .industry__num { font-size: 32px; }
+  .industry__name { font-size: 16px; }
 }
 
 /* ==========================================================================
@@ -5779,3 +5871,262 @@ section.mag-end { padding: 48px 0 64px; }
 }
 .digital__title { font-family: var(--font-display); font-size: 26px; font-weight: 800; color: var(--color-ink); }
 .digital__hint { font-family: var(--font-ui); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--color-muted); }
+
+/* ==========================================================================
+   Magazine covers everywhere: a drop shadow so a cover never blends into the
+   white page. On hover the shadow behind the cover turns into a soft blue glow;
+   the cover image itself is never tinted.
+   ========================================================================== */
+.mag,
+.story__img,
+.mag-card__cover,
+.hall-entry__portrait,
+.ws-card__portrait,
+.hall-car__cover,
+.spot-fan__card,
+.spot-feature__cover,
+.ed-hero__cover,
+.wv__cover,
+.hof__cover {
+  position: relative;
+  box-shadow: 0 2px 6px rgba(11, 31, 58, .10), 0 16px 34px -12px rgba(11, 31, 58, .42);
+}
+
+/* the home covers and the Business Women covers already animate their shadow */
+.story__img,
+.mag-card__cover,
+.hall-entry__portrait,
+.ws-card__portrait,
+.hall-car__cover,
+.ed-hero__cover,
+.wv__cover,
+.hof__cover { transition: box-shadow .45s cubic-bezier(.2, .8, .2, 1), transform .45s cubic-bezier(.2, .8, .2, 1); }
+
+.wv__cover img,
+.hof__cover img { box-shadow: none; }
+
+.feature-cta__covers img { box-shadow: 0 2px 6px rgba(11, 31, 58, .10), 0 16px 34px -12px rgba(11, 31, 58, .42); }
+
+@media (hover: hover) {
+  .mag:hover,
+  .story:hover .story__img,
+  .hall-entry__portrait:hover,
+  .ws-card:hover .ws-card__portrait,
+  .hall-car__cover:hover,
+  .spot-fan__card:hover,
+  .spot-feature__cover:hover,
+  .ed-hero__cover:hover,
+  .wv__cover:hover,
+  .hof__cover:hover {
+    /* an even soft blue glow all the way round the cover */
+    box-shadow:
+      0 0 0 1px rgba(56, 104, 184, .28),
+      0 0 18px 2px rgba(56, 104, 184, .40),
+      0 0 42px 8px rgba(56, 104, 184, .22),
+      0 18px 34px -16px rgba(11, 31, 58, .45);
+  }
+
+  /* the name under a cover turns blue, like the cover-story cards already do */
+  .mag-card:hover .mag-card__name { color: var(--color-navy-2); }
+
+  /* lift (the home covers and the Business Women covers already move on their own) */
+  .story:hover .story__img,
+  .mag-card:hover .mag-card__cover,
+  .hall-entry__portrait:hover,
+  .ws-card:hover .ws-card__portrait,
+  .hall-car__cover:hover,
+  .ed-hero__cover:hover,
+  .wv__cover:hover,
+  .hof__cover:hover { transform: translateY(-6px); }
+  .mag:hover { transform: translateY(-8px); }
+}
+
+/* ==========================================================================
+   Home hero: title + intro, a fan of covers, and a map of India
+   ========================================================================== */
+.hero.section { padding: 28px 0 40px; overflow: hidden; }
+
+.hero__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr);
+  gap: 32px;
+  align-items: center;
+}
+
+.hero__head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 28px;
+  align-items: center;
+}
+
+.hero__title {
+  margin: 0;
+  padding: 4px 28px 14px 0;
+  border-right: 3px solid var(--color-navy);
+  border-bottom: 3px solid var(--color-navy);
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: clamp(30px, 3vw, 42px);
+  line-height: 1.1;
+  letter-spacing: -.01em;
+  text-transform: uppercase;
+  text-align: right;
+  color: var(--color-navy);
+  max-width: 9ch;
+}
+
+.hero__text {
+  margin: 0;
+  max-width: 54ch;
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--color-ink-2);
+}
+
+/* the fan: each cover gets smaller and sits further back the further it is from the middle */
+.hero__fan {
+  --w: clamp(130px, 13.5vw, 198px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 36px 0 32px;
+  min-height: calc(var(--w) * 1.42);
+}
+
+.hero__cover {
+  position: relative;
+  z-index: calc(10 - var(--a));
+  flex: 0 0 auto;
+  width: calc(var(--w) * (1 - var(--a) * .12));
+  margin-inline: calc(var(--w) * -.115);
+  padding: 6px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(11, 31, 58, .12), 0 22px 40px -18px rgba(11, 31, 58, .55);
+  transition: transform .45s cubic-bezier(.2, .8, .2, 1), box-shadow .45s ease;
+  animation: hero-fan-in .9s cubic-bezier(.2, .8, .2, 1) backwards;
+  animation-delay: calc(var(--a) * 90ms);
+}
+
+.hero__cover img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 713 / 1009;
+  object-fit: cover;
+}
+
+@media (hover: hover) {
+  .hero__cover:hover {
+    z-index: 20;
+    transform: translateY(-14px) scale(1.06);
+    box-shadow:
+      0 0 0 1px rgba(56, 104, 184, .28),
+      0 0 22px 3px rgba(56, 104, 184, .42),
+      0 0 50px 10px rgba(56, 104, 184, .22),
+      0 26px 44px -18px rgba(11, 31, 58, .6);
+  }
+}
+
+@keyframes hero-fan-in {
+  from { opacity: 0; transform: translateX(calc(var(--d) * -70%)) scale(.9); }
+  to { opacity: 1; transform: none; }
+}
+
+.hero__more { display: flex; justify-content: center; }
+
+/* the map: navy India with a soft drop shadow and glowing city dots */
+.hero__map {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  justify-self: center;
+}
+
+.hero__map-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(14px 18px 16px rgba(11, 31, 58, .32));
+  animation: hero-map-in 1.1s ease both;
+}
+
+@keyframes hero-map-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+
+.hero__city {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transform: translate(-6px, -50%);
+  pointer-events: none;
+}
+
+.hero__city[data-left] { flex-direction: row-reverse; transform: translate(calc(-100% + 6px), -50%); }
+
+.hero__city i {
+  position: relative;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #F26A21;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, .85);
+}
+
+.hero__city i::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  border: 2px solid #F26A21;
+  animation: hero-ping 2.4s ease-out infinite;
+  animation-delay: calc(var(--i) * .3s);
+}
+
+@keyframes hero-ping {
+  from { transform: scale(1); opacity: .9; }
+  to { transform: scale(3.2); opacity: 0; }
+}
+
+.hero__city b {
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .94);
+  box-shadow: 0 2px 6px rgba(11, 31, 58, .25);
+  font-family: var(--font-ui);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  color: var(--color-navy);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__cover, .hero__map-svg, .hero__city i::after { animation: none; }
+}
+
+/* tablets: map smaller beside the fan */
+@media (max-width: 1080px) {
+  .hero__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 260px); gap: 20px; }
+  .hero__head { grid-template-columns: 1fr; gap: 14px; }
+  .hero__title { max-width: none; text-align: left; border-right: 0; padding-right: 0; }
+  .hero__fan { --w: 18vw; }
+  .hero__city b { display: none; }
+}
+
+/* phones: title, fan of five, button; the map sits faintly behind the title */
+@media (max-width: 720px) {
+  .hero.section { padding: 18px 0 32px; }
+  .hero__grid { grid-template-columns: 1fr; position: relative; }
+  .hero__map { position: absolute; top: 0; right: -10%; width: 62%; opacity: .12; z-index: 0; }
+  .hero__city { display: none; }
+  .hero__main { position: relative; z-index: 1; }
+  .hero__title { font-size: 28px; }
+  .hero__text { font-size: 15px; }
+  .hero__fan { --w: 34vw; margin: 26px 0 24px; }
+  .hero__cover { padding: 4px; }
+  .hero__cover[data-far] { display: none; }
+}

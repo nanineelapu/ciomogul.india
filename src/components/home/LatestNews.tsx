@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getNewsCards, getSiteText, getVitalUpdates } from "@/lib/data";
+import { getNewsCards, getSiteText } from "@/lib/data";
 
 export default async function LatestNews() {
-  const [cards, updates, t] = await Promise.all([getNewsCards(), getVitalUpdates(), getSiteText()]);
+  const [cards, t] = await Promise.all([getNewsCards(), getSiteText()]);
   return (
     <section className="section" id="news" aria-labelledby="news-title">
       <div className="wrap news">
@@ -29,21 +29,6 @@ export default async function LatestNews() {
             ))}
           </div>
         </div>
-        <aside className="updates" aria-labelledby="updates-title">
-          <header className="s-head">
-            <h2 className="s-title" id="updates-title">{t.home.updatesTitle}</h2>
-            <span className="s-rule" aria-hidden />
-          </header>
-          <ul className="updates__list">
-            {updates.map((u) => (
-              <li key={u.slug}>
-                <h3><Link href={u.href}>{u.title}</Link></h3>
-                {u.description && <p>{u.description}</p>}
-                <Link href={u.href} className="read-more">{t.home.readMore}</Link>
-              </li>
-            ))}
-          </ul>
-        </aside>
       </div>
     </section>
   );

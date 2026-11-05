@@ -6,7 +6,8 @@ import { getSiteText } from "@/lib/data";
 // The "cover spread": framed image · name and introduction · navy themes panel.
 export default async function SpotlightFeature({ profile }: { profile: PublishedProfile }) {
   const { edition } = profile;
-  const t = (await getSiteText()).womenSpotlight;
+  const text = await getSiteText();
+  const t = text.womenSpotlight;
   const label = edition ? t.coverHonoree : t.featuredProfile;
 
   return (
@@ -54,10 +55,8 @@ export default async function SpotlightFeature({ profile }: { profile: Published
 
         <div className="spot-feature__actions">
           <Link href={storyHref(profile.id)} className="btn btn-ink">{t.readStory} <span aria-hidden>→</span></Link>
-          {edition ? (
-            <Link href={edition.href} className="btn btn-line">{t.readEdition}</Link>
-          ) : (
-            <Link href={`${storyHref(profile.id)}#sources`} className="btn btn-line">{t.viewSources}</Link>
+          {profile.digitalHref && (
+            <Link href={profile.digitalHref} target="_blank" rel="noopener" className="btn btn-line">{text.magazines.digitalLive}</Link>
           )}
         </div>
       </div>
