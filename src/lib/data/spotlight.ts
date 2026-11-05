@@ -85,7 +85,7 @@ function fromRaw(r: Raw, fallbackImage: string): SpotlightProfile {
     text(r.edition?.label) && text(r.edition?.href)
       ? { label: text(r.edition?.label), month: text(r.edition?.month), href: safeHref(r.edition?.href, "/magazines") }
       : b?.edition;
-  // Digital View: her own PDF, else a picked edition, else the edition link if it points at a magazine
+  // Digital Version: her own PDF, else a picked edition, else the edition link if it points at a magazine
   const pdfUrl = text(r.pdfUrl) || undefined;
   const digitalHref = pdfUrl
     ? `/business-women/${r.id}/digital`

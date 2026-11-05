@@ -5942,71 +5942,152 @@ section.mag-end { padding: 48px 0 64px; }
 }
 
 /* ==========================================================================
-   Home hero: title + intro, a fan of covers, and a map of India
+   Home hero: details of the magazine in front (left) and a turning 3D
+   carousel of covers in front of a map of India (right)
    ========================================================================== */
-.hero.section { padding: 28px 0 40px; overflow: hidden; }
+.hero.section { padding: 4px 0 32px; overflow: hidden; }
 
 .hero__grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, .8fr) minmax(0, 1.4fr);
   gap: 32px;
   align-items: center;
 }
 
-.hero__head {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: 28px;
+/* left: label, the name on the cover in front, a short line, buttons, dots */
+.hero__eyebrow {
+  display: flex;
   align-items: center;
+  gap: 12px;
+  margin: 0 0 16px;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--color-navy);
 }
 
-.hero__title {
+.hero__eyebrow::before {
+  content: "";
+  width: 36px;
+  height: 3px;
+  background: #F26A21;
+}
+
+/* the About page reveal: the label fades in, each word of the name rises out of
+   its own mask, then the line, buttons and dots rise in after it */
+.hero__eyebrow { animation: abt-fade 1.2s ease .1s backwards; }
+
+.hero__word { display: inline-block; overflow: hidden; padding-bottom: .08em; vertical-align: top; }
+.hero__word > span {
+  display: inline-block;
+  animation: abt-word .9s cubic-bezier(.2, .8, .2, 1) backwards;
+  animation-delay: calc(var(--i) * .07s);
+}
+
+.hero__text { animation: spot-rise .7s cubic-bezier(.2, .7, .2, 1) .45s backwards; }
+.hero__actions { animation: spot-rise .7s cubic-bezier(.2, .7, .2, 1) .6s backwards; }
+.hero__dots { animation: spot-rise .7s cubic-bezier(.2, .7, .2, 1) .75s backwards; }
+
+.hero__label {
+  margin: 0 0 6px;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.hero__name {
   margin: 0;
-  padding: 4px 28px 14px 0;
-  border-right: 3px solid var(--color-navy);
-  border-bottom: 3px solid var(--color-navy);
   font-family: var(--font-ui);
   font-weight: 700;
-  font-size: clamp(30px, 3vw, 42px);
-  line-height: 1.1;
+  font-size: clamp(28px, 3vw, 42px);
+  line-height: 1.12;
   letter-spacing: -.01em;
-  text-transform: uppercase;
-  text-align: right;
   color: var(--color-navy);
-  max-width: 9ch;
 }
 
 .hero__text {
-  margin: 0;
-  max-width: 54ch;
-  font-size: 17px;
-  line-height: 1.7;
+  margin: 18px 0 0;
+  max-width: 38ch;
+  font-size: 16px;
+  line-height: 1.6;
   color: var(--color-ink-2);
 }
 
-/* the fan: each cover gets smaller and sits further back the further it is from the middle */
-.hero__fan {
-  --w: clamp(130px, 13.5vw, 198px);
+.hero__actions {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 36px 0 32px;
-  min-height: calc(var(--w) * 1.42);
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
 }
 
-.hero__cover {
+.hero__dots {
+  display: flex;
+  gap: 8px;
+  margin-top: 28px;
+}
+
+.hero__dots button {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: var(--color-navy-light);
+  cursor: pointer;
+  transition: width .35s ease, background-color .35s ease;
+}
+
+.hero__dots button.is-active {
+  width: 28px;
+  background: #F26A21;
+}
+
+/* right: the stage holds the map and the turning covers */
+.hero__stage {
   position: relative;
+  height: clamp(380px, 33vw, 460px);
+}
+
+.hero__ring {
+  position: absolute;
+  inset: 0;
+  perspective: 1400px;
+  transform-style: preserve-3d;
+}
+
+/* each cover is placed by how far it is from the front one (--o, and --a without the sign) */
+.hero__cover {
+  --w: clamp(170px, 15vw, 230px);
+  position: absolute;
+  top: 50%;
+  left: 40%;
   z-index: calc(10 - var(--a));
-  flex: 0 0 auto;
-  width: calc(var(--w) * (1 - var(--a) * .12));
-  margin-inline: calc(var(--w) * -.115);
+  width: var(--w);
   padding: 6px;
   background: #fff;
   box-shadow: 0 2px 6px rgba(11, 31, 58, .12), 0 22px 40px -18px rgba(11, 31, 58, .55);
-  transition: transform .45s cubic-bezier(.2, .8, .2, 1), box-shadow .45s ease;
-  animation: hero-fan-in .9s cubic-bezier(.2, .8, .2, 1) backwards;
-  animation-delay: calc(var(--a) * 90ms);
+  opacity: clamp(0, 3 - var(--a), 1);
+  transform:
+    translate(-50%, -50%)
+    translateX(calc(var(--o) * 74%))
+    translateZ(calc(var(--a) * -190px))
+    rotateY(calc(var(--o) * -28deg));
+  transition: transform .9s cubic-bezier(.2, .8, .2, 1), opacity .6s ease, box-shadow .6s ease;
 }
+
+.hero__cover[data-front] {
+  box-shadow:
+    0 0 0 1px rgba(56, 104, 184, .25),
+    0 0 26px 4px rgba(56, 104, 184, .38),
+    0 30px 50px -20px rgba(11, 31, 58, .65);
+}
+
+.hero__cover:not([data-front]) { cursor: pointer; }
 
 .hero__cover img {
   display: block;
@@ -6017,30 +6098,19 @@ section.mag-end { padding: 48px 0 64px; }
 }
 
 @media (hover: hover) {
-  .hero__cover:hover {
-    z-index: 20;
-    transform: translateY(-14px) scale(1.06);
-    box-shadow:
-      0 0 0 1px rgba(56, 104, 184, .28),
-      0 0 22px 3px rgba(56, 104, 184, .42),
-      0 0 50px 10px rgba(56, 104, 184, .22),
-      0 26px 44px -18px rgba(11, 31, 58, .6);
+  .hero__cover[data-front]:hover {
+    transform: translate(-50%, -50%) translateY(-10px) scale(1.04);
   }
 }
 
-@keyframes hero-fan-in {
-  from { opacity: 0; transform: translateX(calc(var(--d) * -70%)) scale(.9); }
-  to { opacity: 1; transform: none; }
-}
-
-.hero__more { display: flex; justify-content: center; }
-
-/* the map: navy India with a soft drop shadow and glowing city dots */
+/* the map: navy India behind the covers, on the right, with glowing city dots */
 .hero__map {
-  position: relative;
-  width: 100%;
-  max-width: 440px;
-  justify-self: center;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 52%;
+  max-width: 390px;
+  transform: translateY(-50%);
 }
 
 .hero__map-svg {
@@ -6105,28 +6175,32 @@ section.mag-end { padding: 48px 0 64px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero__cover, .hero__map-svg, .hero__city i::after { animation: none; }
+  .hero__eyebrow, .hero__word > span, .hero__text, .hero__actions, .hero__dots, .hero__map-svg, .hero__city i::after { animation: none; }
+  .hero__cover { transition: none; }
 }
 
-/* tablets: map smaller beside the fan */
+/* tablets: the same two columns, smaller covers, no city names */
 @media (max-width: 1080px) {
-  .hero__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 260px); gap: 20px; }
-  .hero__head { grid-template-columns: 1fr; gap: 14px; }
-  .hero__title { max-width: none; text-align: left; border-right: 0; padding-right: 0; }
-  .hero__fan { --w: 18vw; }
+  .hero__grid { grid-template-columns: minmax(0, .9fr) minmax(0, 1.2fr); gap: 20px; }
+  .hero__stage { height: 400px; }
+  .hero__cover { --w: 160px; }
   .hero__city b { display: none; }
 }
 
-/* phones: title, fan of five, button; the map sits faintly behind the title */
+/* phones: details on top, then the carousel with the map faint behind it */
 @media (max-width: 720px) {
-  .hero.section { padding: 18px 0 32px; }
-  .hero__grid { grid-template-columns: 1fr; position: relative; }
-  .hero__map { position: absolute; top: 0; right: -10%; width: 62%; opacity: .12; z-index: 0; }
+  .hero.section { padding: 16px 0 32px; }
+  .hero__grid { grid-template-columns: 1fr; gap: 8px; }
+  .hero__eyebrow { margin-bottom: 14px; font-size: 12px; }
+  .hero__name { font-size: 26px; }
+  .hero__text { margin-top: 12px; font-size: 15px; }
+  .hero__actions { margin-top: 18px; }
+  .hero__actions .btn { flex: 1; padding: 0 14px; }
+  .hero__dots { order: 3; justify-content: center; margin-top: 0; }
+  .hero__info { display: contents; }
+  .hero__stage { order: 2; height: 340px; }
+  .hero__actions { order: 4; }
+  .hero__cover { --w: 44vw; left: 50%; padding: 4px; }
+  .hero__map { right: 50%; width: 80%; transform: translate(50%, -50%); opacity: .14; }
   .hero__city { display: none; }
-  .hero__main { position: relative; z-index: 1; }
-  .hero__title { font-size: 28px; }
-  .hero__text { font-size: 15px; }
-  .hero__fan { --w: 34vw; margin: 26px 0 24px; }
-  .hero__cover { padding: 4px; }
-  .hero__cover[data-far] { display: none; }
 }

@@ -1,86 +1,74 @@
-import Image from "next/image";
-import Link from "next/link";
 import type { CSSProperties } from "react";
 import { getMagazineEditions, getReleaseCovers, getSiteText } from "@/lib/data";
+import HeroCarousel, { type HeroCover } from "./HeroCarousel";
 import { INDIA_CITIES, INDIA_PATH, INDIA_VIEWBOX } from "./indiaMap";
 
 const COUNT = 7;
 
-// The home page hero: title and intro, a fan of magazine covers (the first one
-// in the middle, the rest alternating outwards and getting smaller), and a map
-// of India with the cities our leaders work in.
+// The home page hero: the details of the magazine in front on the left, and a
+// turning carousel of covers in front of a map of India on the right.
 export default async function MagazineRelease() {
   const [picked, editions, t] = await Promise.all([getReleaseCovers(), getMagazineEditions(), getSiteText()]);
-  // The covers picked in Sanity first, topped up with the newest editions.
-  const covers = [
-    ...picked,
-    ...editions
-      .filter((e) => !picked.some((p) => p.slug === e.slug))
-      .map((e) => ({ slug: e.slug, href: `/magazines/${e.slug}`, title: e.title, coverImage: e.coverImage, alt: e.coverAlt })),
-  ].slice(0, COUNT);
+  const bySlug = new Map(editions.map((e) => [e.slug, e]));
+  // The covers picked in Sanity, topped up with the newest editions, then shown
+  // newest first so the hero opens on the latest magazine.
+  const order = new Map(editions.map((e, i) => [e.slug, i]));
+  const slugs = [...picked.map((p) => p.slug), ...editions.map((e) => e.slug)]
+    .filter((s, i, all) => all.indexOf(s) === i)
+    .slice(0, COUNT)
+    .sort((a, b) => (order.get(a) ?? 99) - (order.get(b) ?? 99));
+  const covers: HeroCover[] = slugs.flatMap((slug) => {
+    const e = bySlug.get(slug);
+    const p = picked.find((x) => x.slug === slug);
+    if (!e && !p) return [];
+    return [{
+      slug,
+      href: `/magazines/${slug}`,
+      image: p?.coverImage || e!.coverImage,
+      alt: p?.alt || e?.coverAlt || "",
+      name: e?.featuredPersonName ?? p?.title ?? "",
+      label: e?.editionLabel ?? "",
+    }];
+  });
 
-  // 0 → middle, 1 → right of it, 2 → left of it, 3 → further right, …
-  const fan = covers
-    .map((c, i) => ({ c, d: i === 0 ? 0 : (i % 2 ? 1 : -1) * Math.ceil(i / 2) }))
-    .sort((a, b) => a.d - b.d);
+  const map = (
+    <div className="hero__map" aria-hidden>
+      <svg viewBox={INDIA_VIEWBOX} className="hero__map-svg">
+        <defs>
+          <linearGradient id="india-fill" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="#1B3A6B" />
+            <stop offset="1" stopColor="#0B1F3A" />
+          </linearGradient>
+        </defs>
+        <path d={INDIA_PATH} fill="url(#india-fill)" />
+      </svg>
+      {INDIA_CITIES.map((c, i) => (
+        <span
+          key={c.name}
+          className="hero__city"
+          data-left={c.left || undefined}
+          style={{ left: `${c.x}%`, top: `${c.y}%`, "--i": i } as CSSProperties}
+        >
+          <i />
+          <b>{c.name}</b>
+        </span>
+      ))}
+    </div>
+  );
 
   return (
     <section className="section hero" aria-labelledby="release-title">
-      <div className="wrap hero__grid">
-        <div className="hero__main">
-          <header className="hero__head">
-            <h1 className="hero__title" id="release-title">{t.home.releaseTitle}</h1>
-            <p className="hero__text">{t.home.releaseText}</p>
-          </header>
-
-          <div className="hero__fan">
-            {fan.map(({ c, d }) => (
-              <Link
-                key={c.slug}
-                href={c.href}
-                className="hero__cover"
-                data-far={Math.abs(d) > 2 || undefined}
-                style={{ "--d": d, "--a": Math.abs(d) } as CSSProperties}
-              >
-                <Image
-                  src={c.coverImage}
-                  alt={c.alt}
-                  width={713}
-                  height={1009}
-                  sizes="(max-width: 720px) 34vw, 230px"
-                  priority={Math.abs(d) < 2}
-                />
-              </Link>
-            ))}
-          </div>
-
-          <div className="hero__more">
-            <Link href="/magazines" className="btn btn-ink">{t.home.releaseButton}</Link>
-          </div>
-        </div>
-
-        <div className="hero__map" aria-hidden>
-          <svg viewBox={INDIA_VIEWBOX} className="hero__map-svg">
-            <defs>
-              <linearGradient id="india-fill" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stopColor="#1B3A6B" />
-                <stop offset="1" stopColor="#0B1F3A" />
-              </linearGradient>
-            </defs>
-            <path d={INDIA_PATH} fill="url(#india-fill)" />
-          </svg>
-          {INDIA_CITIES.map((c, i) => (
-            <span
-              key={c.name}
-              className="hero__city"
-              data-left={c.left || undefined}
-              style={{ left: `${c.x}%`, top: `${c.y}%`, "--i": i } as CSSProperties}
-            >
-              <i />
-              <b>{c.name}</b>
-            </span>
-          ))}
-        </div>
+      <div className="wrap">
+        <HeroCarousel
+          covers={covers}
+          map={map}
+          text={{
+            title: t.home.releaseTitle,
+            text: t.home.releaseText,
+            readMore: t.magazines.readEdition,
+            viewAll: t.home.releaseButton,
+          }}
+        />
       </div>
     </section>
   );

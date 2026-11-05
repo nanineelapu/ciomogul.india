@@ -34,7 +34,7 @@ export type PublishedProfile = {
   quote?: { text: string; source: SpotlightSource };
   // Set only when the real CIO Mogul India issue is confirmed.
   edition?: { label: string; month: string; href: string };
-  // Digital View: her magazine PDF uploaded in Sanity, and where the button goes
+  // Digital Version: her magazine PDF uploaded in Sanity, and where the button goes
   // (/business-women/<id>/digital for her PDF, or a picked edition's reader).
   pdfUrl?: string;
   digitalHref?: string;

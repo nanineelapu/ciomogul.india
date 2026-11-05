@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   });
 }
 
-// Digital View for a business woman: her magazine PDF in the page-turning reader.
+// Digital Version for a business woman: her magazine PDF in the page-turning reader.
 // The Business Women page opens it in a new tab.
 async function DigitalContent({ params }: { params: Promise<Params> }) {
   const { id } = await params;

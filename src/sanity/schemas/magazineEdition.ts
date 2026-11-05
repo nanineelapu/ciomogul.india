@@ -117,7 +117,7 @@ export const magazineEdition = defineType({
     }),
     defineField({
       name: "pdfFile",
-      title: "PDF file (Digital View)",
+      title: "PDF file (Digital Version)",
       type: "file",
       options: { accept: "application/pdf" },
     }),

@@ -136,7 +136,7 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
         fields: [
           ["backLink", "Back link"],
           ["webLive", "Web View button (opens the story)"],
-          ["digitalLive", "Digital View button (opens the magazine in a new tab)"],
+          ["digitalLive", "Digital Version button (opens the magazine in a new tab)"],
           ["liveSoon", "Shown when neither is ready yet"],
         ],
       },
@@ -148,7 +148,7 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
         ],
       },
       {
-        title: "5. Digital View page",
+        title: "5. Digital Version page",
         fields: [["readerHint", "Tip next to the heading", "The heading is the person's name and the edition."]],
       },
       {
@@ -236,7 +236,7 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
           ["exploreProfile", "Link on each name tab"],
           ["coverHonoree", "Label when she has been on a cover"],
           ["featuredProfile", "Label for other profiles"],
-          ["readStory", "Read her story button (the Digital View button uses the Magazines label)"],
+          ["readStory", "Read her story button (the Digital Version button uses the Magazines label)"],
         ],
       },
       {

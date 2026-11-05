@@ -190,15 +190,15 @@ export const spotlightProfile = defineType({
 
     defineField({
       name: "pdfFile",
-      title: "Magazine PDF (Digital View)",
+      title: "Magazine PDF (Digital Version)",
       type: "file",
       options: { accept: "application/pdf" },
       group: "facts",
-      description: "Upload her magazine as a PDF. A Digital View button then appears next to Read her story and opens it in the page-turning reader.",
+      description: "Upload her magazine as a PDF. A Digital Version button then appears next to Read her story and opens it in the page-turning reader.",
     }),
     defineField({
       name: "digitalEdition",
-      title: "Or: a magazine edition for the Digital View button",
+      title: "Or: a magazine edition for the Digital Version button",
       type: "reference",
       to: [{ type: "magazineEdition" }],
       group: "facts",
