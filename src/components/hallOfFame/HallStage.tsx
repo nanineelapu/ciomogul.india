@@ -13,12 +13,8 @@ type Props = {
   nextLabel: string;
 };
 
-// Fills {name}, {when}… in text that editors can change in Studio.
-const fill = (tpl: string, vars: Record<string, string | number>) =>
-  tpl.replace(/\{(\w+)\}/g, (_, k: string) => String(vars[k] ?? ""));
-
 // The Hall of Fame showcase: the inductee in front is big and centred, the others
-// tilt away on either side. The name, role, quote and buttons follow whoever is in
+// tilt away on either side. The name, role and buttons follow whoever is in
 // front. It turns on its own (a thin line fills, then the next one steps forward),
 // pauses on hover, and can be swiped, clicked, or moved with the arrow keys.
 export default function HallStage({ entries, text, digitalLabel, prevLabel, nextLabel }: Props) {
@@ -30,8 +26,6 @@ export default function HallStage({ entries, text, digitalLabel, prevLabel, next
   if (!n) return null;
 
   const e = entries[active];
-  const vars = { name: e.name, when: e.inductedOn, role: e.role, organization: e.organization };
-  const quote = e.pullQuote || fill(e.inductedOn ? text.citation : text.citationNoDate, vars);
   const meta = [e.role, e.organization].filter(Boolean).join(" · ");
 
   return (
@@ -104,7 +98,6 @@ export default function HallStage({ entries, text, digitalLabel, prevLabel, next
 
       {/* key: a new inductee replays the reveal; each word of the name rises out of its own mask */}
       <div className="hs__detail" key={e.slug} aria-live="polite">
-        <p className="hs__label">{e.inductedOn ? `${text.inducted} · ${e.inductedOn}` : text.carouselEyebrow}</p>
         <h2 className="hs__name" aria-label={e.name}>
           {e.name.split(" ").map((w, i) => (
             <Fragment key={i}>
@@ -115,7 +108,6 @@ export default function HallStage({ entries, text, digitalLabel, prevLabel, next
           ))}
         </h2>
         {meta && <p className="hs__meta">{meta}</p>}
-        <blockquote className="hs__quote">{quote}</blockquote>
         <div className="hs__actions">
           <Link href={`/hall-of-fame/${e.slug}`} className="btn btn-ink">
             {text.viewProfile} <span aria-hidden>→</span>
