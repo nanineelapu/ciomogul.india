@@ -11,7 +11,6 @@ export const INDIA_CITIES: { name: string; x: number; y: number; left?: boolean 
   { name: "Ahmedabad", x: 15.15, y: 46.3, left: true },
   { name: "Kolkata", x: 69.19, y: 47.78 },
   { name: "Mumbai", x: 16.21, y: 59.29, left: true },
-  { name: "Pune", x: 19.56, y: 61.14 },
   { name: "Hyderabad", x: 35.41, y: 64.87 },
   { name: "Bengaluru", x: 32.33, y: 79.45, left: true },
   { name: "Chennai", x: 41.5, y: 79.08 },

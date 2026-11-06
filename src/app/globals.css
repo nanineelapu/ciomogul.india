@@ -5945,9 +5945,10 @@ section.mag-end { padding: 48px 0 64px; }
 
 .hero__grid {
   display: grid;
-  grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr) minmax(0, .75fr);
+  grid-template-columns: minmax(270px, .8fr) minmax(0, 1.35fr) minmax(0, .7fr);
   gap: 24px;
   align-items: center;
+  margin-top: -12px;
 }
 
 /* left: label, the name on the cover in front, a short line, buttons, dots */
@@ -6014,12 +6015,14 @@ section.mag-end { padding: 48px 0 64px; }
   color: var(--color-ink-2);
 }
 
+/* two small buttons side by side */
 .hero__actions {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  flex-wrap: nowrap;
+  gap: 8px;
   margin-top: 20px;
 }
+.hero__actions .btn { height: 36px; padding: 0 14px; gap: 8px; font-size: 13px; white-space: nowrap; }
 
 .hero__dots {
   display: flex;
@@ -6046,7 +6049,7 @@ section.mag-end { padding: 48px 0 64px; }
 /* right: the stage holds the map and the turning covers */
 .hero__stage {
   position: relative;
-  height: clamp(420px, 37vw, 540px);
+  height: clamp(420px, 32vw, 480px);
   touch-action: pan-y; /* sideways swipes slide the covers; up/down still scrolls the page */
 }
 
@@ -6065,7 +6068,7 @@ section.mag-end { padding: 48px 0 64px; }
 
 /* each cover is placed by how far it is from the front one (--o, and --a without the sign) */
 .hero__cover {
-  --w: clamp(170px, 16.5vw, 245px);
+  --w: clamp(185px, 18vw, 272px);
   position: absolute;
   top: 50%;
   left: 50%;
@@ -6198,7 +6201,7 @@ section.mag-end { padding: 48px 0 64px; }
   .hero__name { font-size: 26px; }
   .hero__text { margin-top: 12px; font-size: 15px; }
   .hero__actions { margin-top: 18px; }
-  .hero__actions .btn { flex: 1; padding: 0 14px; }
+  .hero__actions .btn { flex: 1; padding: 0 10px; font-size: 12.5px; }
   .hero__dots { order: 3; justify-content: center; margin-top: 0; }
   .hero__info { display: contents; }
   .hero__stage { order: 2; height: 340px; }
