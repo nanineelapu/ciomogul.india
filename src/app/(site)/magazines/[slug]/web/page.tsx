@@ -10,6 +10,13 @@ import { breadcrumbLd, buildMetadata, mergeKeywords } from "@/lib/seo";
 
 type Params = { slug: string };
 
+// The short line next to the cover is just the opening sentence of the intro.
+function firstSentence(text: string) {
+  const t = text.trim();
+  const end = t.search(/[.!?](\s|$)/);
+  return end === -1 ? t : t.slice(0, end + 1);
+}
+
 export async function generateStaticParams(): Promise<Params[]> {
   const editions = await getMagazineEditions();
   return editions.map((e) => ({ slug: e.slug }));
@@ -85,9 +92,8 @@ async function WebLiveContent({ params }: { params: Promise<Params> }) {
               />
             </div>
             <div>
-              <p className="wv__label">{edition.editionLabel}</p>
               <h1 className="wv__title">{title}</h1>
-              {edition.storyIntro && <p className="wv__intro">{edition.storyIntro}</p>}
+              {edition.storyIntro && <p className="wv__intro">{firstSentence(edition.storyIntro)}</p>}
             </div>
           </header>
 
