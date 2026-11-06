@@ -5,6 +5,7 @@ import Header from "@/components/layout/Header";
 import JsonLd from "@/components/seo/JsonLd";
 import { organizationLd, websiteLd } from "@/lib/seo";
 import Footer from "@/components/layout/Footer";
+import Preloader from "@/components/layout/Preloader";
 import SmoothScroll from "@/components/layout/SmoothScroll";
 import { getIndustries, getSiteSettings, getSiteText } from "@/lib/data";
 import { SITE_URL } from "@/lib/site";
@@ -16,6 +17,7 @@ export default async function SiteLayout({
 
   return (
     <SmoothScroll>
+      <Preloader />
       <JsonLd
         data={[
           organizationLd({

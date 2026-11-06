@@ -100,7 +100,6 @@ async function MagazineDetailPageContent({
             </div>
 
             <div>
-              <p className="ed-hero__label">{edition.editionLabel}</p>
               <h1 className="ed-hero__title">{edition.title || edition.featuredPersonName}</h1>
               {description && (
                 <div className="ed-hero__text">

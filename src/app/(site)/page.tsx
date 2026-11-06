@@ -34,11 +34,11 @@ export default async function Home() {
       <MagazineRelease />
       <CoverStories />
       <Industries />
+      <TrustedBrands />
       <LatestNews />
       <FeaturedArticles />
       <WallOfFame />
       <Testimonials />
-      <TrustedBrands />
       <GetFeatured />
       <Newsletter text={text.home} />
     </main>

@@ -165,8 +165,11 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
     title: "Hall of Fame",
     sections: [
       {
-        title: "1. Carousel",
+        title: "1. Top of the page and carousel",
         fields: [
+          ["mastLabel", "Small label at the top left"],
+          ["jumpButton", "Button under the intro (scrolls to the carousel)"],
+          ["rollTitle", "Heading above the grid of all inductees"],
           ["carouselHint", "Swipe hint above the carousel"],
           ["carouselEyebrow", "Small label above the name"],
           ["carouselPosition", "Position text", FILL],
@@ -407,5 +410,6 @@ export const HIDDEN_TEXT_KEYS: Record<string, string[]> = {
   home: ["updatesTitle"],
   magazines: ["scrollToInside", "insideLabel", "readButton", "exploreMore", "scrollToRead", "pdfSoon", "readerSoon", "readerPlaceholderTitle", "readerPlaceholderText", "readerTitle", "downloadButton"],
   womenSpotlight: ["themesLabel", "readEdition", "viewSources"],
+  hallOfFame: ["mastLabel", "jumpButton", "rollTitle", "applyLabel", "applyTitle", "applyText", "applyButton", "applyLink"],
   footer: ["legalHeading", "tagline", "platformHeading", "exploreHeading"],
 };

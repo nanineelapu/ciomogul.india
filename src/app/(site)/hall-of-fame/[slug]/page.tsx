@@ -94,14 +94,12 @@ async function HallProfileContent({ params }: { params: Promise<Params> }) {
               </div>
 
               <header className="hof__head">
-                <p className="hof__eyebrow">{t.hallOfFame.carouselEyebrow}</p>
                 <h1 className="hof__name">{entry.name}</h1>
                 <p className="hof__role">
                   {entry.role}
                   {entry.organization && <> · <span>{entry.organization}</span></>}
                 </p>
                 {entry.pullQuote && <blockquote className="hof__quote">{entry.pullQuote}</blockquote>}
-                <p className="hof__meta">{t.hallOfFame.inducted} · {entry.inductedOn}</p>
                 {entry.editionSlug && (
                   <div className="hof__actions">
                     <Link href={`/magazines/${entry.editionSlug}/digital`} target="_blank" rel="noopener" className="btn btn-ink">

@@ -32,27 +32,40 @@
   grid-template-columns: minmax(0, 380px) minmax(0, 1fr);
   gap: 56px;
   align-items: center;
-  padding: 28px;
-  background: var(--color-paper);
-  border: 1px solid var(--color-rule-soft);
-  border-top: 3px solid var(--color-navy);
+  padding: 40px 44px;
+  background: linear-gradient(135deg, #fff 0%, var(--color-paper-2) 100%);
+  border: 1px solid #D5DDEA;
+  border-left: 5px solid var(--color-navy);
+  box-shadow: 0 1px 2px rgba(11, 31, 58, .05), 0 22px 44px -28px rgba(11, 31, 58, .4);
 }
 
+/* the cover sits in a white frame with a shadow; the blue glow comes from the shared cover hover */
 #hall-carousel .hall-car__cover {
   position: relative;
   display: block;
-  aspect-ratio: 4 / 5;
-  background: var(--color-paper-2);
-  overflow: hidden;
+  padding: 10px;
+  background: #fff;
 }
 #hall-carousel .hall-car__cover img {
   width: 100%;
-  height: 100%;
+  height: auto;
+  aspect-ratio: 713 / 1009;
   object-fit: cover;
   display: block;
-  transition: transform .5s ease;
 }
-#hall-carousel .hall-car__cover:hover img { transform: scale(1.02); }
+
+/* the first slide rises in when the page opens, one piece after another */
+@keyframes hall-car-rise { from { opacity: 0; transform: translateY(22px); } }
+#hall-carousel .hall-car__cover { animation: hall-car-rise .8s cubic-bezier(.2, .8, .2, 1) .5s backwards; }
+#hall-carousel .hall-car__eyebrow { animation: hall-car-rise .7s cubic-bezier(.2, .8, .2, 1) .65s backwards; }
+#hall-carousel .hall-car__name { animation: hall-car-rise .7s cubic-bezier(.2, .8, .2, 1) .75s backwards; }
+#hall-carousel .hall-car__meta { animation: hall-car-rise .7s cubic-bezier(.2, .8, .2, 1) .85s backwards; }
+#hall-carousel .hall-car__citation { animation: hall-car-rise .7s cubic-bezier(.2, .8, .2, 1) .95s backwards; }
+#hall-carousel .hall-car__actions { animation: hall-car-rise .7s cubic-bezier(.2, .8, .2, 1) 1.05s backwards; }
+@media (prefers-reduced-motion: reduce) {
+  #hall-carousel .hall-car__cover, #hall-carousel .hall-car__eyebrow, #hall-carousel .hall-car__name,
+  #hall-carousel .hall-car__meta, #hall-carousel .hall-car__citation, #hall-carousel .hall-car__actions { animation: none; }
+}
 
 #hall-carousel .hall-car__body { min-width: 0; }
 
@@ -73,9 +86,9 @@
 
 #hall-carousel .hall-car__name {
   margin: 0;
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: clamp(30px, 3.4vw, 48px);
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: clamp(28px, 3.2vw, 44px);
   line-height: 1.08;
   letter-spacing: -.01em;
   color: var(--color-ink);

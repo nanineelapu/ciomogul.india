@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { getSiteText } from "@/lib/data";
 import JsonLd from "@/components/seo/JsonLd";
 import { buildMetadata, breadcrumbLd, collectionLd, pageLd } from "@/lib/seo";
 import { getPageContent } from "@/lib/data";
 import { Suspense } from "react";
-import HallCarousel from "@/components/hallOfFame/HallCarousel";
 import HallFilters from "@/components/hallOfFame/HallFilters";
+import HallStage from "@/components/hallOfFame/HallStage";
 import { getHallOfFame, searchHallOfFame, type HallSort } from "@/lib/data";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -36,47 +35,13 @@ export default async function HallOfFamePage({
   return (
     <main>
       <JsonLd data={[pageLd("CollectionPage", { name: page.title, description: page.intro, path: "/hall-of-fame" }), breadcrumbLd([{ name: page.title, path: "/hall-of-fame" }]), collectionLd({ name: page.title, path: "/hall-of-fame", items: all.map((e) => ({ name: e.name, url: `/hall-of-fame/${e.slug}`, image: e.portrait })) })]} />
-      <section className="page-lead">
-        <div className="wrap">
-          <h1 className="page-lead__title">{page.title}</h1>
-          <p className="page-lead__sub">{page.intro}</p>
-          <dl className="page-lead__meta">
-            <div>
-              Inductees
-              <b>{totalInductees} on the roll</b>
-            </div>
-          </dl>
-        </div>
-      </section>
+      {/* the page heading, kept for search engines and screen readers only */}
+      <h1 className="sr-only">{page.title}</h1>
 
-      <section className="section">
-        <div className="wrap">
-          <Suspense fallback={<RollSkeleton />}>
-            <HallRoll searchParams={searchParams} totalCount={totalInductees} />
-          </Suspense>
-        </div>
-      </section>
-
-      <section className="hall-apply" aria-labelledby="apply-title">
-        <div className="wrap hall-apply__inner">
-          <div className="hall-apply__text">
-            <span className="page-lead__eyebrow" style={{ color: "#fff", borderColor: "#fff" }}>
-              {t.hallOfFame.applyLabel}
-            </span>
-            <h2 className="hall-apply__title" id="apply-title">
-              {t.hallOfFame.applyTitle}
-            </h2>
-            <p>{t.hallOfFame.applyText}</p>
-          </div>
-          <div className="hall-apply__actions">
-            <Link href="/contact" className="btn btn-paper">
-              {t.hallOfFame.applyButton}
-            </Link>
-            <Link href="/about" className="hall-apply__link">
-              {t.hallOfFame.applyLink}
-            </Link>
-          </div>
-        </div>
+      <section className="hof-roll">
+        <Suspense fallback={<RollSkeleton />}>
+          <HallRoll searchParams={searchParams} totalCount={totalInductees} />
+        </Suspense>
       </section>
     </main>
   );
@@ -114,23 +79,28 @@ async function HallRoll({
   return (
     <>
       {totalCount > 8 && (
-        <HallFilters
-          years={result.years}
-          resultCount={result.total}
-          totalCount={totalCount}
-          text={t.hallOfFame}
-        />
+        <div className="wrap">
+          <HallFilters
+            years={result.years}
+            resultCount={result.total}
+            totalCount={totalCount}
+            text={t.hallOfFame}
+          />
+        </div>
       )}
 
       {result.items.length === 0 ? (
-        <div className="mag-empty">
-          <b>{t.hallOfFame.noResultsTitle}</b>
-          <p>{t.hallOfFame.noResultsText}</p>
+        <div className="wrap">
+          <div className="mag-empty">
+            <b>{t.hallOfFame.noResultsTitle}</b>
+            <p>{t.hallOfFame.noResultsText}</p>
+          </div>
         </div>
       ) : (
-        <HallCarousel
+        <HallStage
           entries={result.items}
           text={t.hallOfFame}
+          digitalLabel={t.magazines.digitalLive}
           prevLabel={t.general.paginationPrev}
           nextLabel={t.general.paginationNext}
         />

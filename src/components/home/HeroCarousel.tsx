@@ -53,8 +53,8 @@ export default function HeroCarousel({ covers, text, map }: { covers: HeroCover[
         </div>
         <p className="hero__text">{text.text}</p>
         <div className="hero__actions">
-          <Link href={current.href} className="btn btn-ink">{text.readMore} <span aria-hidden>→</span></Link>
-          <Link href="/magazines" className="btn btn-line">{text.viewAll}</Link>
+          <Link href={current.href} className="btn btn-ink btn-sm">{text.readMore} <span aria-hidden>→</span></Link>
+          <Link href="/magazines" className="btn btn-line btn-sm">{text.viewAll}</Link>
         </div>
         <div className="hero__dots" role="tablist" aria-label={text.title}>
           {covers.map((c, i) => (
@@ -83,7 +83,6 @@ export default function HeroCarousel({ covers, text, map }: { covers: HeroCover[
           if (s && Math.abs(e.clientX - s.x) > 40) go(e.clientX < s.x ? 1 : -1);
         }}
       >
-        {map}
         <div className="hero__ring">
           {covers.map((c, i) => {
             // how far this cover is from the one in front: …, -2, -1, 0, 1, 2, …
@@ -113,6 +112,9 @@ export default function HeroCarousel({ covers, text, map }: { covers: HeroCover[
           })}
         </div>
       </div>
+
+      {/* the whole map in a column of its own, so no cover ever sits on top of it */}
+      {map}
     </div>
   );
 }

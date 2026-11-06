@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import PdfViewer from "@/components/magazines/PdfViewerLoader";
@@ -16,7 +17,7 @@ export async function generateStaticParams(): Promise<Params[]> {
 export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
   const { slug } = await params;
   const edition = await getMagazineEditionBySlug(slug);
-  if (!edition?.pdfUrl) return { title: "Edition not found | CIO Mogul India", robots: { index: false } };
+  if (!edition) return { title: "Edition not found | CIO Mogul India", robots: { index: false } };
   return buildMetadata({
     title: `${edition.featuredPersonName} | ${edition.editionLabel} | Digital edition`,
     description: edition.subtitle || edition.title,
@@ -24,6 +25,8 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
     image: edition.coverImage,
     imageAlt: edition.coverAlt || edition.title,
     kicker: "Digital edition",
+    // an edition without a PDF has nothing to read yet, so keep it out of search
+    noIndex: !edition.pdfUrl,
   });
 }
 
@@ -32,7 +35,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
 async function DigitalLiveContent({ params }: { params: Promise<Params> }) {
   const { slug } = await params;
   const edition = await getMagazineEditionBySlug(slug);
-  if (!edition?.pdfUrl) notFound();
+  if (!edition) notFound();
   const t = await getSiteText();
 
   return (
@@ -51,11 +54,19 @@ async function DigitalLiveContent({ params }: { params: Promise<Params> }) {
             </h1>
             <span className="digital__hint">{t.magazines.readerHint}</span>
           </header>
-          <PdfViewer
-            file={edition.pdfUrl}
-            poster={edition.coverImage}
-            title={`${edition.featuredPersonName} — ${edition.editionLabel}`}
-          />
+          {edition.pdfUrl ? (
+            <PdfViewer
+              file={edition.pdfUrl}
+              poster={edition.coverImage}
+              title={`${edition.featuredPersonName} — ${edition.editionLabel}`}
+            />
+          ) : (
+            <div className="digital__soon">
+              <Image src={edition.coverImage} alt={edition.coverAlt} width={713} height={1009} sizes="220px" />
+              <p>{t.magazines.liveSoon}</p>
+              <Link href={`/magazines/${edition.slug}`} className="btn btn-ink">{t.magazines.storyBack}</Link>
+            </div>
+          )}
         </div>
       </section>
     </main>
