@@ -1113,8 +1113,14 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
 .ftr__legal a:hover { color: #fff; }
 .ftr__sep { color: var(--ftr-orange); font-size: 10px; }
 
-@media (max-width: 1080px) {
+@media (max-width: 960px) {
   .ftr__main { grid-template-columns: 1fr; gap: 28px; padding: 32px 0 28px; }
+}
+/* narrow desktop (also a phone's "Desktop site" view): tighter footer so the link lists fit */
+@media (min-width: 961px) and (max-width: 1180px) {
+  .ftr__main { gap: 32px 28px; }
+  .ftr__grid { gap: 32px 16px; }
+  .ftr__social, .ftr__links { gap: 10px 14px; }
 }
 @media (max-width: 720px) {
   .ftr { margin-top: 32px; }
@@ -1141,7 +1147,7 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
   }
 }
 
-@media (max-width: 1080px) {
+@media (max-width: 960px) {
   .site-head__top {
     height: 84px;
   }
@@ -1427,7 +1433,7 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
   gap: 24px 24px;
 }
 
-@media (max-width: 1080px) {
+@media (max-width: 960px) {
   .news__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
@@ -1480,12 +1486,12 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
   border-inline: 1px solid rgba(27, 58, 107, .25);
 }
 
-@media (max-width: 1080px) {}
+@media (max-width: 960px) {}
 
 @media (max-width: 720px) {}
 
 /* responsive spans — must come after the layout grid rules */
-@media (max-width: 1080px) {
+@media (max-width: 960px) {
 
   .release__covers,
   .release__text,
@@ -1505,13 +1511,13 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
 
 }
 
-@media (max-width: 1080px) {
+@media (max-width: 960px) {
   .story {
     grid-column: span 6;
   }
 }
 
-@media (max-width: 1080px) {
+@media (max-width: 960px) {
   .leader {
     grid-column: 1 / -1;
   }
@@ -1662,7 +1668,7 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
   flex-shrink: 0;
 }
 
-@media (max-width: 1080px) {
+@media (max-width: 960px) {
   .feature-cta {
     flex-direction: column;
     align-items: center;
@@ -1931,7 +1937,7 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
   transform: translateX(4px);
 }
 
-@media (max-width: 1080px) {
+@media (max-width: 960px) {
   .mag-grid { grid-template-columns: repeat(3, 1fr); gap: 40px 24px; }
 }
 
@@ -2310,7 +2316,7 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
 
 .mag-hero .mag-hero__hint span { color: var(--color-navy); font-size: 14px; }
 
-@media (max-width: 1080px) {
+@media (max-width: 960px) {
   .mag-hero { grid-template-columns: minmax(0, 260px) minmax(0, 1fr); gap: 40px; }
 }
 
@@ -3164,7 +3170,7 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
 
 .ws-card:hover .ws-card__cta::after { transform: translateX(4px); }
 
-@media (max-width: 1080px) {
+@media (max-width: 960px) {
   .ws-grid { grid-template-columns: repeat(3, 1fr); gap: 48px 24px; }
 }
 
@@ -5481,7 +5487,7 @@ main.spot + .ftr { margin-top: 0; }
   .spot-row { grid-template-columns: 72px minmax(0, 2fr) minmax(0, 1.2fr) auto; }
 }
 
-@media (max-width: 1080px) {
+@media (max-width: 960px) {
   .spot-hero { background: var(--color-paper); }
   .spot-hero__grid { grid-template-columns: 1fr; gap: 24px; }
   .spot-fan { height: 390px; }
@@ -5950,8 +5956,11 @@ section.mag-end { padding: 48px 0 64px; }
   grid-template-columns: minmax(270px, .8fr) minmax(0, 1.35fr) minmax(0, .7fr);
   gap: 24px;
   align-items: center;
-  margin-top: -12px;
 }
+/* desktop only: pull the hero up under the "Latest Magazines" tab */
+@media (min-width: 961px) { .hero__grid { margin-top: -12px; } }
+/* narrow desktop (also a phone's "Desktop site" view): dots only, no city tags beside the covers */
+@media (min-width: 961px) and (max-width: 1100px) { .hero__city b { display: none; } }
 
 /* left: label, the name on the cover in front, a short line, buttons, dots */
 .hero__eyebrow {
@@ -6185,13 +6194,13 @@ section.mag-end { padding: 48px 0 64px; }
   .hero__cover { transition: none; }
 }
 
-/* tablets: the same two columns, smaller covers, no city names */
-@media (max-width: 1080px) {
-  .hero__grid { grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: 20px; }
-  .hero__info { grid-column: 1 / -1; }
-  .hero__stage { height: 400px; }
-  .hero__cover { --w: 160px; }
-  .hero__map { max-width: 300px; }
+/* tablets: the details and the map side by side on top, the covers full width below */
+@media (max-width: 960px) {
+  .hero__grid { grid-template-columns: minmax(0, 1fr) minmax(0, .8fr); gap: 12px 24px; }
+  .hero__info { grid-column: 1; grid-row: 1; }
+  .hero__map { grid-column: 2; grid-row: 1; max-width: 300px; }
+  .hero__stage { grid-column: 1 / -1; grid-row: 2; height: 450px; }
+  .hero__cover { --w: clamp(180px, 25vw, 230px); }
   .hero__city b { display: none; }
 }
 
@@ -6205,11 +6214,11 @@ section.mag-end { padding: 48px 0 64px; }
   .hero__actions { margin-top: 18px; }
   .hero__actions .btn { flex: 1; padding: 0 10px; font-size: 12.5px; }
   .hero__dots { order: 3; justify-content: center; margin-top: 0; }
-  .hero__info { display: contents; }
-  .hero__stage { order: 2; height: 340px; }
+  .hero__info { display: contents; grid-column: auto; grid-row: auto; }
+  .hero__stage { order: 2; height: 340px; grid-column: auto; grid-row: auto; }
   .hero__actions { order: 4; }
   .hero__cover { --w: 44vw; padding: 4px; }
-  .hero__map { order: 5; width: min(72vw, 300px); margin-top: 20px; }
+  .hero__map { order: 5; width: min(72vw, 300px); margin-top: 20px; grid-column: auto; grid-row: auto; }
 }
 
 /* ==========================================================================
@@ -6324,7 +6333,7 @@ section.mag-end { padding: 48px 0 64px; }
   .hof-card:hover .hof-card__cta { background-size: 100% 2px; }
 }
 
-@media (max-width: 1080px) {
+@media (max-width: 960px) {
   .hof-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px 22px; }
 }
 
@@ -6395,7 +6404,7 @@ section.mag-end { padding: 48px 0 64px; }
 .sk-hero__side { width: min(170px, 30%); opacity: .7; }
 .sk-hero__map { width: min(300px, 100%); aspect-ratio: 1000 / 1119; justify-self: center; border-radius: 40% 30% 50% 30%; }
 
-@media (max-width: 1080px) {
+@media (max-width: 960px) {
   .sk-grid { grid-template-columns: repeat(min(var(--cols, 4), 3), minmax(0, 1fr)); }
   .sk-hero__grid { grid-template-columns: minmax(0, 1fr); }
   .sk-hero__map { display: none; }

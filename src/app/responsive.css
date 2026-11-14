@@ -1,11 +1,11 @@
 /* ==========================================================================
-   Responsive polish: iPad (≤1080px) and phones (≤720px).
+   Responsive polish: iPad (≤960px) and phones (≤720px).
    Loaded after globals.css, so these rules win at equal specificity.
    Organised from the top of the page down: header, home sections, footer.
    ========================================================================== */
 
-/* ---------- Tablet and phone (≤1080px) ---------- */
-@media (max-width: 1080px) {
+/* ---------- Tablet and phone (≤960px) ---------- */
+@media (max-width: 960px) {
   /* Masthead bar: the logo row above already shows the brand, so the bar
      offers "Latest edition" until the page scrolls and the bar sticks. */
   .masthead__inner { padding-left: 20px; }
@@ -110,8 +110,8 @@
    Magazines: archive (/magazines) and edition pages (/magazines/[slug])
    ========================================================================== */
 
-/* iPad (721–1080px): three covers across, cover beside the details */
-@media (min-width: 721px) and (max-width: 1080px) {
+/* iPad (721–960px): three covers across, cover beside the details */
+@media (min-width: 721px) and (max-width: 960px) {
   .mag-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px 20px; }
   .mag-card__name { font-size: 16px; }
   .mag-card__role {
@@ -167,7 +167,7 @@
    ========================================================================== */
 
 /* iPad: cover beside the story; four inductees across in "More inductees" */
-@media (min-width: 721px) and (max-width: 1080px) {
+@media (min-width: 721px) and (max-width: 960px) {
   .ws-profile__body { grid-template-columns: minmax(0, 260px) minmax(0, 1fr); gap: 36px; padding-top: 28px; }
   .ws-profile__portrait { max-width: none; }
   .hof__hero { grid-template-columns: minmax(0, 260px) minmax(0, 1fr); gap: 36px; }
@@ -206,7 +206,7 @@
    ========================================================================== */
 
 /* iPad: hero text beside a smaller cover fan; profile cover beside its details */
-@media (min-width: 721px) and (max-width: 1080px) {
+@media (min-width: 721px) and (max-width: 960px) {
   .spot-hero__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 300px); gap: 24px; }
   .spot-fan { height: 340px; }
   .spot-fan__card { width: 168px; bottom: 56px; }
@@ -297,7 +297,7 @@
    ========================================================================== */
 
 /* iPad: the four contact details in a 2×2 grid instead of one long column */
-@media (min-width: 721px) and (max-width: 1080px) {
+@media (min-width: 721px) and (max-width: 960px) {
   .contact-details { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 32px; }
 }
 
@@ -337,7 +337,7 @@
    Logo (new emblem logo, about 3.2 : 1, taller than the old wordmark)
    ========================================================================== */
 .site-head__logo img { height: 72px; }
-@media (max-width: 1080px) {
+@media (max-width: 960px) {
   .site-head__logo img { height: 60px; }
 }
 @media (max-width: 720px) {
@@ -401,7 +401,7 @@
 .nav__menu-all:hover { color: var(--color-navy-2); }
 
 /* Desktop: a panel under the menu item, opened on hover, focus or click */
-@media (min-width: 1081px) {
+@media (min-width: 961px) {
   .nav__menu {
     position: absolute;
     top: 100%;
@@ -417,13 +417,24 @@
 }
 
 /* Keep nine menu items on one line on smaller laptops */
-@media (min-width: 1081px) and (max-width: 1440px) {
+@media (min-width: 961px) and (max-width: 1440px) {
   .nav { gap: 18px; }
   .nav__link { font-size: 13px; letter-spacing: .03em; }
 }
 
+/* Narrow desktop (961–1120px, also a phone's "Desktop site" view): tighter menu */
+@media (min-width: 961px) and (max-width: 1120px) {
+  .nav { gap: 10px; }
+  .nav__link { font-size: 12px; letter-spacing: .02em; white-space: nowrap; }
+}
+@media (min-width: 961px) and (max-width: 1010px) {
+  .nav { gap: 7px; }
+  .nav__link { font-size: 11px; letter-spacing: 0; }
+  .masthead__edition { padding: 0 10px; font-size: 12px; }
+}
+
 /* Phone and iPad: the industries open inside the menu, under the item */
-@media (max-width: 1080px) {
+@media (max-width: 960px) {
   .nav__drop { flex-direction: column; align-items: stretch; }
   .nav__drop-btn { justify-content: space-between; width: 100%; text-align: left; }
   .nav__menu {
@@ -445,7 +456,7 @@
 }
 
 /* Home page "Industries we cover": the tile styles live in globals.css */
-@media (max-width: 1080px) { .industries { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 960px) { .industries { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (max-width: 720px) { .industries { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 420px) { .industries { grid-template-columns: 1fr; } }
 
@@ -487,7 +498,7 @@
   color: var(--color-muted);
 }
 .ind-card__go { font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--color-navy); }
-@media (max-width: 1080px) { .ind-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 960px) { .ind-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 600px) {
   .ind-list { grid-template-columns: 1fr; gap: 12px; }
   .ind-card { padding: 18px; }
@@ -619,7 +630,7 @@
 
 /* Open mobile menu: a fixed panel from the bar to the bottom of the screen,
    which scrolls by itself while the page behind stays still. */
-@media (max-width: 1080px) {
+@media (max-width: 960px) {
   .nav,
   .masthead .nav {
     position: fixed;
