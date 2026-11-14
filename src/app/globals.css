@@ -6201,7 +6201,9 @@ section.mag-end { padding: 48px 0 64px; }
   .hero__map { grid-column: 2; grid-row: 1; max-width: 300px; }
   .hero__stage { grid-column: 1 / -1; grid-row: 2; height: 450px; }
   .hero__cover { --w: clamp(180px, 25vw, 230px); }
-  .hero__city b { display: none; }
+  /* small city tags on the map (phones and tablets) */
+  .hero__city { gap: 4px; }
+  .hero__city b { padding: 1px 6px; font-size: 9.5px; box-shadow: 0 1px 4px rgba(11, 31, 58, .22); }
 }
 
 /* phones: details on top, then the carousel with the map faint behind it */
