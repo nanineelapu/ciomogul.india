@@ -155,6 +155,7 @@ export function organizationLd(opts: {
       "@type": "PostalAddress",
       streetAddress: "Office No. 630 B Block, Gera Imperium Gateway, Nashik Phata Metro station",
       addressLocality: "Pimpri-Chinchwad, Pune",
+      postalCode: "411033",
       addressRegion: "Maharashtra",
       addressCountry: "IN",
     },
