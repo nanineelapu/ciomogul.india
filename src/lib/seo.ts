@@ -153,7 +153,8 @@ export function organizationLd(opts: {
     telephone: opts.phone,
     address: {
       "@type": "PostalAddress",
-      addressLocality: "Pune",
+      streetAddress: "Office No. 630 B Block, Gera Imperium Gateway, Nashik Phata Metro station",
+      addressLocality: "Pimpri-Chinchwad, Pune",
       addressRegion: "Maharashtra",
       addressCountry: "IN",
     },

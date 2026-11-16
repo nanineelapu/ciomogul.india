@@ -108,11 +108,10 @@ export const magazineEdition = defineType({
     }),
     defineField({
       name: "roleTags",
-      title: "Role tags (not shown)",
+      title: "Person's title",
       type: "array",
       of: [{ type: "string" }],
-      description: "No longer shown on the site.",
-      hidden: ({ value }) => !value || value.length === 0,
+      description: "The person's job title, for example Managing Director, Sealmatic. The first one is shown above their name in the home page Cover stories. Leave empty to show nothing.",
       options: { layout: "tags" },
     }),
     defineField({

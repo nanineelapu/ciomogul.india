@@ -51,7 +51,7 @@ export const COVER_STORIES_QUERY = /* groq */ `
   *[_type == "homepageConfig" && _id == "homepageConfig"][0].coverStories[]->{
     "slug": slug.current,
     "name": featuredPersonName,
-    "role": coalesce(roleTags[0], editionLabel, ""),
+    "role": coalesce(roleTags[0], ""),
     "tag": coalesce(subtitle, ""),
     "image": cover
   }

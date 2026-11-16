@@ -50,7 +50,6 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
         title: "3. Cover stories",
         fields: [
           ["coverStoriesTitle", "Heading"],
-          ["coverStoryLabel", "Small label on each cover"],
         ],
       },
       {
@@ -73,7 +72,6 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
         title: "7. Business women (Wall of fame)",
         fields: [
           ["wallTitle", "Heading"],
-          ["wallIntro", "Line under the heading"],
           ["wallReadFeature", "Link on each card"],
           ["wallButton", "Button"],
         ],
@@ -226,9 +224,7 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
         fields: [
           ["introOne", "Intro: first paragraph"],
           ["introTwo", "Intro: second paragraph"],
-          ["meetButton", "First button"],
-          ["nominateButton", "Second button"],
-          ["featuredCount", "Label above the number of profiles"],
+          ["meetButton", "Button under the intro"],
           ["tickerThemes", "Scrolling themes", "Separate the themes with commas."],
         ],
       },
@@ -407,9 +403,9 @@ export const SITE_TEXT_LAYOUT: TextGroup[] = [
 
 // Kept in the data for older pages but no longer shown on the site.
 export const HIDDEN_TEXT_KEYS: Record<string, string[]> = {
-  home: ["updatesTitle"],
+  home: ["updatesTitle", "wallIntro", "coverStoryLabel"],
   magazines: ["scrollToInside", "insideLabel", "readButton", "exploreMore", "scrollToRead", "pdfSoon", "readerSoon", "readerPlaceholderTitle", "readerPlaceholderText", "readerTitle", "downloadButton"],
-  womenSpotlight: ["themesLabel", "readEdition", "viewSources"],
+  womenSpotlight: ["themesLabel", "readEdition", "viewSources", "nominateButton", "featuredCount"],
   hallOfFame: ["mastLabel", "jumpButton", "rollTitle", "applyLabel", "applyTitle", "applyText", "applyButton", "applyLink"],
   footer: ["legalHeading", "tagline", "platformHeading", "exploreHeading"],
 };

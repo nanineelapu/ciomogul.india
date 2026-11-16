@@ -38,10 +38,10 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
 @media (max-width: 720px) { .wrap { padding: 0 24px; } }
 
 /* Section title block: title, horizontal rule, optional "View all" link */
-.s-head { display: flex; flex-direction: column; align-items: flex-start; text-align: left; margin-bottom: 24px; }
+.s-head { display: flex; flex-direction: column; align-items: flex-start; text-align: left; margin-bottom: 16px; }
 .s-title { font-family: var(--font-display); font-weight: 800; font-size: 36px; line-height: 1.1; letter-spacing: .01em; text-transform: uppercase; color: var(--color-ink); }
-.s-rule { display: block; align-self: stretch; width: 100%; height: 2px; margin-top: 16px; background: var(--color-navy); }
-.s-intro { max-width: 60ch; margin-top: 16px; font-size: 18px; color: var(--color-ink-2); }
+.s-rule { display: block; align-self: stretch; width: 100%; height: 2px; margin-top: 12px; background: var(--color-navy); }
+.s-intro { max-width: 60ch; margin-top: 12px; font-size: 18px; color: var(--color-ink-2); }
 @media (max-width: 720px) { .s-title { font-size: 28px; } }
 
 /* Buttons */
@@ -268,7 +268,7 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
 
 /* ---------- 5. Section system ---------- */
 .section {
-  padding: 36px 0;
+  padding: 24px 0;
 }
 
 .section--flush {
@@ -486,13 +486,14 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
   gap: 4px;
 }
 
+/* the person's own title, above their name */
 .story__label {
   order: -1;
   font-family: var(--font-ui);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: .12em;
-  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: .01em;
   color: var(--color-navy-2);
 }
 
@@ -963,7 +964,7 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
   --ftr-orange: #F26A21;
   --ftr-soft: rgba(255, 255, 255, .62);
   --ftr-line: rgba(255, 255, 255, .14);
-  margin-top: 48px;
+  margin-top: 32px;
   background: var(--color-navy);
   color: #fff;
 }
@@ -971,20 +972,20 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
 .ftr__main {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
-  gap: 32px 64px;
+  gap: 20px 48px;
   align-items: center;
-  padding: 36px 0 32px;
+  padding: 22px 0 18px;
 }
 
 /* Left: the logo, the line and the button */
 .ftr__logo {
   display: inline-block;
-  margin-bottom: 18px;
-  padding: 8px 12px;
+  margin-bottom: 12px;
+  padding: 6px 10px;
   background: #fff;
   border-radius: 6px;
 }
-.ftr__logo img { display: block; width: 170px; height: auto; }
+.ftr__logo img { display: block; width: 140px; height: auto; }
 
 .ftr__title {
   max-width: 18ch;
@@ -1001,8 +1002,8 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  margin-top: 18px;
-  padding: 6px 6px 6px 16px;
+  margin-top: 12px;
+  padding: 5px 5px 5px 14px;
   background: rgba(255, 255, 255, .08);
   border: 1px solid var(--ftr-line);
   border-radius: 6px;
@@ -1026,7 +1027,7 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
 }
 .ftr__btn:hover .ftr__btn-icon { transform: translateX(2px); }
 .ftr__mail {
-  margin-top: 12px;
+  margin-top: 8px;
   font-family: var(--font-ui);
   font-size: 13px;
 }
@@ -1037,11 +1038,11 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
 .ftr__grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 40px 32px;
+  gap: 20px 28px;
 }
-.ftr__block { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; min-width: 0; }
+.ftr__block { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; min-width: 0; }
 .ftr__head {
-  margin-bottom: 6px;
+  margin-bottom: 3px;
   font-family: var(--font-ui);
   font-size: 15px;
   font-weight: 600;
@@ -1061,11 +1062,11 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
 .ftr__links {
   display: grid;
   grid-template-columns: repeat(2, max-content);
-  gap: 10px 32px;
+  gap: 5px 28px;
   list-style: none;
 }
 .ftr__social li,
-.ftr__links li { line-height: 1.5; }
+.ftr__links li { line-height: 1.4; }
 .ftr__social a {
   display: inline-flex;
   align-items: center;
@@ -1101,8 +1102,8 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  gap: 12px 24px;
-  padding: 16px 0;
+  gap: 6px 24px;
+  padding: 10px 0;
   border-top: 1px solid var(--ftr-line);
   font-family: var(--font-ui);
   font-size: 13px;
@@ -1114,19 +1115,22 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
 .ftr__sep { color: var(--ftr-orange); font-size: 10px; }
 
 @media (max-width: 960px) {
-  .ftr__main { grid-template-columns: 1fr; gap: 28px; padding: 32px 0 28px; }
+  .ftr__main { grid-template-columns: 1fr; gap: 18px; padding: 22px 0 16px; }
 }
 /* narrow desktop (also a phone's "Desktop site" view): tighter footer so the link lists fit */
 @media (min-width: 961px) and (max-width: 1180px) {
-  .ftr__main { gap: 32px 28px; }
-  .ftr__grid { gap: 32px 16px; }
-  .ftr__social, .ftr__links { gap: 10px 14px; }
+  .ftr__main { gap: 20px 28px; }
+  .ftr__grid { gap: 20px 16px; }
+  .ftr__social, .ftr__links { gap: 5px 14px; }
 }
 @media (max-width: 720px) {
-  .ftr { margin-top: 32px; }
-  .ftr__main { padding: 28px 0 24px; }
-  .ftr__grid { grid-template-columns: 1fr; gap: 20px; }
-  .ftr__bar { flex-direction: column; text-align: center; gap: 10px; }
+  .ftr { margin-top: 24px; }
+  .ftr__main { padding: 18px 0 12px; gap: 14px; }
+  .ftr__logo img { width: 124px; }
+  .ftr__title { max-width: none; }
+  /* one column, so the long office address has the full width */
+  .ftr__grid { grid-template-columns: 1fr; gap: 14px; }
+  .ftr__bar { flex-direction: column; text-align: center; gap: 4px; padding: 10px 0; }
 }
 
 /* ==========================================================================
@@ -1548,8 +1552,8 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 56px;
-  padding: 44px 56px;
+  gap: 40px;
+  padding: 32px 48px;
   background: var(--color-paper-2);
   border: 1px solid var(--color-rule-soft);
 }
@@ -1822,8 +1826,8 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
 .mag-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 40px 32px;
-  padding: 32px 0 56px;
+  gap: 28px 28px;
+  padding: 20px 0 32px;
 }
 
 .mag-card {
@@ -2079,7 +2083,7 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
 }
 
 .mag-empty {
-  padding: 80px 0;
+  padding: 40px 0;
   text-align: center;
   border-bottom: 1px solid var(--color-rule-soft);
 }
@@ -2106,7 +2110,7 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
   align-items: center;
   justify-content: center;
   gap: 24px;
-  padding: 64px 0 0;
+  padding: 32px 0 0;
   flex-wrap: wrap;
 }
 
@@ -2175,7 +2179,7 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  margin-top: 32px;
+  margin-top: 16px;
   font-family: var(--font-ui);
   font-size: 12px;
   font-weight: 700;
@@ -2488,7 +2492,7 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
 
 /* ---------- Detail page: "More editions" block ---------- */
 .mag-more {
-  padding: 72px 0 96px;
+  padding: 32px 0 40px;
 }
 
 .mag-more__head {
@@ -3089,8 +3093,8 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
 .ws-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 44px 32px;
-  padding: 32px 0 56px;
+  gap: 28px 28px;
+  padding: 20px 0 32px;
 }
 
 .ws-card {
@@ -3188,7 +3192,7 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
 
 .ws-profile__head {
   max-width: 68ch;
-  margin-bottom: 56px;
+  margin-bottom: 32px;
 }
 
 .ws-profile__name {
@@ -3504,7 +3508,7 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
 .abt-mast {
   position: relative;
   overflow: hidden;
-  padding: 48px 0 80px;
+  padding: 28px 0 44px;
   background: var(--color-paper);
 }
 
@@ -3546,7 +3550,7 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
 }
 
 .abt-mast__title {
-  margin: 72px 0 28px;
+  margin: 40px 0 20px;
   white-space: nowrap;
   font-family: var(--font-display);
   font-weight: 800;
@@ -3646,7 +3650,7 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
 
 /* 2. Join our community: centred navy band */
 .abt-joinband {
-  padding: 64px 0;
+  padding: 36px 0;
   background: #fff;
   border-top: 1px solid var(--color-rule-soft);
   color: var(--color-ink);
@@ -3710,7 +3714,7 @@ button { background: none; border: 0; cursor: pointer; font: inherit; color: inh
   display: flex;
   justify-content: center;
   width: 100%;
-  margin-top: 56px;
+  margin-top: 28px;
   text-align: center;
 }
 
@@ -4167,7 +4171,7 @@ a.contact-details__value:hover { color: var(--color-navy-2); }
 .hof__body {
   max-width: 760px;
   margin: 0 auto;
-  padding: 56px 0 72px;
+  padding: 28px 0 36px;
 }
 
 .hof__body p {
@@ -4185,7 +4189,7 @@ a.contact-details__value:hover { color: var(--color-navy-2); }
 .hof__body p:last-child { margin-bottom: 0; }
 
 .more-block {
-  padding: 24px 0 72px;
+  padding: 12px 0 32px;
   border-top: 1px solid var(--color-rule-soft);
 }
 
@@ -4353,8 +4357,8 @@ html.lenis, html.lenis body { height: auto; }
 
 /* Newsletter: light band, centred, email and button on one row */
 .newsletter {
-  margin-top: 48px;
-  padding: 64px 0;
+  margin-top: 28px;
+  padding: 36px 0;
   background: var(--color-paper-2);
   border-top: 1px solid var(--color-rule-soft);
   color: var(--color-ink);
@@ -5128,7 +5132,7 @@ html.lenis, html.lenis body { height: auto; }
 .spot-honours li::before { content: "★"; flex-shrink: 0; font-size: 12px; line-height: 1.7; color: var(--color-navy-2); }
 
 .spot-sub {
-  margin: 56px 0 24px;
+  margin: 32px 0 16px;
   padding-bottom: 14px;
   border-bottom: 1px solid var(--color-rule-soft);
   font-family: var(--font-display);
@@ -5338,8 +5342,8 @@ html.lenis, html.lenis body { height: auto; }
 
 /* ---------- Quotes ---------- */
 .spot-voices {
-  margin-top: 56px;
-  padding: 64px 0;
+  margin-top: 32px;
+  padding: 36px 0;
   background: var(--color-paper-2);
 }
 
@@ -5399,7 +5403,7 @@ html.lenis, html.lenis body { height: auto; }
 
 /* ---------- Nomination band ---------- */
 .spot-cta {
-  padding: 80px 0;
+  padding: 44px 0;
   background: var(--color-navy);
   color: #fff;
 }
@@ -5633,7 +5637,7 @@ section.mag-end { padding: 48px 0 64px; }
    and the arrow slides. */
 #industries.section {
   position: relative;
-  padding: 56px 0 52px;
+  padding: 32px 0 32px;
   background: var(--color-paper);
 }
 #industries .s-head { margin-bottom: 28px; }
@@ -5745,7 +5749,7 @@ section.mag-end { padding: 48px 0 64px; }
 .ed-hero {
   display: grid;
   grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
-  gap: 56px;
+  gap: 40px;
   align-items: start;
 }
 /* white frame round the cover, the same as the other magazine covers */
@@ -5805,9 +5809,9 @@ section.mag-end { padding: 48px 0 64px; }
 .wv__head {
   display: grid;
   grid-template-columns: 240px minmax(0, 1fr);
-  gap: 40px;
+  gap: 32px;
   align-items: center;
-  padding-bottom: 36px;
+  padding-bottom: 24px;
   border-bottom: 1px solid var(--color-rule-soft);
 }
 .wv__cover img {
@@ -5853,8 +5857,8 @@ section.mag-end { padding: 48px 0 64px; }
   flex-wrap: wrap;
   gap: 14px;
   justify-content: center;
-  margin-top: 48px;
-  padding-top: 32px;
+  margin-top: 28px;
+  padding-top: 20px;
   border-top: 1px solid var(--color-rule-soft);
 }
 @media (max-width: 720px) {
@@ -6151,6 +6155,8 @@ section.mag-end { padding: 48px 0 64px; }
 }
 
 .hero__city[data-left] { flex-direction: row-reverse; transform: translate(calc(-100% + 6px), -50%); }
+/* Pune sits between Mumbai and Hyderabad: its name goes a little above the dot */
+.hero__city[data-up] b { transform: translateY(-11px); }
 
 .hero__city i {
   position: relative;

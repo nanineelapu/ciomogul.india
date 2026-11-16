@@ -13,7 +13,6 @@ export default async function WallOfFame() {
         <header className="s-head">
           <h2 className="s-title" id="wall-title">{t.home.wallTitle}</h2>
           <span className="s-rule" aria-hidden />
-          <p className="s-intro">{t.home.wallIntro}</p>
         </header>
         <div className="leaders">
           {leaders.map((l) => (

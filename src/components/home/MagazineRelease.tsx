@@ -47,6 +47,7 @@ export default async function MagazineRelease() {
           key={c.name}
           className="hero__city"
           data-left={c.left || undefined}
+          data-up={c.up || undefined}
           style={{ left: `${c.x}%`, top: `${c.y}%`, "--i": i } as CSSProperties}
         >
           <i />

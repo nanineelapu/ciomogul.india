@@ -50,7 +50,7 @@ async function DigitalLiveContent({ params }: { params: Promise<Params> }) {
         <div className="wrap">
           <header className="digital__head">
             <h1 className="digital__title">
-              {edition.featuredPersonName} · {edition.editionLabel}
+              {edition.featuredPersonName}
             </h1>
             <span className="digital__hint">{t.magazines.readerHint}</span>
           </header>

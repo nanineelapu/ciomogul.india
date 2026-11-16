@@ -796,7 +796,7 @@ const SETTINGS_FALLBACK: SiteSettings = {
   email: "info@ciomogulindia.com",
   phone: "+91 95292 03836",
   phoneHref: "tel:+919529203836",
-  office: "Pune, Maharashtra, India",
+  office: "Office No. 630 B Block, Gera Imperium Gateway, Nashik Phata Metro station, Pimpri-Chinchwad, Pune 411033, Maharashtra 411034",
   whatsappUrl: WHATSAPP_URL,
   social: SOCIAL.map((x) => ({ key: x.key, label: x.label, href: x.href })),
 };

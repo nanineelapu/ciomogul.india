@@ -31,12 +31,8 @@ export default async function SpotlightHero({ title }: { title: string }) {
 
             <div className="spot-hero__actions">
               <a href="#profile" className="btn btn-ink">{t.meetButton} <span aria-hidden>↓</span></a>
-              <Link href="/contact" className="btn btn-line">{t.nominateButton}</Link>
             </div>
 
-            <dl className="spot-hero__meta">
-              <div><dt>{t.featuredCount}</dt><dd>{profiles.length}</dd></div>
-            </dl>
           </div>
 
           <div className="spot-fan" aria-label="Featured profiles">

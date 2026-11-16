@@ -147,7 +147,6 @@ export default function Header({
                 );
               })}
             </div>
-            <Link href="/magazines" className="masthead__edition">{text.latestEdition} <span aria-hidden>→</span></Link>
             <button className="menu-btn" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} onClick={() => setOpen(!open)}>
               <span /><span />
             </button>
