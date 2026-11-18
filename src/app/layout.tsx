@@ -54,11 +54,69 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
+// Script to support iPhone in "Request Desktop Website" mode.
+// On Android, "Desktop site" mode automatically overrides the viewport to 980px, activating the desktop layout (min-width: 961px).
+// On iOS Safari / Chrome, "Request Desktop Website" sends a Mac user agent but continues to respect width=device-width (~390-430px),
+// leaving the phone stuck in the mobile layout. This script detects that state and sets viewport content to "width=1024",
+// allowing the full desktop layout to render and scale to fit the screen, matching Android behavior.
+const IPHONE_DESKTOP_VIEWPORT_SCRIPT = `(function () {
+  try {
+    var isIPhoneDesktop = (
+      (/Macintosh/i.test(navigator.userAgent) || navigator.platform === 'MacIntel') &&
+      navigator.maxTouchPoints > 0 &&
+      Math.min(window.screen.width, window.screen.height) < 700
+    );
+    if (!isIPhoneDesktop) return;
+
+    function applyDesktopViewport() {
+      var meta = document.querySelector('meta[name="viewport"]');
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.name = 'viewport';
+        document.head.appendChild(meta);
+      }
+      if (meta.getAttribute('content') !== 'width=1024') {
+        meta.setAttribute('content', 'width=1024');
+      }
+    }
+
+    applyDesktopViewport();
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', applyDesktopViewport);
+    }
+    window.addEventListener('load', applyDesktopViewport);
+    window.addEventListener('orientationchange', applyDesktopViewport);
+
+    if (window.MutationObserver) {
+      var observer = new MutationObserver(function () {
+        var meta = document.querySelector('meta[name="viewport"]');
+        if (meta && meta.getAttribute('content') !== 'width=1024') {
+          meta.setAttribute('content', 'width=1024');
+        }
+      });
+      observer.observe(document.head || document.documentElement, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['content'],
+      });
+    }
+  } catch (e) {}
+})();`;
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en-IN" className={`${playfair.variable} ${poppins.variable}`}>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: IPHONE_DESKTOP_VIEWPORT_SCRIPT,
+          }}
+        />
+      </head>
       <body suppressHydrationWarning>{children}</body>
     </html>
   );
