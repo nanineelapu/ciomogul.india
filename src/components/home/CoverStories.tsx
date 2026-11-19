@@ -16,7 +16,6 @@ export default async function CoverStories() {
             <Link key={s.slug} href={s.href} className="story">
               <span className="story__img"><Image src={s.image} alt={s.name} width={713} height={1009} sizes="(max-width: 720px) 50vw, 25vw" /></span>
               <span className="story__text">
-                {s.role && <span className="story__label">{s.role}</span>}
                 <span className="story__name">{s.name}</span>
               </span>
             </Link>

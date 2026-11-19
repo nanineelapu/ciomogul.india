@@ -1,9 +1,38 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
+import { headers } from "next/headers";
 import { Playfair_Display, Poppins } from "next/font/google";
 import { BASE_KEYWORDS, DEFAULT_DESCRIPTION, DEFAULT_TITLE, SITE_NAME, ogImageUrl } from "@/lib/seo";
 import "./globals.css";
 import "./responsive.css";
 import { SITE_URL } from "@/lib/site";
+
+// Generate viewport dynamically based on User-Agent:
+// - Mobile browsers (iPhone, Android mobile) receive standard responsive viewport (width=device-width).
+// - When an iPhone user taps "Request Desktop Website", Safari/Chrome reloads the page with a Mac desktop User-Agent.
+//   Serving width=1024 statically in the HTML head forces WebKit to render the full desktop layout scaled to fit,
+//   exactly like Android "Desktop site" does.
+// - Real desktop browsers (PC / Mac) ignore the viewport meta tag entirely.
+export async function generateViewport(): Promise<Viewport> {
+  try {
+    const headersList = await headers();
+    const ua = headersList.get("user-agent") || "";
+    const isMobile = /iPhone|iPod|Android.*Mobile|Mobile/i.test(ua);
+    if (isMobile) {
+      return {
+        width: "device-width",
+        initialScale: 1,
+      };
+    }
+    return {
+      width: 1024,
+    };
+  } catch {
+    return {
+      width: "device-width",
+      initialScale: 1,
+    };
+  }
+}
 
 // Root layout — nothing but the html/body shell + global fonts. Site chrome
 // (Header, Footer) lives in (site)/layout so the /studio route can render
@@ -54,69 +83,11 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-// Script to support iPhone in "Request Desktop Website" mode.
-// On Android, "Desktop site" mode automatically overrides the viewport to 980px, activating the desktop layout (min-width: 961px).
-// On iOS Safari / Chrome, "Request Desktop Website" sends a Mac user agent but continues to respect width=device-width (~390-430px),
-// leaving the phone stuck in the mobile layout. This script detects that state and sets viewport content to "width=1024",
-// allowing the full desktop layout to render and scale to fit the screen, matching Android behavior.
-const IPHONE_DESKTOP_VIEWPORT_SCRIPT = `(function () {
-  try {
-    var isIPhoneDesktop = (
-      (/Macintosh/i.test(navigator.userAgent) || navigator.platform === 'MacIntel') &&
-      navigator.maxTouchPoints > 0 &&
-      Math.min(window.screen.width, window.screen.height) < 700
-    );
-    if (!isIPhoneDesktop) return;
-
-    function applyDesktopViewport() {
-      var meta = document.querySelector('meta[name="viewport"]');
-      if (!meta) {
-        meta = document.createElement('meta');
-        meta.name = 'viewport';
-        document.head.appendChild(meta);
-      }
-      if (meta.getAttribute('content') !== 'width=1024') {
-        meta.setAttribute('content', 'width=1024');
-      }
-    }
-
-    applyDesktopViewport();
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', applyDesktopViewport);
-    }
-    window.addEventListener('load', applyDesktopViewport);
-    window.addEventListener('orientationchange', applyDesktopViewport);
-
-    if (window.MutationObserver) {
-      var observer = new MutationObserver(function () {
-        var meta = document.querySelector('meta[name="viewport"]');
-        if (meta && meta.getAttribute('content') !== 'width=1024') {
-          meta.setAttribute('content', 'width=1024');
-        }
-      });
-      observer.observe(document.head || document.documentElement, {
-        childList: true,
-        subtree: true,
-        attributes: true,
-        attributeFilter: ['content'],
-      });
-    }
-  } catch (e) {}
-})();`;
-
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en-IN" className={`${playfair.variable} ${poppins.variable}`}>
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: IPHONE_DESKTOP_VIEWPORT_SCRIPT,
-          }}
-        />
-      </head>
       <body suppressHydrationWarning>{children}</body>
     </html>
   );
