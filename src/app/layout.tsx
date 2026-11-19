@@ -1,38 +1,70 @@
 import type { Metadata, Viewport } from "next";
-import { headers } from "next/headers";
 import { Playfair_Display, Poppins } from "next/font/google";
 import { BASE_KEYWORDS, DEFAULT_DESCRIPTION, DEFAULT_TITLE, SITE_NAME, ogImageUrl } from "@/lib/seo";
 import "./globals.css";
 import "./responsive.css";
 import { SITE_URL } from "@/lib/site";
 
-// Generate viewport dynamically based on User-Agent:
-// - Mobile browsers (iPhone, Android mobile) receive standard responsive viewport (width=device-width).
-// - When an iPhone user taps "Request Desktop Website", Safari/Chrome reloads the page with a Mac desktop User-Agent.
-//   Serving width=1024 statically in the HTML head forces WebKit to render the full desktop layout scaled to fit,
-//   exactly like Android "Desktop site" does.
-// - Real desktop browsers (PC / Mac) ignore the viewport meta tag entirely.
-export async function generateViewport(): Promise<Viewport> {
+// Static viewport export so Next.js static page prerendering succeeds at build time.
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
+// Client script to support iOS (Safari & Chrome) in "Request Desktop Website" mode.
+// On Android, "Desktop site" mode automatically forces a 980px layout viewport.
+// On iOS Safari / Chrome, "Request Desktop Website" sends a Mac user agent with touch points (> 1).
+// This script detects that state and overrides all viewport meta tags to "width=980",
+// causing iOS WebKit to render the full desktop layout and scale to fit the screen.
+const IPHONE_DESKTOP_VIEWPORT_SCRIPT = `(function () {
   try {
-    const headersList = await headers();
-    const ua = headersList.get("user-agent") || "";
-    const isMobile = /iPhone|iPod|Android.*Mobile|Mobile/i.test(ua);
-    if (isMobile) {
-      return {
-        width: "device-width",
-        initialScale: 1,
-      };
+    var isIOSDesktop = (
+      navigator.maxTouchPoints > 1 &&
+      (navigator.platform === 'MacIntel' || /Macintosh/i.test(navigator.userAgent))
+    );
+    if (!isIOSDesktop) return;
+
+    function applyDesktopViewport() {
+      var metas = document.querySelectorAll('meta[name="viewport"]');
+      metas.forEach(function (m) {
+        if (m.getAttribute('content') !== 'width=980') {
+          m.setAttribute('content', 'width=980');
+        }
+      });
+      if (metas.length === 0) {
+        var m = document.createElement('meta');
+        m.name = 'viewport';
+        m.content = 'width=980';
+        document.head.appendChild(m);
+      }
     }
-    return {
-      width: 1024,
-    };
-  } catch {
-    return {
-      width: "device-width",
-      initialScale: 1,
-    };
-  }
-}
+
+    applyDesktopViewport();
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', applyDesktopViewport);
+    }
+    window.addEventListener('load', applyDesktopViewport);
+    window.addEventListener('orientationchange', applyDesktopViewport);
+
+    if (window.MutationObserver) {
+      var observer = new MutationObserver(function () {
+        var metas = document.querySelectorAll('meta[name="viewport"]');
+        metas.forEach(function (m) {
+          if (m.getAttribute('content') !== 'width=980') {
+            m.setAttribute('content', 'width=980');
+          }
+        });
+      });
+      observer.observe(document.head || document.documentElement, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['content'],
+      });
+    }
+  } catch (e) {}
+})();`;
 
 // Root layout — nothing but the html/body shell + global fonts. Site chrome
 // (Header, Footer) lives in (site)/layout so the /studio route can render
@@ -88,6 +120,13 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en-IN" className={`${playfair.variable} ${poppins.variable}`}>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: IPHONE_DESKTOP_VIEWPORT_SCRIPT,
+          }}
+        />
+      </head>
       <body suppressHydrationWarning>{children}</body>
     </html>
   );
